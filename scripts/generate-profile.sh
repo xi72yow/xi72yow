@@ -70,34 +70,25 @@ for i in $(seq 0 $((repo_count - 1))); do
     "${API_URL}/repos/${full_name}/readme" 2>/dev/null | head -c 2000 || echo "")
 
   # ── AI: Generate descriptions (EN + DE) ─────────────────────────────
-  # Build context for the AI
   ai_context="Repository: ${name}
 Original description: ${description_raw}
 Languages: ${languages}
 Topics: ${topics}
 README excerpt: ${readme_content}"
 
-  # Escape for JSON
-  ai_context_escaped=$(echo "${ai_context}" | jq -Rs '.')
-
-  ai_payload=$(cat <<PAYLOAD
-{
-  "model": "${MODEL}",
-  "messages": [
-    {
-      "role": "system",
-      "content": "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}"
-    },
-    {
-      "role": "user",
-      "content": "Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone — no marketing language, no superlatives, no hype. Context: ${ai_context_escaped}"
-    }
-  ],
-  "temperature": 0.3,
-  "max_tokens": 300
-}
-PAYLOAD
-)
+  ai_payload=$(jq -nc \
+    --arg model "${MODEL}" \
+    --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
+    --arg context "${ai_context}" \
+    '{
+      model: $model,
+      messages: [
+        { role: "system", content: $system },
+        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone — no marketing language, no superlatives, no hype. Context: " + $context) }
+      ],
+      temperature: 0.3,
+      max_tokens: 300
+    }')
 
   ai_response=$(curl -s -X POST "${MODELS_URL}" \
     "${CURL_AUTH[@]}" \
