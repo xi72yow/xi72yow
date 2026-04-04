@@ -1,0 +1,161 @@
+{
+  "updated_at": "2026-04-04T21:26:38Z",
+  "user": "xi72yow",
+  "repos": [
+    {
+      "name": "ScreenChaser",
+      "url": "https://github.com/xi72yow/ScreenChaser",
+      "homepage": null,
+      "description_en": "LEDs follow me!",
+      "description_de": "LEDs follow me!",
+      "tech_stack": [
+        "TypeScript",
+        "JavaScript",
+        "C"
+      ],
+      "topics": [
+        "x"
+      ],
+      "stars": null,
+      "is_fork": false,
+      "last_commits": [
+        {
+          "message": "Update README.md",
+          "date": "2024-03-17T14:47:53Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "chore: bump deps\n\ntodo: mantine migration",
+          "date": "2024-02-18T13:53:50Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "chore(app): disable auto scan",
+          "date": "2023-08-30T14:21:16Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "input-remapper-rs",
+      "url": "https://github.com/xi72yow/input-remapper-rs",
+      "homepage": null,
+      "description_en": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
+      "description_de": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
+      "tech_stack": [
+        "Rust",
+        "Shell",
+        "Dockerfile"
+      ],
+      "topics": [
+        "azeron",
+        "evdev",
+        "gaming",
+        "input-remapper",
+        "key-remapping",
+        "keymapping",
+        "linux",
+        "mmo-mouse",
+        "rust",
+        "tui",
+        "uinput",
+        "wayland",
+        "x",
+        "x11"
+      ],
+      "stars": null,
+      "is_fork": false,
+      "last_commits": [
+        {
+          "message": "chore: align dependabot (monthly, grouped, explicit deps)",
+          "date": "2026-03-30T19:53:44Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "fix: mount host /dev into test container for uinput device visibility",
+          "date": "2026-03-28T16:55:43Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "fix: modprobe uinput on runner, not inside container",
+          "date": "2026-03-28T16:40:12Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "sei",
+      "url": "https://github.com/xi72yow/sei",
+      "homepage": null,
+      "description_en": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
+      "description_de": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
+      "tech_stack": [
+        "Rust",
+        "Shell",
+        "Dockerfile"
+      ],
+      "topics": [
+        "developer-tools",
+        "developer-tools-ai-agent",
+        "environment-variables",
+        "rust-lang",
+        "secrets",
+        "security",
+        "x"
+      ],
+      "stars": null,
+      "is_fork": false,
+      "last_commits": [
+        {
+          "message": "Update README with image and command usage details\n\nAdded image and clarified usage of 'sei' command.",
+          "date": "2026-03-29T09:42:09Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "Update README.md",
+          "date": "2026-03-29T09:41:19Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "Update README to remove old examples\n\nRemoved outdated import and store examples from README.",
+          "date": "2026-03-29T09:36:59Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "desktop-drac",
+      "url": "https://github.com/xi72yow/desktop-drac",
+      "homepage": null,
+      "description_en": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
+      "description_de": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
+      "tech_stack": [
+        "TypeScript",
+        "SCSS",
+        "JavaScript"
+      ],
+      "topics": [
+        "x"
+      ],
+      "stars": null,
+      "is_fork": true,
+      "last_commits": [
+        {
+          "message": "Update build-default-menu.ts",
+          "date": "2026-03-18T21:47:45Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "chore: lint",
+          "date": "2026-03-17T09:36:50Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "fix: increase RecentRepositoriesLength to 7",
+          "date": "2026-03-12T12:58:14Z",
+          "author": "xi72yow"
+        }
+      ]
+    }
+  ]
+}

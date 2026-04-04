@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+GITHUB_USER="xi72yow"
+FEATURED_TOPIC="x"
+API_URL="https://api.github.com"
+MODELS_URL="https://models.inference.ai.azure.com/chat/completions"
+MODEL="gpt-4o"
+
+# Auth header (works in Actions via GITHUB_TOKEN, optional for local testing)
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+  AUTH_HEADER="Authorization: Bearer ${GITHUB_TOKEN}"
+  CURL_AUTH=("${CURL_AUTH[@]}")
+else
+  echo "Warning: No GITHUB_TOKEN set, running without auth (rate-limited, no AI descriptions)"
+  CURL_AUTH=()
+fi
+
+# ── Fetch all public repos ──────────────────────────────────────────────
+echo "Fetching public repos for ${GITHUB_USER}..."
+all_repos_json=$(curl -sf "${CURL_AUTH[@]}" \
+  "${API_URL}/users/${GITHUB_USER}/repos?type=public&per_page=100&sort=updated")
+
+# Filter to only repos with the featured topic
+repos_json=$(echo "${all_repos_json}" | jq -c "[.[] | select(.topics | index(\"${FEATURED_TOPIC}\"))]")
+
+repo_count=$(echo "${repos_json}" | jq 'length')
+all_count=$(echo "${all_repos_json}" | jq 'length')
+echo "Found ${all_count} public repos, ${repo_count} tagged with '${FEATURED_TOPIC}'."
+
+# ── Build repo data ─────────────────────────────────────────────────────
+repos_output="[]"
+
+for i in $(seq 0 $((repo_count - 1))); do
+  repo=$(echo "${repos_json}" | jq ".[$i]")
+  name=$(echo "${repo}" | jq -r '.name')
+  full_name=$(echo "${repo}" | jq -r '.full_name')
+  url=$(echo "${repo}" | jq -r '.html_url')
+  homepage=$(echo "${repo}" | jq -r '.homepage // empty')
+  stars=$(echo "${repo}" | jq -r '.stargazers_count')
+  fork=$(echo "${repo}" | jq -r '.fork')
+  description_raw=$(echo "${repo}" | jq -r '.description // empty')
+  topics=$(echo "${repo}" | jq -c '.topics // []')
+
+  # Skip the profile repo itself
+  if [[ "${name}" == "${GITHUB_USER}" ]]; then
+    echo "Skipping profile repo: ${name}"
+    continue
+  fi
+
+  echo "Processing ${name} ($((i + 1))/${repo_count})..."
+
+  # Fetch languages (top 3 by bytes)
+  languages=$(curl -sf "${CURL_AUTH[@]}" \
+    "${API_URL}/repos/${full_name}/languages" | jq -c '[to_entries | sort_by(-.value) | .[:3] | .[].key]')
+
+  # Fetch last 3 non-merge commits
+  commits_raw=$(curl -sf "${CURL_AUTH[@]}" \
+    "${API_URL}/repos/${full_name}/commits?per_page=30" 2>/dev/null || echo "[]")
+
+  commits=$(echo "${commits_raw}" | jq -c '[.[] | select(.parents | length <= 1) | {
+    message: .commit.message,
+    date: .commit.author.date,
+    author: .commit.author.name
+  }] | .[:3]' 2>/dev/null || echo "[]")
+
+  # Fetch README (first 2000 chars for AI context)
+  readme_content=$(curl -sf "${CURL_AUTH[@]}" \
+    -H "Accept: application/vnd.github.raw+json" \
+    "${API_URL}/repos/${full_name}/readme" 2>/dev/null | head -c 2000 || echo "")
+
+  # ── AI: Generate descriptions (EN + DE) ─────────────────────────────
+  # Build context for the AI
+  ai_context="Repository: ${name}
+Original description: ${description_raw}
+Languages: ${languages}
+Topics: ${topics}
+README excerpt: ${readme_content}"
+
+  # Escape for JSON
+  ai_context_escaped=$(echo "${ai_context}" | jq -Rs '.')
+
+  ai_payload=$(cat <<PAYLOAD
+{
+  "model": "${MODEL}",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}"
+    },
+    {
+      "role": "user",
+      "content": "Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone — no marketing language, no superlatives, no hype. Context: ${ai_context_escaped}"
+    }
+  ],
+  "temperature": 0.3,
+  "max_tokens": 300
+}
+PAYLOAD
+)
+
+  ai_response=$(curl -sf -X POST "${MODELS_URL}" \
+    "${CURL_AUTH[@]}" \
+    -H "Content-Type: application/json" \
+    -d "${ai_payload}" 2>/dev/null || echo "")
+
+  if [[ -n "${ai_response}" ]]; then
+    descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+    # Try to parse as JSON, strip markdown fences if present
+    descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+    description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
+    description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
+  else
+    echo "  AI request failed, using original description"
+    description_en="${description_raw}"
+    description_de="${description_raw}"
+  fi
+
+  # ── Build repo entry ────────────────────────────────────────────────
+  # Only include stars if > 5
+  show_stars="null"
+  if [[ "${stars}" -gt 5 ]]; then
+    show_stars="${stars}"
+  fi
+
+  repo_entry=$(jq -nc \
+    --arg name "${name}" \
+    --arg url "${url}" \
+    --arg homepage "${homepage}" \
+    --arg desc_en "${description_en}" \
+    --arg desc_de "${description_de}" \
+    --argjson languages "${languages}" \
+    --argjson topics "${topics}" \
+    --argjson stars "${show_stars}" \
+    --argjson fork "${fork}" \
+    --argjson commits "${commits}" \
+    '{
+      name: $name,
+      url: $url,
+      homepage: ($homepage | if . == "" then null else . end),
+      description_en: $desc_en,
+      description_de: $desc_de,
+      tech_stack: $languages,
+      topics: $topics,
+      stars: $stars,
+      is_fork: $fork,
+      last_commits: $commits
+    }')
+
+  repos_output=$(echo "${repos_output}" | jq --argjson entry "${repo_entry}" '. + [$entry]')
+
+  # Rate limit: small delay between repos
+  sleep 1
+done
+
+# ── Write repos.json ─────────────────────────────────────────────────────
+output_json=$(jq -nc \
+  --arg updated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  --arg user "${GITHUB_USER}" \
+  --argjson repos "${repos_output}" \
+  '{
+    updated_at: $updated,
+    user: $user,
+    repos: ($repos | sort_by(.stars // 0) | reverse)
+  }')
+
+echo "${output_json}" | jq '.' > repos.json
+echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
+
+# ── Generate README.md ───────────────────────────────────────────────────
+{
+  echo "# Hey, I'm ${GITHUB_USER}"
+  echo ""
+  echo "From embedded systems to web apps, from security tooling to Linux infrastructure, from DevOps to developer experience. I build what's needed."
+  echo ""
+  echo "## Selected Projects"
+  echo ""
+
+  {
+    section_repos=$(echo "${repos_output}" | jq -c '.')
+    count=$(echo "${section_repos}" | jq 'length')
+
+    for j in $(seq 0 $((count - 1))); do
+      entry=$(echo "${section_repos}" | jq ".[$j]")
+      r_name=$(echo "${entry}" | jq -r '.name')
+      r_url=$(echo "${entry}" | jq -r '.url')
+      r_desc=$(echo "${entry}" | jq -r '.description_en')
+      r_stack=$(echo "${entry}" | jq -r '.tech_stack | join(", ")')
+      r_stars=$(echo "${entry}" | jq -r '.stars // empty')
+      r_homepage=$(echo "${entry}" | jq -r '.homepage // empty')
+      r_commits=$(echo "${entry}" | jq -c '.last_commits')
+
+      # Header with optional stars
+      header="### [${r_name}](${r_url})"
+      if [[ -n "${r_stars}" && "${r_stars}" != "null" ]]; then
+        header="${header} :star: ${r_stars}"
+      fi
+      echo "${header}"
+      echo ""
+
+      # Description
+      if [[ -n "${r_desc}" ]]; then
+        echo "${r_desc}"
+        echo ""
+      fi
+
+      # Tech stack
+      if [[ -n "${r_stack}" ]]; then
+        echo "**Tech:** ${r_stack}"
+        echo ""
+      fi
+
+      # Homepage link
+      if [[ -n "${r_homepage}" ]]; then
+        echo "[Live](${r_homepage})"
+        echo ""
+      fi
+
+      # Recent commits
+      commit_count=$(echo "${r_commits}" | jq 'length')
+      if [[ "${commit_count}" -gt 0 ]]; then
+        echo "<details><summary>Recent activity</summary>"
+        echo ""
+        for k in $(seq 0 $((commit_count - 1))); do
+          c_msg=$(echo "${r_commits}" | jq -r ".[$k].message" | head -1)
+          c_date=$(echo "${r_commits}" | jq -r ".[$k].date" | cut -dT -f1)
+          echo "- \`${c_date}\` ${c_msg}"
+        done
+        echo ""
+        echo "</details>"
+        echo ""
+      fi
+    done
+  }
+
+  echo "---"
+  echo ""
+  echo "*Last updated: $(date -u +%Y-%m-%d)*"
+} > README.md
+
+echo "Written README.md"
+echo "Done!"

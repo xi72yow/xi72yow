@@ -1,0 +1,65 @@
+# Hey, I'm xi72yow
+
+From embedded systems to web apps, from security tooling to Linux infrastructure, from DevOps to developer experience. I build what's needed.
+
+## Selected Projects
+
+### [desktop-drac](https://github.com/xi72yow/desktop-drac)
+
+Fork of Fork of GitHub Desktop to support my Linux distribution in new style
+
+**Tech:** TypeScript, SCSS, JavaScript
+
+<details><summary>Recent activity</summary>
+
+- `2026-03-18` Update build-default-menu.ts
+- `2026-03-17` chore: lint
+- `2026-03-12` fix: increase RecentRepositoriesLength to 7
+
+</details>
+
+### [sei](https://github.com/xi72yow/sei)
+
+Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-03-29` Update README with image and command usage details
+- `2026-03-29` Update README.md
+- `2026-03-29` Update README to remove old examples
+
+</details>
+
+### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
+
+Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
+- `2026-03-28` fix: mount host /dev into test container for uinput device visibility
+- `2026-03-28` fix: modprobe uinput on runner, not inside container
+
+</details>
+
+### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
+
+LEDs follow me!
+
+**Tech:** TypeScript, JavaScript, C
+
+<details><summary>Recent activity</summary>
+
+- `2024-03-17` Update README.md
+- `2024-02-18` chore: bump deps
+- `2023-08-30` chore(app): disable auto scan
+
+</details>
+
+---
+
+*Last updated: 2026-04-04*
