@@ -6,6 +6,8 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
+A Linux-specific fork of GitHub Desktop, synchronized with the official repository and adapted for compatibility with a custom Linux distribution. Built with TypeScript, React, and Electron.
+
 **Tech:** TypeScript, SCSS, JavaScript
 
 <details><summary>Recent activity</summary>
@@ -17,6 +19,8 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 </details>
 
 ### [sei](https://github.com/xi72yow/sei)
+
+A tool for managing environment variable secrets by storing them securely in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets, ensuring they remain inaccessible to file-based tools and AI agents.
 
 **Tech:** Rust, Shell, Dockerfile
 
@@ -30,6 +34,8 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Designed for devices like MMO mice and Azeron keypads, it supports key-to-key and key-to-combination mappings, multi-device setups, and includes a terminal UI for configuration.
+
 **Tech:** Rust, Shell, Dockerfile
 
 <details><summary>Recent activity</summary>
@@ -41,6 +47,8 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 </details>
 
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
+
+ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network, consisting of firmware, a core mediator, and a user interface. It uses UDP to transmit data packets from the PC to a microcontroller, enabling configuration through a graphical interface or CLI.
 
 **Tech:** TypeScript, JavaScript, C
 

@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-04-04T21:38:57Z",
+  "updated_at": "2026-04-04T21:40:10Z",
   "user": "xi72yow",
   "repos": [
     {
       "name": "ScreenChaser",
       "url": "https://github.com/xi72yow/ScreenChaser",
       "homepage": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network, consisting of firmware, a core mediator, and a user interface. It uses UDP to transmit data packets from the PC to a microcontroller, enabling configuration through a graphical interface or CLI.",
+      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und das lokale Netzwerk, bestehend aus Firmware, einem Kernvermittler und einer Benutzeroberfläche. Es überträgt Datenpakete per UDP vom PC an einen Mikrocontroller und ermöglicht die Konfiguration über eine grafische Oberfläche oder CLI.",
       "tech_stack": [
         "TypeScript",
         "JavaScript",
@@ -40,8 +40,8 @@
       "name": "input-remapper-rs",
       "url": "https://github.com/xi72yow/input-remapper-rs",
       "homepage": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Designed for devices like MMO mice and Azeron keypads, it supports key-to-key and key-to-combination mappings, multi-device setups, and includes a terminal UI for configuration.",
+      "description_de": "Ein in Rust entwickeltes Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput, kompatibel mit Wayland und X11. Entwickelt für Geräte wie MMO-Mäuse und Azeron-Keypads, unterstützt es Tasten-zu-Tasten- und Tasten-zu-Kombination-Zuordnungen, Multi-Geräte-Setups und enthält eine Terminal-Benutzeroberfläche zur Konfiguration.",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -87,8 +87,8 @@
       "name": "sei",
       "url": "https://github.com/xi72yow/sei",
       "homepage": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "A tool for managing environment variable secrets by storing them securely in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets, ensuring they remain inaccessible to file-based tools and AI agents.",
+      "description_de": "Ein Werkzeug zur Verwaltung von Umgebungsvariablen-Geheimnissen, das diese sicher im GNOME Keyring anstelle von unverschlüsselten .env-Dateien speichert. Bietet eine TUI zum Bearbeiten und eine CLI zum Injizieren von Geheimnissen, um deren Zugriff durch dateibasierte Tools und KI-Agenten zu verhindern.",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -127,8 +127,8 @@
       "name": "desktop-drac",
       "url": "https://github.com/xi72yow/desktop-drac",
       "homepage": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "A Linux-specific fork of GitHub Desktop, synchronized with the official repository and adapted for compatibility with a custom Linux distribution. Built with TypeScript, React, and Electron.",
+      "description_de": "Ein Linux-spezifischer Fork von GitHub Desktop, der mit dem offiziellen Repository synchronisiert und für die Kompatibilität mit einer benutzerdefinierten Linux-Distribution angepasst wurde. Entwickelt mit TypeScript, React und Electron.",
       "tech_stack": [
         "TypeScript",
         "SCSS",
