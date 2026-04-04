@@ -10,7 +10,7 @@ MODEL="gpt-4o"
 # Auth header (works in Actions via GITHUB_TOKEN, optional for local testing)
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then
   AUTH_HEADER="Authorization: Bearer ${GITHUB_TOKEN}"
-  CURL_AUTH=("${CURL_AUTH[@]}")
+  CURL_AUTH=(-H "${AUTH_HEADER}")
 else
   echo "Warning: No GITHUB_TOKEN set, running without auth (rate-limited, no AI descriptions)"
   CURL_AUTH=()
