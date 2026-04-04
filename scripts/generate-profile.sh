@@ -40,7 +40,7 @@ for i in $(seq 0 $((repo_count - 1))); do
   stars=$(echo "${repo}" | jq -r '.stargazers_count')
   fork=$(echo "${repo}" | jq -r '.fork')
   description_raw=$(echo "${repo}" | jq -r '.description // empty')
-  topics=$(echo "${repo}" | jq -c '.topics // []')
+  topics=$(echo "${repo}" | jq -c "[.topics // [] | .[] | select(. != \"${FEATURED_TOPIC}\")]")
 
   # Skip the profile repo itself
   if [[ "${name}" == "${GITHUB_USER}" ]]; then
@@ -64,10 +64,29 @@ for i in $(seq 0 $((repo_count - 1))); do
     author: .commit.author.name
   }] | .[:3]' 2>/dev/null || echo "[]")
 
-  # Fetch README (first 2000 chars for AI context)
+  # Fetch full README for AI context + image extraction
   readme_content=$(curl -sf "${CURL_AUTH[@]}" \
     -H "Accept: application/vnd.github.raw+json" \
-    "${API_URL}/repos/${full_name}/readme" 2>/dev/null | head -c 2000 || echo "")
+    "${API_URL}/repos/${full_name}/readme" 2>/dev/null || echo "")
+
+  # Extract first image URL from README (markdown ![...](url) or <img src="...">)
+  first_image=$(echo "${readme_content}" | grep -oP '(?<=!\[)[^\]]*\]\(([^\)]+)' | head -1 | grep -oP '\(.*' | tr -d '(' || \
+    echo "${readme_content}" | grep -oP '<img[^>]+src="[^"]*"' | head -1 | grep -oP 'src="\K[^"]+' || echo "")
+
+  # Extract first video URL from README (<video src="..."> or github user-content video links)
+  first_video=$(echo "${readme_content}" | grep -oP '<video[^>]+src="\K[^"]+' | head -1 || \
+    echo "${readme_content}" | grep -oP 'https://[^)"\s]+\.(mp4|webm|mov)' | head -1 || echo "")
+
+  # Make relative URLs absolute
+  if [[ -n "${first_image}" && ! "${first_image}" =~ ^https?:// ]]; then
+    first_image="https://raw.githubusercontent.com/${full_name}/main/${first_image}"
+  fi
+  if [[ -n "${first_video}" && ! "${first_video}" =~ ^https?:// ]]; then
+    first_video="https://raw.githubusercontent.com/${full_name}/main/${first_video}"
+  fi
+
+  # Trim README for AI context
+  readme_content=$(echo "${readme_content}" | head -c 2000)
 
   # ── AI: Generate descriptions (EN + DE) ─────────────────────────────
   ai_context="Repository: ${name}
@@ -94,11 +113,6 @@ README excerpt: ${readme_content}"
     "${CURL_AUTH[@]}" \
     -H "Content-Type: application/json" \
     -d "${ai_payload}" || echo "")
-
-  # Debug: show AI response status
-  if echo "${ai_response}" | jq -e '.error' &>/dev/null; then
-    echo "  AI error: $(echo "${ai_response}" | jq -r '.error.message // .error // "unknown"')"
-  fi
 
   if [[ -n "${ai_response}" ]]; then
     descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
@@ -130,10 +144,14 @@ README excerpt: ${readme_content}"
     --argjson stars "${show_stars}" \
     --argjson fork "${fork}" \
     --argjson commits "${commits}" \
+    --arg image "${first_image}" \
+    --arg video "${first_video}" \
     '{
       name: $name,
       url: $url,
       homepage: ($homepage | if . == "" then null else . end),
+      image: ($image | if . == "" then null else . end),
+      video: ($video | if . == "" then null else . end),
       description_en: $desc_en,
       description_de: $desc_de,
       tech_stack: $languages,
@@ -185,6 +203,8 @@ echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
       r_stars=$(echo "${entry}" | jq -r '.stars // empty')
       r_homepage=$(echo "${entry}" | jq -r '.homepage // empty')
       r_commits=$(echo "${entry}" | jq -c '.last_commits')
+      r_image=$(echo "${entry}" | jq -r '.image // empty')
+      r_video=$(echo "${entry}" | jq -r '.video // empty')
 
       # Header with optional stars
       header="### [${r_name}](${r_url})"
@@ -197,6 +217,15 @@ echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
       # Description
       if [[ -n "${r_desc}" ]]; then
         echo "${r_desc}"
+        echo ""
+      fi
+
+      # Video (preferred) or Image
+      if [[ -n "${r_video}" ]]; then
+        echo "<video src=\"${r_video}\" width=\"600\" autoplay loop muted></video>"
+        echo ""
+      elif [[ -n "${r_image}" ]]; then
+        echo "<img src=\"${r_image}\" alt=\"${r_name}\" width=\"600\">"
         echo ""
       fi
 
