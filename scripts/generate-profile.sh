@@ -69,9 +69,9 @@ for i in $(seq 0 $((repo_count - 1))); do
     -H "Accept: application/vnd.github.raw+json" \
     "${API_URL}/repos/${full_name}/readme" 2>/dev/null || echo "")
 
-  # Extract first image URL from README (markdown ![...](url) or <img src="...">)
-  first_image=$(echo "${readme_content}" | grep -oP '(?<=!\[)[^\]]*\]\(([^\)]+)' | head -1 | grep -oP '\(.*' | tr -d '(' || \
-    echo "${readme_content}" | grep -oP '<img[^>]+src="[^"]*"' | head -1 | grep -oP 'src="\K[^"]+' || echo "")
+  # Extract first image URL from README, skipping badges (shields.io, workflow badges, etc.)
+  first_image=$(echo "${readme_content}" | grep -oP '!\[[^\]]*\]\(\K[^\)]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || \
+    echo "${readme_content}" | grep -oP '<img[^>]+src="\K[^"]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || echo "")
 
   # Extract first video URL from README (<video src="..."> or github user-content video links)
   first_video=$(echo "${readme_content}" | grep -oP '<video[^>]+src="\K[^"]+' | head -1 || \
@@ -222,10 +222,10 @@ echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
 
       # Video (preferred) or Image
       if [[ -n "${r_video}" ]]; then
-        echo "<video src=\"${r_video}\" width=\"600\" autoplay loop muted></video>"
+        echo "<p align=\"center\"><video src=\"${r_video}\" width=\"600\" autoplay loop muted></video></p>"
         echo ""
       elif [[ -n "${r_image}" ]]; then
-        echo "<img src=\"${r_image}\" alt=\"${r_name}\" width=\"600\">"
+        echo "<p align=\"center\"><img src=\"${r_image}\" alt=\"${r_name}\" width=\"600\"></p>"
         echo ""
       fi
 
