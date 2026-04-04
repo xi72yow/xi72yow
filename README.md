@@ -6,7 +6,9 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
-A Linux-specific fork of GitHub Desktop, synchronized with the official repository and adapted for compatibility with a custom Linux distribution. Built with TypeScript, React, and Electron.
+A Linux-specific fork of GitHub Desktop, maintained to integrate with a custom Linux distribution and synchronized with the official GitHub Desktop repository. Built using TypeScript, React, and Electron.
+
+<img src="https://github.com/xi72yow/desktop-drac/actions/workflows/ci-linux.yml/badge.svg" alt="desktop-drac" width="600">
 
 **Tech:** TypeScript, SCSS, JavaScript
 
@@ -20,7 +22,9 @@ A Linux-specific fork of GitHub Desktop, synchronized with the official reposito
 
 ### [sei](https://github.com/xi72yow/sei)
 
-A tool for managing environment variable secrets by storing them securely in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets, ensuring they remain inaccessible to file-based tools and AI agents.
+A tool for managing environment secrets securely by storing them in GNOME Keyring instead of plaintext `.env` files. Provides a TUI for editing and a CLI for injecting secrets, ensuring they remain inaccessible to file-based tools like AI agents, scanners, and version control systems.
+
+<img src="https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797" alt="sei" width="600">
 
 **Tech:** Rust, Shell, Dockerfile
 
@@ -34,7 +38,9 @@ A tool for managing environment variable secrets by storing them securely in GNO
 
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
-A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Designed for devices like MMO mice and Azeron keypads, it supports key-to-key and key-to-combination mappings, multi-device setups, and includes a terminal UI for configuration.
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, designed for devices like MMO mice and Azeron keypads. It supports Wayland and X11, offers a terminal-based UI for configuration, and is compatible with input-remapper preset files.
+
+<img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600">
 
 **Tech:** Rust, Shell, Dockerfile
 
@@ -48,7 +54,9 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
 
-ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network, consisting of firmware, a core mediator, and a user interface. It uses UDP to transmit data packets from the PC to a microcontroller, enabling configuration through a graphical interface or CLI.
+ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs using a PC and local network. It consists of firmware, a core for mediating between the user and LEDs, and a graphical user interface for configuration, with plans for CLI support in future versions.
+
+<video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video>
 
 **Tech:** TypeScript, JavaScript, C
 
