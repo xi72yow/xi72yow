@@ -6,8 +6,6 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
-Fork of Fork of GitHub Desktop to support my Linux distribution in new style
-
 **Tech:** TypeScript, SCSS, JavaScript
 
 <details><summary>Recent activity</summary>
@@ -19,8 +17,6 @@ Fork of Fork of GitHub Desktop to support my Linux distribution in new style
 </details>
 
 ### [sei](https://github.com/xi72yow/sei)
-
-Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.
 
 **Tech:** Rust, Shell, Dockerfile
 
@@ -34,8 +30,6 @@ Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI
 
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
-Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.
-
 **Tech:** Rust, Shell, Dockerfile
 
 <details><summary>Recent activity</summary>
@@ -47,8 +41,6 @@ Remap input device events on kernel level (evdev/uinput) – built for MMO mice,
 </details>
 
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
-
-LEDs follow me!
 
 **Tech:** TypeScript, JavaScript, C
 

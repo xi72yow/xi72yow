@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-04-04T21:34:54Z",
+  "updated_at": "2026-04-04T21:36:31Z",
   "user": "xi72yow",
   "repos": [
     {
       "name": "ScreenChaser",
       "url": "https://github.com/xi72yow/ScreenChaser",
       "homepage": null,
-      "description_en": "LEDs follow me!",
-      "description_de": "LEDs follow me!",
+      "description_en": "",
+      "description_de": "",
       "tech_stack": [
         "TypeScript",
         "JavaScript",
@@ -40,8 +40,8 @@
       "name": "input-remapper-rs",
       "url": "https://github.com/xi72yow/input-remapper-rs",
       "homepage": null,
-      "description_en": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
-      "description_de": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
+      "description_en": "",
+      "description_de": "",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -87,8 +87,8 @@
       "name": "sei",
       "url": "https://github.com/xi72yow/sei",
       "homepage": null,
-      "description_en": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
-      "description_de": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
+      "description_en": "",
+      "description_de": "",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -127,8 +127,8 @@
       "name": "desktop-drac",
       "url": "https://github.com/xi72yow/desktop-drac",
       "homepage": null,
-      "description_en": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
-      "description_de": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
+      "description_en": "",
+      "description_de": "",
       "tech_stack": [
         "TypeScript",
         "SCSS",
