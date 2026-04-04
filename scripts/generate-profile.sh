@@ -99,10 +99,15 @@ README excerpt: ${readme_content}"
 PAYLOAD
 )
 
-  ai_response=$(curl -sf -X POST "${MODELS_URL}" \
+  ai_response=$(curl -s -X POST "${MODELS_URL}" \
     "${CURL_AUTH[@]}" \
     -H "Content-Type: application/json" \
-    -d "${ai_payload}" 2>/dev/null || echo "")
+    -d "${ai_payload}" || echo "")
+
+  # Debug: show AI response status
+  if echo "${ai_response}" | jq -e '.error' &>/dev/null; then
+    echo "  AI error: $(echo "${ai_response}" | jq -r '.error.message // .error // "unknown"')"
+  fi
 
   if [[ -n "${ai_response}" ]]; then
     descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
