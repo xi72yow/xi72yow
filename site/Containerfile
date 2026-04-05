@@ -8,7 +8,7 @@ COPY site/package.json site/package-lock.json* ./
 RUN npm install
 COPY site/ .
 COPY repos.json ../repos.json
-RUN curl -fsSL -o public/photo.jpg "https://github.com/user-attachments/assets/708d1434-91f0-45c7-81e8-c51178313213"
+RUN node -e "const fs=require('fs');fetch('https://github.com/user-attachments/assets/708d1434-91f0-45c7-81e8-c51178313213').then(r=>r.arrayBuffer()).then(b=>fs.writeFileSync('public/photo.jpg',Buffer.from(b)))"
 RUN npm run build
 
 FROM dhi.io/node:25-debian13
