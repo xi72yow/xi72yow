@@ -151,7 +151,7 @@ try {
       <ellipse cx="180" cy="190" rx="480" ry="400" fill="url(#g1)"/>
       <ellipse cx="1020" cy="440" rx="420" ry="350" fill="url(#g2)"/>
       <ellipse cx="720" cy="130" rx="360" ry="280" fill="url(#g3)"/>
-      <text x="70" y="240" font-family="Inter, sans-serif" font-size="72" font-weight="800" fill="white">Maximilian Reinke</text>
+      <text x="70" y="240" font-family="Inter, sans-serif" font-size="66" font-weight="800" fill="white">Maximilian Reinke</text>
       <text x="70" y="310" font-family="Inter, sans-serif" font-size="38" font-weight="500" fill="#0ea5e9">Solution Developer</text>
       <!-- Globe icon (tabler: world) -->
       <g transform="translate(70, 348)">
