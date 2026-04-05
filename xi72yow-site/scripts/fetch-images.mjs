@@ -42,7 +42,8 @@ for (const repo of repos.repos) {
       const res = await fetch(repo.video, { headers: { Range: "bytes=0-5000000" } });
       if (!res.ok && res.status !== 206) throw new Error(`HTTP ${res.status}`);
       const buf = Buffer.from(await res.arrayBuffer());
-      const tmpVideo = join(outDir, `${repo.name}_tmp.mp4`);
+      const ext = repo.video.match(/\.(mp4|webm|mov)/i)?.[1] || "mp4";
+      const tmpVideo = join(outDir, `${repo.name}_tmp.${ext}`);
 
       // Write partial video to disk
       writeFileSync(tmpVideo, buf);
