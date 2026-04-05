@@ -32,17 +32,26 @@ echo "Found ${all_count} public repos, ${repo_count} tagged with '${FEATURED_TOP
 echo "Aggregating language stats across all non-fork public repos..."
 non_fork_repos=$(echo "${all_repos_json}" | jq -c '[.[] | select(.fork == false)]')
 non_fork_count=$(echo "${non_fork_repos}" | jq 'length')
-all_lang_bytes="{}"
+all_lang_jsons=""
 
 for i in $(seq 0 $((non_fork_count - 1))); do
   nf_full_name=$(echo "${non_fork_repos}" | jq -r ".[$i].full_name")
-  nf_langs=$(curl -sf "${CURL_AUTH[@]}" \
+  echo "  Languages for ${nf_full_name} ($((i + 1))/${non_fork_count})"
+  nf_langs=$(curl -sf --max-time 10 "${CURL_AUTH[@]}" \
     "${API_URL}/repos/${nf_full_name}/languages" 2>/dev/null || echo "{}")
-  all_lang_bytes=$(echo "${all_lang_bytes}" | jq --argjson new "${nf_langs}" '
-    . as $acc | ($new | to_entries[]) as $e | $acc + {($e.key): ((.[$e.key] // 0) + $e.value)}
-  ')
-  sleep 0.5
+  if echo "${nf_langs}" | jq empty 2>/dev/null; then
+    all_lang_jsons="${all_lang_jsons}${nf_langs}"$'\n'
+  fi
 done
+
+# Merge all language objects at once
+all_lang_bytes=$(echo "${all_lang_jsons}" | jq -s '
+  reduce .[] as $obj ({};
+    reduce ($obj | to_entries[]) as $e (.;
+      .[$e.key] = ((.[$e.key] // 0) + $e.value)
+    )
+  )
+')
 
 echo "Aggregated languages from ${non_fork_count} non-fork repos."
 
@@ -199,8 +208,6 @@ README excerpt: ${readme_content}"
 
   repos_output=$(echo "${repos_output}" | jq --argjson entry "${repo_entry}" '. + [$entry]')
 
-  # Rate limit: small delay between repos
-  sleep 1
 done
 
 # ── Generate profile (about + skills) via AI ─────────────────────────────
