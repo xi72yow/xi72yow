@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-05T14:14:49Z",
+  "updated_at": "2026-04-05T14:19:11Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
@@ -45,7 +45,7 @@
       },
       {
         "name": "Shell",
-        "bytes": 153889,
+        "bytes": 153638,
         "percentage": 5.8
       },
       {
@@ -122,8 +122,8 @@
       "homepage": null,
       "image": "https://xi72yow.de/data/pictures/screenchaser_logo.png",
       "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
-      "description_en": "",
-      "description_de": "",
+      "description_en": "LEDs follow me!",
+      "description_de": "LEDs follow me!",
       "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
       "tech_stack": [
         "TypeScript",
@@ -157,8 +157,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031",
       "video": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
+      "description_de": "Remap input device events on kernel level (evdev/uinput) – built for MMO mice, Azeron keypads, and any Linux input device. Rust rewrite of input-remapper.",
       "readme_teaser": "input-remapper-rs Remap input device events on kernel level (evdev/uinput). Works on Wayland and X11. Rust rewrite of , focusing on performance and simplicity. Compatible with existing input-remapper preset files. Features - Key-to-key and key-to-combination remapping (e.g. mouse button -> Ctrl+C) -",
       "tech_stack": [
         "Rust",
@@ -206,8 +206,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797",
       "video": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
+      "description_de": "Manage .env secrets in GNOME Keyring instead of plaintext files. TUI editor, CLI injector - invisible to AI agents, scanners, and git.",
       "readme_teaser": "sei - Save Env Inject > You don't leave your front door open just because you'll need to get back in tomorrow. Manages environment secrets in GNOME Keyring instead of .env files. TUI for editing, CLI for injection. Why? .env files sit in the project directory — any tool with file access can read t",
       "tech_stack": [
         "Rust",
@@ -248,8 +248,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35",
       "video": null,
-      "description_en": "",
-      "description_de": "",
+      "description_en": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
+      "description_de": "Fork of Fork of GitHub Desktop to support my Linux distribution in new style",
       "readme_teaser": "- The Linux Fork (desktop-drac) is an open-source -based GitHub app. It is written in and uses . desktop-drac is a community-maintained Linux fork, originally based on (no longer actively maintained), now synced directly with the official upstream. <source src=\"https://github.com/user-attachments/as",
       "tech_stack": [
         "TypeScript",
