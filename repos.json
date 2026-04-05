@@ -1,45 +1,50 @@
 {
-  "updated_at": "2026-04-05T14:22:17Z",
+  "updated_at": "2026-04-05T19:03:20Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops tools and applications with a focus on system-level functionality, user interface design, and security enhancements. His projects include a Linux-specific fork of GitHub Desktop, providing a desktop client for managing repositories on Linux distributions, and a Rust-based input remapping tool that supports both Wayland and X11 environments. He has also created a system for controlling Neopixel LEDs over a network and a utility for securely managing environment variable secrets using the GNOME Keyring.",
-      "Maximilian's technical approach emphasizes the use of modern programming languages and frameworks, including Rust, TypeScript, and React, to build efficient and maintainable software. He incorporates containerization with Docker for development and deployment workflows and leverages tools like evdev and uinput for low-level system integrations. His projects often feature both graphical and terminal-based user interfaces, reflecting a balanced focus on usability and performance."
+      "Maximilian Reinke develops software solutions focused on system-level integrations, desktop applications, and secure environment management. His projects include adaptations of existing tools for Linux environments, such as desktop-drac, which modifies GitHub Desktop for compatibility with specific Linux distributions. Other works, like sei, address security concerns by enabling encrypted handling of environment variables, while input-remapper-rs facilitates kernel-level input device remapping for both Wayland and X11 environments. Additionally, ScreenChaser demonstrates his interest in hardware-software interaction, providing control systems for Neopixel LEDs over local networks.",
+      "Maximilian employs a pragmatic and modular approach to development, leveraging languages and tools suited to the specific requirements of each project. His use of Rust in input-remapper-rs highlights a focus on performance and safety for system-level programming, while TypeScript and SCSS are utilized for user-facing applications like desktop-drac. Dockerfile and Shell scripting are integrated into workflows for deployment and automation, and GNOME Keyring is utilized for secure credential management in sei. Across projects, he demonstrates an emphasis on compatibility, maintainability, and adherence to technical standards."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Werkzeuge und Anwendungen mit einem Schwerpunkt auf systemnaher Funktionalität, Benutzeroberflächendesign und Sicherheitsverbesserungen. Zu seinen Projekten gehören ein Linux-spezifischer Fork von GitHub Desktop, der einen Desktop-Client für die Verwaltung von Repositories auf Linux-Distributionen bereitstellt, sowie ein in Rust entwickeltes Tool zur Eingabeneuverknüpfung, das sowohl Wayland- als auch X11-Umgebungen unterstützt. Außerdem hat er ein System zur Steuerung von Neopixel-LEDs über ein Netzwerk und ein Dienstprogramm zur sicheren Verwaltung von Umgebungsvariablen mit dem GNOME Keyring entwickelt.",
-      "Maximilians technischer Ansatz legt den Fokus auf die Verwendung moderner Programmiersprachen und Frameworks wie Rust, TypeScript und React, um effiziente und wartbare Software zu erstellen. Er nutzt Containerisierung mit Docker für Entwicklungs- und Bereitstellungs-Workflows und setzt Werkzeuge wie evdev und uinput für systemnahe Integrationen ein. Seine Projekte umfassen häufig sowohl grafische als auch terminalbasierte Benutzeroberflächen, was einen ausgewogenen Fokus auf Benutzerfreundlichkeit und Leistung widerspiegelt."
+      "Maximilian Reinke entwickelt Softwarelösungen mit Schwerpunkt auf Systemintegration, Desktop-Anwendungen und sicherer Umgebungsverwaltung. Zu seinen Projekten gehören Anpassungen bestehender Tools für Linux-Umgebungen, wie desktop-drac, eine modifizierte Version von GitHub Desktop, die für spezifische Linux-Distributionen optimiert wurde. Weitere Arbeiten, wie sei, befassen sich mit Sicherheitsaspekten, indem sie eine verschlüsselte Handhabung von Umgebungsvariablen ermöglichen. Input-remapper-rs bietet Kernel-Level-Remapping von Eingabegeräten für Wayland- und X11-Umgebungen. ScreenChaser zeigt sein Interesse an der Interaktion zwischen Hardware und Software, indem es Steuerungssysteme für Neopixel-LEDs über lokale Netzwerke bereitstellt.",
+      "Maximilian verfolgt einen pragmatischen und modularen Entwicklungsansatz und nutzt Programmiersprachen und Tools, die den spezifischen Anforderungen jedes Projekts entsprechen. Sein Einsatz von Rust in input-remapper-rs unterstreicht den Fokus auf Leistung und Sicherheit bei der Systemprogrammierung, während TypeScript und SCSS für benutzerorientierte Anwendungen wie desktop-drac verwendet werden. Dockerfile und Shell-Skripte werden in Workflows für Bereitstellung und Automatisierung integriert, und GNOME Keyring wird für die sichere Verwaltung von Zugangsdaten in sei eingesetzt. Über alle Projekte hinweg legt er Wert auf Kompatibilität, Wartbarkeit und die Einhaltung technischer Standards."
     ],
     "language_stats": [
       {
         "name": "Rust",
         "bytes": 670771,
-        "percentage": 25.4
+        "percentage": 25
       },
       {
         "name": "JavaScript",
-        "bytes": 593513,
-        "percentage": 22.5
+        "bytes": 601838,
+        "percentage": 22.4
       },
       {
         "name": "HTML",
         "bytes": 526996,
-        "percentage": 20
+        "percentage": 19.6
       },
       {
         "name": "TypeScript",
-        "bytes": 470510,
-        "percentage": 17.8
+        "bytes": 474540,
+        "percentage": 17.7
       },
       {
         "name": "Shell",
-        "bytes": 153850,
+        "bytes": 154680,
         "percentage": 5.8
       },
       {
         "name": "CSS",
         "bytes": 64058,
         "percentage": 2.4
+      },
+      {
+        "name": "Astro",
+        "bytes": 55666,
+        "percentage": 2.1
       },
       {
         "name": "Go",
@@ -57,11 +62,6 @@
         "percentage": 0.8
       },
       {
-        "name": "Astro",
-        "bytes": 19910,
-        "percentage": 0.8
-      },
-      {
         "name": "Makefile",
         "bytes": 19644,
         "percentage": 0.7
@@ -69,12 +69,12 @@
       {
         "name": "C",
         "bytes": 11910,
-        "percentage": 0.5
+        "percentage": 0.4
       },
       {
         "name": "Dockerfile",
-        "bytes": 8290,
-        "percentage": 0.3
+        "bytes": 9626,
+        "percentage": 0.4
       },
       {
         "name": "TeX",
@@ -110,8 +110,8 @@
       "homepage": null,
       "image": "https://xi72yow.de/data/pictures/screenchaser_logo.png",
       "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
-      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP communication. It includes firmware, a core for managing user-LED interactions, and a graphical interface for configuration, with plans for CLI support in future versions.",
-      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP-Kommunikation. Es umfasst Firmware, einen Kern zur Verwaltung der Interaktion zwischen Benutzer und LEDs sowie eine grafische Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen.",
+      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between user and LEDs, and a graphical interface for configuration, with plans for CLI support.",
+      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Vermittlung zwischen Benutzer und LEDs sowie eine grafische Oberfläche zur Konfiguration, mit geplanten CLI-Unterstützung.",
       "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
       "tech_stack": [
         "TypeScript",
@@ -121,6 +121,7 @@
       "topics": [],
       "stars": null,
       "is_fork": false,
+      "featured": "x",
       "last_commits": [
         {
           "message": "Update README.md",
@@ -145,8 +146,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031",
       "video": null,
-      "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports Wayland and X11, multi-device mapping, and includes a terminal UI for configuration.",
-      "description_de": "Ein in Rust geschriebenes Tool zum Umbelegen von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput. Unterstützt Wayland und X11, Multi-Geräte-Mapping und enthält eine Terminal-Benutzeroberfläche zur Konfiguration.",
+      "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Includes a terminal UI for configuration, multi-device support, and systemd integration for managing presets and virtual devices.",
+      "description_de": "Ein in Rust entwickeltes Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput, kompatibel mit Wayland und X11. Enthält eine Terminal-Benutzeroberfläche zur Konfiguration, Unterstützung für mehrere Geräte und Systemd-Integration zur Verwaltung von Presets und virtuellen Geräten.",
       "readme_teaser": "input-remapper-rs Remap input device events on kernel level (evdev/uinput). Works on Wayland and X11. Rust rewrite of , focusing on performance and simplicity. Compatible with existing input-remapper preset files. Features - Key-to-key and key-to-combination remapping (e.g. mouse button -> Ctrl+C) -",
       "tech_stack": [
         "Rust",
@@ -170,6 +171,7 @@
       ],
       "stars": null,
       "is_fork": false,
+      "featured": "x",
       "last_commits": [
         {
           "message": "chore: align dependabot (monthly, grouped, explicit deps)",
@@ -194,8 +196,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797",
       "video": null,
-      "description_en": "Stores environment variable secrets in GNOME Keyring instead of plaintext .env files, providing a TUI for editing and a CLI for injecting secrets into applications. Enhances security by preventing access to secrets from file-based tools, AI agents, and scanners.",
-      "description_de": "Speichert Umgebungsvariablen-Geheimnisse im GNOME Keyring anstelle von Klartext-.env-Dateien und bietet eine TUI zur Bearbeitung sowie eine CLI zur Geheimnisinjektion in Anwendungen. Erhöht die Sicherheit, indem der Zugriff auf Geheimnisse durch dateibasierte Tools, KI-Agenten und Scanner verhindert wird.",
+      "description_en": "Manages environment variable secrets using GNOME Keyring instead of plaintext .env files. Provides a terminal-based editor and command-line injection tool to securely handle secrets, preventing access by file-based tools or AI agents.",
+      "description_de": "Verwaltet Umgebungsvariablen-Geheimnisse mit GNOME Keyring anstelle von Klartext-.env-Dateien. Bietet einen terminalbasierten Editor und ein Befehlszeilen-Injektionstool, um Geheimnisse sicher zu handhaben und den Zugriff durch dateibasierte Tools oder KI-Agenten zu verhindern.",
       "readme_teaser": "sei - Save Env Inject > You don't leave your front door open just because you'll need to get back in tomorrow. Manages environment secrets in GNOME Keyring instead of .env files. TUI for editing, CLI for injection. Why? .env files sit in the project directory — any tool with file access can read t",
       "tech_stack": [
         "Rust",
@@ -212,6 +214,7 @@
       ],
       "stars": null,
       "is_fork": false,
+      "featured": "x",
       "last_commits": [
         {
           "message": "Update README with image and command usage details\n\nAdded image and clarified usage of 'sei' command.",
@@ -236,8 +239,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35",
       "video": null,
-      "description_en": "A Linux-specific fork of GitHub Desktop, built with TypeScript and React, synced with the official GitHub Desktop repository. Provides a desktop client for managing GitHub repositories with Linux distribution support.",
-      "description_de": "Ein Linux-spezifischer Fork von GitHub Desktop, entwickelt mit TypeScript und React, synchronisiert mit dem offiziellen GitHub Desktop-Repository. Bietet einen Desktop-Client zur Verwaltung von GitHub-Repositories mit Unterstützung für Linux-Distributionen.",
+      "description_en": "A Linux fork of GitHub Desktop, synchronized with the official upstream repository and adapted for specific Linux distributions. Written in TypeScript and SCSS, it provides a desktop client for managing GitHub repositories.",
+      "description_de": "Ein Linux-Fork von GitHub Desktop, synchronisiert mit dem offiziellen Upstream-Repository und angepasst für spezifische Linux-Distributionen. Geschrieben in TypeScript und SCSS, bietet es einen Desktop-Client zur Verwaltung von GitHub-Repositories.",
       "readme_teaser": "- The Linux Fork (desktop-drac) is an open-source -based GitHub app. It is written in and uses . desktop-drac is a community-maintained Linux fork, originally based on (no longer actively maintained), now synced directly with the official upstream. <source src=\"https://github.com/user-attachments/as",
       "tech_stack": [
         "TypeScript",
@@ -247,6 +250,7 @@
       "topics": [],
       "stars": null,
       "is_fork": true,
+      "featured": "x",
       "last_commits": [
         {
           "message": "Update build-default-menu.ts",
