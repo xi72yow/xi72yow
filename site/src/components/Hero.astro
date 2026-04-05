@@ -1,0 +1,66 @@
+---
+import { SITE } from "../config";
+---
+
+<section class="section-container min-h-[80vh] flex items-center">
+  <div class="flex flex-col md:flex-row items-center gap-12 w-full">
+    <div class="flex-1 space-y-6">
+      <p class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1" data-i18n-en="Hello, I'm" data-i18n-de="Hallo, ich bin">Hello, I'm</p>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-900 tracking-tight leading-none hero-fade hero-fade-2">
+        {SITE.name}
+      </h1>
+      <p class="text-2xl sm:text-3xl text-neutral-500 dark:text-neutral-400 font-500 hero-fade hero-fade-3">
+        {SITE.title}
+      </p>
+      <div class="flex gap-4 pt-4 hero-fade hero-fade-4">
+        <a
+          href={`mailto:${SITE.email}`}
+          class="inline-flex items-center gap-2 px-5 py-2.5 accent-bg text-white rounded-md font-500 text-sm hover:opacity-90 transition-opacity"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <span data-i18n-en="Get in touch" data-i18n-de="Kontakt">Get in touch</span>
+        </a>
+        <a
+          href="#projects"
+          class="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-300 dark:border-neutral-700 rounded-md font-500 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+        >
+          <span data-i18n-en="View projects" data-i18n-de="Projekte ansehen">View projects</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="flex-shrink-0 hero-fade hero-fade-3">
+      <div class="w-48 sm:w-56 md:w-72 lg:w-80 rounded-2xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-800 shadow-lg mx-auto">
+        <img
+          src={SITE.photoUrl}
+          alt={SITE.name}
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-fade {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: heroFadeIn 0.6s ease-out forwards;
+  }
+  .hero-fade-1 { animation-delay: 0.1s; }
+  .hero-fade-2 { animation-delay: 0.25s; }
+  .hero-fade-3 { animation-delay: 0.4s; }
+  .hero-fade-4 { animation-delay: 0.55s; }
+
+  @keyframes heroFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

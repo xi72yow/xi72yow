@@ -1,6 +1,25 @@
 {
   "updated_at": "2026-04-04T22:34:46Z",
   "user": "xi72yow",
+  "profile": {
+    "about_en": [
+      "Builds tools at the intersection of hardware and software — from controlling LED strips over UDP to remapping input devices at the kernel level.",
+      "Primarily works with Rust for systems-level tooling and TypeScript for application interfaces. Maintains several open-source projects including Linux desktop forks and embedded device controllers."
+    ],
+    "about_de": [
+      "Entwickelt Tools an der Schnittstelle von Hardware und Software — von der Steuerung von LED-Streifen über UDP bis zur Neuzuordnung von Eingabegeräten auf Kernel-Ebene.",
+      "Arbeitet hauptsächlich mit Rust für systemnahe Tools und TypeScript für Anwendungsschnittstellen. Pflegt mehrere Open-Source-Projekte, darunter Linux-Desktop-Forks und Embedded-Device-Controller."
+    ],
+    "language_stats": [
+      { "name": "TypeScript", "bytes": 2450000, "percentage": 42.5 },
+      { "name": "Rust", "bytes": 1800000, "percentage": 31.2 },
+      { "name": "JavaScript", "bytes": 680000, "percentage": 11.8 },
+      { "name": "C", "bytes": 420000, "percentage": 7.3 },
+      { "name": "SCSS", "bytes": 230000, "percentage": 4.0 },
+      { "name": "Shell", "bytes": 105000, "percentage": 1.8 },
+      { "name": "Dockerfile", "bytes": 12000, "percentage": 0.2 }
+    ]
+  },
   "repos": [
     {
       "name": "ScreenChaser",
@@ -10,6 +29,7 @@
       "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
       "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a user interface for configuration, with plans for CLI support in future versions.",
       "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Kommunikationsverwaltung und eine Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen.",
+      "readme_teaser": "ScreenChaser lets you control WS2812B Neopixel LEDs from your PC using UDP. It captures screen colors in real-time and streams them to LED strips, creating ambient lighting effects. The system consists of ESP32 firmware, a Node.js core for communication, and an Electron-based UI for configuration.",
       "tech_stack": [
         "TypeScript",
         "JavaScript",
@@ -44,6 +64,7 @@
       "video": null,
       "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, supporting devices like MMO mice and Azeron keypads. Includes a terminal UI for configuration, multi-device support, and compatibility with existing input-remapper presets on both Wayland and X11.",
       "description_de": "Ein in Rust entwickeltes Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput, unterstützt Geräte wie MMO-Mäuse und Azeron-Keypads. Beinhaltet eine Terminal-Benutzeroberfläche zur Konfiguration, Unterstützung für mehrere Geräte und Kompatibilität mit bestehenden input-remapper-Presets unter Wayland und X11.",
+      "readme_teaser": "A tool to remap input device events on Linux at the kernel level. It uses evdev to read events and uinput to inject modified events. Supports complex mappings for MMO mice, Azeron keypads, and other multi-button devices. Configuration is done through an interactive TUI.",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -92,6 +113,7 @@
       "video": null,
       "description_en": "This repository provides tools to securely manage environment variable secrets using GNOME Keyring instead of plaintext `.env` files. It includes a terminal-based editor (TUI) for secret management and a CLI for injecting secrets into applications, ensuring they remain inaccessible to file-based tools and AI agents.",
       "description_de": "Dieses Repository bietet Werkzeuge zur sicheren Verwaltung von Umgebungsvariablen-Geheimnissen mithilfe des GNOME Keyrings anstelle von Klartext-`.env`-Dateien. Es umfasst einen terminalbasierten Editor (TUI) zur Geheimnisverwaltung und eine CLI zur Injektion von Geheimnissen in Anwendungen, wodurch sie für dateibasierte Tools und KI-Agenten unzugänglich bleiben.",
+      "readme_teaser": "Manage your environment secrets securely using GNOME Keyring. Instead of storing sensitive values in plaintext .env files, sei keeps them in the system keyring where they are encrypted at rest. Edit secrets with a TUI editor, inject them into any process via CLI.",
       "tech_stack": [
         "Rust",
         "Shell",
@@ -133,6 +155,7 @@
       "video": null,
       "description_en": "A community-maintained Linux fork of GitHub Desktop, based on the Electron framework and synced with the official upstream repository. It includes modifications to support a specific Linux distribution and features a Dracula-themed interface.",
       "description_de": "Ein von der Community gepflegter Linux-Fork von GitHub Desktop, basierend auf dem Electron-Framework und synchronisiert mit dem offiziellen Upstream-Repository. Enthält Anpassungen zur Unterstützung einer spezifischen Linux-Distribution und bietet ein Dracula-Theme-Interface.",
+      "readme_teaser": "GitHub Desktop for Linux with a Dracula theme. This fork is based on the official desktop/desktop repository and includes patches for Linux compatibility, custom theming, and distribution-specific build configurations.",
       "tech_stack": [
         "TypeScript",
         "SCSS",

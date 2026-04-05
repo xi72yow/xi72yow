@@ -1,0 +1,111 @@
+---
+import { SITE } from "../config";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.title}`;
+---
+
+<!doctype html>
+<html lang="en" id="root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={`${SITE.name} — ${SITE.title}. Portfolio and projects.`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans antialiased relative overflow-x-hidden">
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-3" aria-hidden="true"></div>
+    <slot />
+    <script is:inline>
+      (function() {
+        var lang = navigator.language?.startsWith("de") ? "de" : "en";
+        document.documentElement.lang = lang;
+
+        document.querySelectorAll("[data-lang]").forEach(function(el) {
+          el.classList.toggle("hidden", el.getAttribute("data-lang") !== lang);
+        });
+
+        document.querySelectorAll("[data-i18n-" + lang + "]").forEach(function(el) {
+          el.textContent = el.getAttribute("data-i18n-" + lang);
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    min-height: 100vh;
+  }
+
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .bg-glow { opacity: 0.15; }
+  }
+
+  .bg-glow-1 {
+    width: 600px;
+    height: 600px;
+    background: #0ea5e9;
+    top: -10%;
+    right: -5%;
+    animation: drift1 20s ease-in-out infinite;
+  }
+
+  .bg-glow-2 {
+    width: 500px;
+    height: 500px;
+    background: #8b5cf6;
+    bottom: 10%;
+    left: -10%;
+    animation: drift2 25s ease-in-out infinite;
+  }
+
+  .bg-glow-3 {
+    width: 400px;
+    height: 400px;
+    background: #06b6d4;
+    top: 40%;
+    left: 50%;
+    animation: drift3 22s ease-in-out infinite;
+  }
+
+  @keyframes drift1 {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-60px, 40px); }
+    50% { transform: translate(-30px, 80px); }
+    75% { transform: translate(40px, 30px); }
+  }
+
+  @keyframes drift2 {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -30px); }
+    50% { transform: translate(80px, 20px); }
+    75% { transform: translate(20px, -50px); }
+  }
+
+  @keyframes drift3 {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-40px, -40px); }
+    50% { transform: translate(30px, -60px); }
+    75% { transform: translate(-20px, 30px); }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import reposData from "../../../repos.json";
+
+const profile = reposData.profile;
+const paragraphs_en = profile?.about_en ?? [];
+const paragraphs_de = profile?.about_de ?? [];
+const langStats = profile?.language_stats ?? [];
+
+function formatBytes(bytes: number): string {
+  if (bytes >= 1_000_000) return (bytes / 1_000_000).toFixed(1) + " MB";
+  if (bytes >= 1_000) return (bytes / 1_000).toFixed(0) + " KB";
+  return bytes + " B";
+}
+
+const langColors: Record<string, string> = {
+  TypeScript: "#3178c6",
+  JavaScript: "#f1e05a",
+  Rust: "#dea584",
+  C: "#555555",
+  Shell: "#89e051",
+  SCSS: "#c6538c",
+  Dockerfile: "#384d54",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  Python: "#3572A5",
+  Go: "#00ADD8",
+};
+---
+
+<section id="about" class="section-container border-t border-neutral-200 dark:border-neutral-800">
+  <div class="space-y-2 mb-12">
+    <h2 class="text-3xl sm:text-4xl font-800 tracking-tight" data-i18n-en="About" data-i18n-de="Über mich">About</h2>
+    <p class="text-neutral-500 dark:text-neutral-400" data-i18n-en="Background and stats" data-i18n-de="Hintergrund und Statistiken">
+      Background and stats
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div class="space-y-4 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+      <div data-lang="en">
+        {paragraphs_en.map((text) => (
+          <p class="mb-4">{text}</p>
+        ))}
+      </div>
+      <div data-lang="de" class="hidden">
+        {paragraphs_de.map((text) => (
+          <p class="mb-4">{text}</p>
+        ))}
+      </div>
+    </div>
+
+    <div class="space-y-5">
+      <h3 class="text-xs font-mono accent tracking-wider uppercase" data-i18n-en="Lines of code" data-i18n-de="Codezeilen">Lines of code</h3>
+
+      <!-- Stacked bar -->
+      <div class="flex w-full h-3 rounded-full overflow-hidden">
+        {langStats.map((lang) => (
+          <div
+            style={`width: ${lang.percentage}%; background: ${langColors[lang.name] || "#6b7280"}`}
+            title={`${lang.name}: ${lang.percentage}%`}
+          />
+        ))}
+      </div>
+
+      <!-- Legend -->
+      <div class="space-y-2.5">
+        {langStats.map((lang) => (
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2">
+              <span
+                class="w-3 h-3 rounded-full inline-block flex-shrink-0"
+                style={`background: ${langColors[lang.name] || "#6b7280"}`}
+              />
+              <span class="text-neutral-700 dark:text-neutral-300">{lang.name}</span>
+            </div>
+            <div class="flex items-center gap-3 text-neutral-400 dark:text-neutral-500 font-mono text-xs">
+              <span>{formatBytes(lang.bytes)}</span>
+              <span class="w-12 text-right">{lang.percentage}%</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

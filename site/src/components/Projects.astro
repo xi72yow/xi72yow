@@ -1,0 +1,32 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import reposData from "../../../repos.json";
+
+const repos = reposData.repos;
+---
+
+<section id="projects" class="section-container">
+  <div class="space-y-2 mb-12">
+    <h2 class="text-3xl sm:text-4xl font-800 tracking-tight" data-i18n-en="Projects" data-i18n-de="Projekte">Projects</h2>
+    <p class="text-neutral-500 dark:text-neutral-400" data-i18n-en="Open-source work and side projects" data-i18n-de="Open-Source-Arbeit und Nebenprojekte">
+      Open-source work and side projects
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {repos.map((repo) => (
+      <ProjectCard
+        name={repo.name}
+        url={repo.url}
+        descriptionEn={repo.description_en}
+        descriptionDe={repo.description_de}
+        readmeTeaser={repo.readme_teaser}
+        techStack={repo.tech_stack}
+        image={repo.image}
+        video={repo.video}
+        isFork={repo.is_fork}
+        commits={repo.last_commits}
+      />
+    ))}
+  </div>
+</section>

@@ -28,7 +28,25 @@ repo_count=$(echo "${repos_json}" | jq 'length')
 all_count=$(echo "${all_repos_json}" | jq 'length')
 echo "Found ${all_count} public repos, ${repo_count} tagged with '${FEATURED_TOPIC}'."
 
-# ── Build repo data ─────────────────────────────────────────────────────
+# ── Aggregate language stats across ALL public non-fork repos ────────────
+echo "Aggregating language stats across all non-fork public repos..."
+non_fork_repos=$(echo "${all_repos_json}" | jq -c '[.[] | select(.fork == false)]')
+non_fork_count=$(echo "${non_fork_repos}" | jq 'length')
+all_lang_bytes="{}"
+
+for i in $(seq 0 $((non_fork_count - 1))); do
+  nf_full_name=$(echo "${non_fork_repos}" | jq -r ".[$i].full_name")
+  nf_langs=$(curl -sf "${CURL_AUTH[@]}" \
+    "${API_URL}/repos/${nf_full_name}/languages" 2>/dev/null || echo "{}")
+  all_lang_bytes=$(echo "${all_lang_bytes}" | jq --argjson new "${nf_langs}" '
+    . as $acc | ($new | to_entries[]) as $e | $acc + {($e.key): ((.[$e.key] // 0) + $e.value)}
+  ')
+  sleep 0.5
+done
+
+echo "Aggregated languages from ${non_fork_count} non-fork repos."
+
+# ── Build repo data (featured only) ─────────────────────────────────────
 repos_output="[]"
 
 for i in $(seq 0 $((repo_count - 1))); do
@@ -88,6 +106,19 @@ for i in $(seq 0 $((repo_count - 1))); do
     first_video="https://raw.githubusercontent.com/${full_name}/main/${first_video}"
   fi
 
+  # Extract a plain-text README teaser (strip markdown/HTML, first ~300 chars)
+  readme_teaser=$(echo "${readme_content}" | \
+    sed 's/<[^>]*>//g' | \
+    sed 's/!\[[^]]*\]([^)]*)//g' | \
+    sed 's/\[[^]]*\]([^)]*)//g' | \
+    sed 's/^#\+\s*//g' | \
+    sed 's/[*_`~]//g' | \
+    sed '/^\s*$/d' | \
+    sed '/^[![]/d' | \
+    tr '\n' ' ' | \
+    sed 's/  */ /g' | \
+    head -c 300)
+
   # Trim README for AI context
   readme_content=$(echo "${readme_content}" | head -c 2000)
 
@@ -106,7 +137,7 @@ README excerpt: ${readme_content}"
       model: $model,
       messages: [
         { role: "system", content: $system },
-        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone — no marketing language, no superlatives, no hype. Context: " + $context) }
+        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context: " + $context) }
       ],
       temperature: 0.3,
       max_tokens: 300
@@ -149,6 +180,7 @@ README excerpt: ${readme_content}"
     --argjson commits "${commits}" \
     --arg image "${first_image}" \
     --arg video "${first_video}" \
+    --arg teaser "${readme_teaser}" \
     '{
       name: $name,
       url: $url,
@@ -157,6 +189,7 @@ README excerpt: ${readme_content}"
       video: ($video | if . == "" then null else . end),
       description_en: $desc_en,
       description_de: $desc_de,
+      readme_teaser: ($teaser | if . == "" then null else . end),
       tech_stack: $languages,
       topics: $topics,
       stars: $stars,
@@ -170,14 +203,96 @@ README excerpt: ${readme_content}"
   sleep 1
 done
 
+# ── Generate profile (about + skills) via AI ─────────────────────────────
+echo "Generating profile section..."
+
+# Aggregate all unique languages and tech across repos
+all_languages=$(echo "${repos_output}" | jq -r '[.[].tech_stack[]] | unique | join(", ")')
+all_descriptions=$(echo "${repos_output}" | jq -r '[.[] | "\(.name): \(.description_en)"] | join("\n")')
+
+profile_context="Developer: ${GITHUB_USER}
+All languages/tech used across projects: ${all_languages}
+Project summaries:
+${all_descriptions}"
+
+profile_payload=$(jq -nc \
+  --arg model "${MODEL}" \
+  --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format:
+{
+  \"about_en\": [\"paragraph 1\", \"paragraph 2\"],
+  \"about_de\": [\"paragraph 1\", \"paragraph 2\"],
+  \"skills\": [
+    {\"category\": \"Languages\", \"items\": [\"...\"]},
+    {\"category\": \"Frontend\", \"items\": [\"...\"]},
+    ...
+  ]
+}
+Skills categories should be derived from the actual tech stack. Only include technologies that are evident from the repositories. Group them logically (Languages, Frontend, Backend, Tools, Embedded, etc.)." \
+  --arg context "${profile_context}" \
+  '{
+    model: $model,
+    messages: [
+      { role: "system", content: $system },
+      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience — only reference what is evident from the repositories. Provide both English and German versions. Context:\n" + $context) }
+    ],
+    temperature: 0.3,
+    max_tokens: 800
+  }')
+
+profile_response=$(curl -s -X POST "${MODELS_URL}" \
+  "${CURL_AUTH[@]}" \
+  -H "Content-Type: application/json" \
+  -d "${profile_payload}" || echo "")
+
+if [[ -n "${profile_response}" ]]; then
+  profile_data=$(echo "${profile_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+  profile_data=$(echo "${profile_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+  profile_json=$(echo "${profile_data}" | jq '.' 2>/dev/null || echo "null")
+else
+  echo "  Profile AI request failed, using fallback"
+  profile_json="null"
+fi
+
+# Fallback if AI failed
+if [[ "${profile_json}" == "null" ]]; then
+  profile_json=$(jq -nc \
+    --arg langs "${all_languages}" \
+    '{
+      about_en: ["A developer building tools across embedded systems, web applications, and Linux infrastructure."],
+      about_de: ["Ein Entwickler, der Tools im Bereich Embedded-Systeme, Webanwendungen und Linux-Infrastruktur baut."],
+      skills: [{"category": "Technologies", "items": ($langs | split(", "))}]
+    }')
+fi
+
+echo "Profile section generated."
+
+# ── Compute language stats ───────────────────────────────────────────────
+echo "Computing language stats..."
+lang_total=$(echo "${all_lang_bytes}" | jq '[.[]] | add')
+language_stats=$(echo "${all_lang_bytes}" | jq -c --argjson total "${lang_total}" '
+  to_entries
+  | sort_by(-.value)
+  | map({
+      name: .key,
+      bytes: .value,
+      percentage: ((.value / $total * 1000 | round) / 10)
+    })
+')
+echo "Language stats: ${lang_total} bytes total across $(echo "${language_stats}" | jq 'length') languages."
+
+# Merge language_stats into profile
+profile_json=$(echo "${profile_json}" | jq --argjson stats "${language_stats}" '. + {language_stats: $stats}')
+
 # ── Write repos.json ─────────────────────────────────────────────────────
 output_json=$(jq -nc \
   --arg updated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
   --arg user "${GITHUB_USER}" \
   --argjson repos "${repos_output}" \
+  --argjson profile "${profile_json}" \
   '{
     updated_at: $updated,
     user: $user,
+    profile: $profile,
     repos: ($repos | sort_by(.stars // 0) | reverse)
   }')
 

@@ -1,0 +1,19 @@
+# Build context should be the parent directory:
+#   docker build -f site/Containerfile -t reinke-portfolio .
+# This allows access to both site/ and repos.json
+
+FROM dhi.io/node:25-debian13-dev AS build
+WORKDIR /app
+COPY site/package.json site/package-lock.json* ./
+RUN npm install
+COPY site/ .
+COPY repos.json ../repos.json
+RUN npm run build
+
+FROM dhi.io/node:25-debian13
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY site/serve.mjs ./serve.mjs
+EXPOSE 3000
+HEALTHCHECK NONE
+CMD ["node", "serve.mjs"]

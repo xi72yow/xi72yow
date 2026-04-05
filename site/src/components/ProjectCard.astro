@@ -1,0 +1,174 @@
+---
+interface Commit {
+  message: string;
+  date: string;
+  author: string;
+}
+
+interface Props {
+  name: string;
+  url: string;
+  descriptionEn: string;
+  descriptionDe: string;
+  readmeTeaser: string | null;
+  techStack: string[];
+  image: string | null;
+  video: string | null;
+  isFork: boolean;
+  commits: Commit[];
+}
+
+const { name, url, descriptionEn, descriptionDe, readmeTeaser, techStack, image, video, isFork, commits } = Astro.props;
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function shortMessage(msg: string): string {
+  const firstLine = msg.split("\n")[0];
+  return firstLine.length > 72 ? firstLine.slice(0, 69) + "..." : firstLine;
+}
+
+const badgeColors: Record<string, string> = {
+  TypeScript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  JavaScript: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  Rust: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  C: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
+  Shell: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+  Dockerfile: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
+  SCSS: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
+};
+
+function getBadgeClass(tech: string): string {
+  return badgeColors[tech] || "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300";
+}
+---
+
+<article class="card overflow-hidden hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300 group">
+  {video ? (
+    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+      <video
+        src={video}
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+        onmouseenter="this.play()"
+        onmouseleave="this.pause()"
+      />
+    </div>
+  ) : image ? (
+    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+      <img
+        src={image}
+        alt={name}
+        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+        loading="lazy"
+      />
+    </div>
+  ) : null}
+
+  <div class="p-6 space-y-4">
+    <div class="flex items-center gap-3">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-lg font-700 hover:accent transition-colors"
+      >
+        {name}
+      </a>
+      {isFork && (
+        <span class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 font-mono">
+          fork
+        </span>
+      )}
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ml-auto text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+        aria-label={`View ${name} on GitHub`}
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+      </a>
+    </div>
+
+    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed" data-lang="en">
+      {descriptionEn}
+    </p>
+    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed hidden" data-lang="de">
+      {descriptionDe}
+    </p>
+
+    {readmeTeaser && (
+      <div class="readme-teaser">
+        <p class="text-xs text-neutral-400 dark:text-neutral-500 leading-relaxed">
+          {readmeTeaser}
+        </p>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="readme-teaser-link text-xs font-mono accent hover:underline"
+          data-i18n-en="Read more on GitHub →"
+          data-i18n-de="Weiterlesen auf GitHub →"
+        >
+          Read more on GitHub →
+        </a>
+      </div>
+    )}
+
+    <div class="flex flex-wrap gap-1.5">
+      {techStack.map((tech) => (
+        <span class={`text-xs font-mono px-2 py-0.5 rounded-md ${getBadgeClass(tech)}`}>
+          {tech}
+        </span>
+      ))}
+    </div>
+
+    {commits.length > 0 && (
+      <details class="pt-2">
+        <summary class="text-xs font-mono text-neutral-400 dark:text-neutral-500 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors select-none">
+          Recent commits
+        </summary>
+        <ul class="mt-2 space-y-1.5">
+          {commits.map((commit) => (
+            <li class="text-xs flex gap-2">
+              <span class="text-neutral-400 dark:text-neutral-500 font-mono whitespace-nowrap shrink-0">
+                {formatDate(commit.date)}
+              </span>
+              <span class="text-neutral-600 dark:text-neutral-400 truncate">
+                {shortMessage(commit.message)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
+  </div>
+</article>
+
+<style>
+  .readme-teaser {
+    position: relative;
+  }
+  .readme-teaser p {
+    max-height: 3rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+  }
+  .readme-teaser-link {
+    position: relative;
+    display: inline-block;
+    margin-top: 0.25rem;
+  }
+</style>
