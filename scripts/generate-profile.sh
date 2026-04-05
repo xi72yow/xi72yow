@@ -69,12 +69,15 @@ for i in $(seq 0 $((repo_count - 1))); do
     -H "Accept: application/vnd.github.raw+json" \
     "${API_URL}/repos/${full_name}/readme" 2>/dev/null || echo "")
 
+  # Collapse multiline HTML tags into single lines for regex matching
+  readme_oneline=$(echo "${readme_content}" | tr '\n' ' ' | sed 's/  */ /g')
+
   # Extract first image URL from README, skipping badges (shields.io, workflow badges, etc.)
   first_image=$(echo "${readme_content}" | grep -oP '!\[[^\]]*\]\(\K[^\)]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || \
-    echo "${readme_content}" | grep -oP '<img[^>]+src="\K[^"]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || echo "")
+    echo "${readme_oneline}" | grep -oP '<img[^>]+src="\K[^"]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || echo "")
 
   # Extract first video URL from README (<video src="..."> or github user-content video links)
-  first_video=$(echo "${readme_content}" | grep -oP '<video[^>]+src="\K[^"]+' | head -1 || \
+  first_video=$(echo "${readme_oneline}" | grep -oP '<video[^>]+src="\K[^"]+' | head -1 || \
     echo "${readme_content}" | grep -oP 'https://[^)"\s]+\.(mp4|webm|mov)' | head -1 || echo "")
 
   # Make relative URLs absolute
