@@ -19,6 +19,7 @@ interface Props {
 }
 
 const { name, url, descriptionEn, descriptionDe, readmeTeaser, techStack, image, video, isFork, commits } = Astro.props;
+const localImage = image ? `/images/${name}.webp` : null;
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -62,10 +63,10 @@ function getBadgeClass(tech: string): string {
         onmouseleave="this.pause()"
       />
     </div>
-  ) : image ? (
+  ) : localImage ? (
     <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
       <img
-        src={image}
+        src={localImage}
         alt={name}
         class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
         loading="lazy"
@@ -93,7 +94,7 @@ function getBadgeClass(tech: string): string {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="ml-auto text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+        class="ml-auto text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
         aria-label={`View ${name} on GitHub`}
       >
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -111,7 +112,7 @@ function getBadgeClass(tech: string): string {
 
     {readmeTeaser && (
       <div class="readme-teaser">
-        <p class="text-xs text-neutral-400 dark:text-neutral-500 leading-relaxed">
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
           {readmeTeaser}
         </p>
         <a
@@ -140,13 +141,13 @@ function getBadgeClass(tech: string): string {
 
     {commits.length > 0 && (
       <details class="pt-2">
-        <summary class="text-xs font-mono text-neutral-400 dark:text-neutral-500 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors select-none">
+        <summary class="text-xs font-mono text-neutral-500 dark:text-neutral-400 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors select-none">
           Recent commits
         </summary>
         <ul class="mt-2 space-y-1.5">
           {commits.map((commit) => (
             <li class="text-xs flex gap-2">
-              <span class="text-neutral-400 dark:text-neutral-500 font-mono whitespace-nowrap shrink-0">
+              <span class="text-neutral-500 dark:text-neutral-400 font-mono whitespace-nowrap shrink-0">
                 {formatDate(commit.date)}
               </span>
               <span class="text-neutral-600 dark:text-neutral-400 truncate">
