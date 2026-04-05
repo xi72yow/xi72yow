@@ -37,8 +37,15 @@ import { SITE } from "../config";
         </svg>
       </a>
     </div>
-    <p class="text-sm text-neutral-500 dark:text-neutral-400">
-      {SITE.name} &middot; {SITE.domain}
-    </p>
+    <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+      <span>{SITE.name} &middot; {SITE.domain}</span>
+      <span>&middot;</span>
+      <a
+        href="/impressum"
+        class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+      >
+        Impressum
+      </a>
+    </div>
   </div>
 </footer>

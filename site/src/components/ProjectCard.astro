@@ -51,17 +51,24 @@ function getBadgeClass(tech: string): string {
 
 <article class="card overflow-hidden hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300 group flex flex-col">
   {video ? (
-    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
-      <video
-        src={video}
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-        onmouseenter="this.play()"
-        onmouseleave="this.pause()"
-      />
+    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden relative video-container cursor-pointer" data-video-src={video}>
+      {localImage ? (
+        <img
+          src={localImage}
+          alt={name}
+          class="w-full h-full object-cover video-thumb"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-full flex items-center justify-center video-thumb">
+          <span class="text-neutral-400 dark:text-neutral-500 text-sm font-mono">{name}</span>
+        </div>
+      )}
+      <div class="video-play-overlay absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
+        <svg class="w-14 h-14 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
     </div>
   ) : localImage ? (
     <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
@@ -161,6 +168,26 @@ function getBadgeClass(tech: string): string {
     </div>
   </div>
 </article>
+
+<script>
+  document.querySelectorAll('.video-container').forEach((container) => {
+    container.addEventListener('click', () => {
+      const src = container.getAttribute('data-video-src');
+      if (!src) return;
+      const video = document.createElement('video');
+      video.src = src;
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.autoplay = true;
+      video.className = 'w-full h-full object-cover';
+      container.innerHTML = '';
+      container.classList.remove('cursor-pointer');
+      container.appendChild(video);
+      video.play();
+    });
+  });
+</script>
 
 <style>
   .readme-teaser {
