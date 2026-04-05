@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} — ${SITE.title}`;
+const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.title}`;
 ---
 
 <!doctype html>
@@ -14,14 +14,14 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} — ${SITE
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}. ${SITE.catchphrase}`} />
+    <meta name="description" content={`${SITE.alias} - ${SITE.name}, ${SITE.title}. ${SITE.catchphrase}`} />
     <meta name="author" content={SITE.name} />
     <link rel="canonical" href={`https://${SITE.domain}/`} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}.`} />
+    <meta property="og:description" content={`${SITE.alias} - ${SITE.name}, ${SITE.title}.`} />
     <meta property="og:url" content={`https://${SITE.domain}/`} />
     <meta property="og:image" content={`https://${SITE.domain}/assets/og.jpg`} />
     <meta property="og:image:width" content="1200" />
@@ -31,7 +31,7 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} — ${SITE
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}.`} />
+    <meta name="twitter:description" content={`${SITE.alias} - ${SITE.name}, ${SITE.title}.`} />
     <meta name="twitter:image" content={`https://${SITE.domain}/assets/og.jpg`} />
 
     <!-- Structured Data -->
