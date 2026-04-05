@@ -5,7 +5,7 @@ GITHUB_USER="xi72yow"
 FEATURED_TOPIC="x"
 API_URL="https://api.github.com"
 MODELS_URL="https://models.inference.ai.azure.com/chat/completions"
-MODEL="o4-mini"
+MODEL="gpt-4o"
 
 # Auth header (works in Actions via GITHUB_TOKEN, optional for local testing)
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then
@@ -140,12 +140,16 @@ README excerpt: ${readme_content}"
 
   ai_payload=$(jq -nc \
     --arg model "${MODEL}" \
+    --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
     --arg context "${ai_context}" \
     '{
       model: $model,
       messages: [
-        { role: "user", content: ("You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}\n\nWrite a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
-      ]
+        { role: "system", content: $system },
+        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
+      ],
+      temperature: 0.3,
+      max_tokens: 300
     }')
 
   ai_response=$(curl -s -X POST "${MODELS_URL}" \
@@ -229,12 +233,16 @@ ${all_descriptions}"
 
 profile_payload=$(jq -nc \
   --arg model "${MODEL}" \
+  --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
   --arg context "${profile_context}" \
   '{
     model: $model,
     messages: [
-      { role: "user", content: ("You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format:\n{\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}\n\nGenerate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
-    ]
+      { role: "system", content: $system },
+      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
+    ],
+    temperature: 0.3,
+    max_tokens: 800
   }')
 
 profile_response=$(curl -s -X POST "${MODELS_URL}" \
