@@ -53,20 +53,7 @@ const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.t
     <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-3" aria-hidden="true"></div>
     <slot />
-    <script is:inline>
-      (function() {
-        var lang = navigator.language?.startsWith("de") ? "de" : "en";
-        document.documentElement.lang = lang;
-
-        document.querySelectorAll("[data-lang]").forEach(function(el) {
-          el.classList.toggle("hidden", el.getAttribute("data-lang") !== lang);
-        });
-
-        document.querySelectorAll("[data-i18n-" + lang + "]").forEach(function(el) {
-          el.textContent = el.getAttribute("data-i18n-" + lang);
-        });
-      })();
-    </script>
+    <script is:inline>!function(){var l=navigator.language?.startsWith("de")?"de":"en";document.documentElement.lang=l;document.querySelectorAll("[data-lang]").forEach(function(e){e.classList.toggle("hidden",e.getAttribute("data-lang")!==l)});document.querySelectorAll("[data-i18n-"+l+"]").forEach(function(e){e.textContent=e.getAttribute("data-i18n-"+l)})}()</script>
   </body>
 </html>
 
