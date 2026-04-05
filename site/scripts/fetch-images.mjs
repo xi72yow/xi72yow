@@ -104,10 +104,24 @@ try {
     .png()
     .toBuffer();
 
+  // Fetch Inter font for OG image
+  console.log("  Fetching Inter font...");
+  const interBold = await fetch("https://fonts.bunny.net/inter/files/inter-latin-800-normal.woff2").then(r => r.arrayBuffer());
+  const interMedium = await fetch("https://fonts.bunny.net/inter/files/inter-latin-500-normal.woff2").then(r => r.arrayBuffer());
+  const interRegular = await fetch("https://fonts.bunny.net/inter/files/inter-latin-400-normal.woff2").then(r => r.arrayBuffer());
+  const interBoldB64 = Buffer.from(interBold).toString("base64");
+  const interMediumB64 = Buffer.from(interMedium).toString("base64");
+  const interRegularB64 = Buffer.from(interRegular).toString("base64");
+
   // Background with subtle glow bubbles + text overlay as SVG
   const bgSvg = Buffer.from(`
     <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <style>
+          @font-face { font-family: "Inter"; font-weight: 800; src: url("data:font/woff2;base64,${interBoldB64}") format("woff2"); }
+          @font-face { font-family: "Inter"; font-weight: 500; src: url("data:font/woff2;base64,${interMediumB64}") format("woff2"); }
+          @font-face { font-family: "Inter"; font-weight: 400; src: url("data:font/woff2;base64,${interRegularB64}") format("woff2"); }
+        </style>
         <radialGradient id="g1" cx="15%" cy="30%" r="40%">
           <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.12"/>
           <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
@@ -125,8 +139,8 @@ try {
       <ellipse cx="180" cy="190" rx="480" ry="400" fill="url(#g1)"/>
       <ellipse cx="1020" cy="440" rx="420" ry="350" fill="url(#g2)"/>
       <ellipse cx="720" cy="130" rx="360" ry="280" fill="url(#g3)"/>
-      <text x="70" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="800" fill="white">Maximilian Reinke</text>
-      <text x="70" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="38" font-weight="500" fill="#0ea5e9">Solution Developer</text>
+      <text x="70" y="240" font-family="Inter, sans-serif" font-size="72" font-weight="800" fill="white">Maximilian Reinke</text>
+      <text x="70" y="310" font-family="Inter, sans-serif" font-size="38" font-weight="500" fill="#0ea5e9">Solution Developer</text>
       <!-- Globe icon (tabler: world) -->
       <g transform="translate(70, 348)">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -135,7 +149,7 @@ try {
           <path d="M2 12h20"/>
         </svg>
       </g>
-      <text x="110" y="372" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">reinke.ing</text>
+      <text x="110" y="372" font-family="Inter, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">reinke.ing</text>
       <!-- Mail icon (tabler: mail) -->
       <g transform="translate(70, 393)">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -143,7 +157,7 @@ try {
           <path d="M3 7l9 6 9-6"/>
         </svg>
       </g>
-      <text x="110" y="417" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">max@reinke.ing</text>
+      <text x="110" y="417" font-family="Inter, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">max@reinke.ing</text>
     </svg>
   `);
 

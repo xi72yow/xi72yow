@@ -3,7 +3,7 @@
 # This allows access to both site/ and repos.json
 
 FROM dhi.io/node:25-debian13-dev AS build
-RUN apt-get update && apt-get install -y --no-install-recommends xz-utils fontconfig fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends xz-utils && rm -rf /var/lib/apt/lists/*
 ADD https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz /tmp/ffmpeg.tar.xz
 RUN cd /tmp && tar xf ffmpeg.tar.xz && cp ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ && rm -rf /tmp/ffmpeg*
 WORKDIR /app
