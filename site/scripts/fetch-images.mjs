@@ -86,4 +86,78 @@ try {
   console.error(`  Failed: ${e.message}`);
 }
 
+// Generate OG image (1200x630) with profile photo, name and title
+console.log("Generating OG image...");
+try {
+  const photoBuf = readFileSync(join(import.meta.dirname, "../public/photo.webp"));
+  const photoResized = await sharp(photoBuf)
+    .resize({ width: 300, height: 300, fit: "cover", position: "top" })
+    .png()
+    .toBuffer();
+
+  // Create circular mask for the photo
+  const circleMask = Buffer.from(
+    `<svg width="300" height="300"><circle cx="150" cy="150" r="150" fill="white"/></svg>`
+  );
+  const photoCircle = await sharp(photoResized)
+    .composite([{ input: circleMask, blend: "dest-in" }])
+    .png()
+    .toBuffer();
+
+  // Background with subtle glow bubbles + text overlay as SVG
+  const bgSvg = Buffer.from(`
+    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="g1" cx="15%" cy="30%" r="40%">
+          <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="85%" cy="70%" r="35%">
+          <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g3" cx="60%" cy="20%" r="30%">
+          <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1200" height="630" fill="#171717"/>
+      <ellipse cx="180" cy="190" rx="480" ry="400" fill="url(#g1)"/>
+      <ellipse cx="1020" cy="440" rx="420" ry="350" fill="url(#g2)"/>
+      <ellipse cx="720" cy="130" rx="360" ry="280" fill="url(#g3)"/>
+      <text x="70" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="800" fill="white">Maximilian Reinke</text>
+      <text x="70" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="38" font-weight="500" fill="#0ea5e9">Solution Developer</text>
+      <!-- Globe icon (tabler: world) -->
+      <g transform="translate(70, 348)">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          <path d="M2 12h20"/>
+        </svg>
+      </g>
+      <text x="110" y="372" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">reinke.ing</text>
+      <!-- Mail icon (tabler: mail) -->
+      <g transform="translate(70, 393)">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 7l9 6 9-6"/>
+        </svg>
+      </g>
+      <text x="110" y="417" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#a3a3a3">max@reinke.ing</text>
+    </svg>
+  `);
+
+  // Compose background + photo
+  await sharp(Buffer.from(await sharp(bgSvg).png().toBuffer()))
+    .composite([
+      { input: photoCircle, left: 810, top: 165 },
+    ])
+    .jpeg({ quality: 90 })
+    .toFile(join(import.meta.dirname, "../public/og.jpg"));
+
+  console.log("  → og.jpg");
+} catch (e) {
+  console.error(`  OG image failed: ${e.message}`);
+}
+
 console.log("Done.");
