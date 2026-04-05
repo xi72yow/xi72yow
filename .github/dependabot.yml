@@ -9,3 +9,25 @@ updates:
         patterns:
           - "*"
     open-pull-requests-limit: 1
+
+  - package-ecosystem: npm
+    directory: /xi72yow-site
+    schedule:
+      interval: monthly
+    groups:
+      all-deps:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: docker
+    directory: /site
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: docker
+    directory: /xi72yow-site
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 1
