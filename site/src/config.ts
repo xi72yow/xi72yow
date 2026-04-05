@@ -9,5 +9,5 @@ export const SITE = {
   catchphrase: "From embedded systems to web apps, from security tooling to Linux infrastructure. I build what's needed.",
   catchphraseDe: "Von Embedded-Systemen bis Webanwendungen, von Security-Tooling bis Linux-Infrastruktur. Ich baue, was gebraucht wird.",
   domain: "reinke.ing",
-  photoUrl: "https://github.com/user-attachments/assets/708d1434-91f0-45c7-81e8-c51178313213",
+  photoUrl: "/photo.jpg",
 } as const;
