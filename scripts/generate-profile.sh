@@ -217,7 +217,7 @@ echo "Generating profile section..."
 all_languages=$(echo "${repos_output}" | jq -r '[.[].tech_stack[]] | unique | join(", ")')
 all_descriptions=$(echo "${repos_output}" | jq -r '[.[] | "\(.name): \(.description_en)"] | join("\n")')
 
-profile_context="Developer: ${GITHUB_USER}
+profile_context="Developer: Maximilian Reinke (GitHub: ${GITHUB_USER})
 All languages/tech used across projects: ${all_languages}
 Project summaries:
 ${all_descriptions}"
@@ -240,7 +240,7 @@ Skills categories should be derived from the actual tech stack. Only include tec
     model: $model,
     messages: [
       { role: "system", content: $system },
-      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience — only reference what is evident from the repositories. Provide both English and German versions. Context:\n" + $context) }
+      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience — only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
     ],
     temperature: 0.3,
     max_tokens: 800
