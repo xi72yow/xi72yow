@@ -48,7 +48,7 @@ function getBadgeClass(tech: string): string {
 }
 ---
 
-<article class="card overflow-hidden hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300 group">
+<article class="card overflow-hidden hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300 group flex flex-col">
   {video ? (
     <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
       <video
@@ -73,7 +73,8 @@ function getBadgeClass(tech: string): string {
     </div>
   ) : null}
 
-  <div class="p-6 space-y-4">
+  <div class="p-6 flex flex-col flex-1 gap-4">
+    <div class="space-y-4">
     <div class="flex items-center gap-3">
       <a
         href={url}
@@ -126,6 +127,9 @@ function getBadgeClass(tech: string): string {
       </div>
     )}
 
+    </div>
+
+    <div class="mt-auto space-y-4">
     <div class="flex flex-wrap gap-1.5">
       {techStack.map((tech) => (
         <span class={`text-xs font-mono px-2 py-0.5 rounded-md ${getBadgeClass(tech)}`}>
@@ -153,6 +157,7 @@ function getBadgeClass(tech: string): string {
         </ul>
       </details>
     )}
+    </div>
   </div>
 </article>
 
