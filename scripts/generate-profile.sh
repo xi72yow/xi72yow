@@ -140,16 +140,12 @@ README excerpt: ${readme_content}"
 
   ai_payload=$(jq -nc \
     --arg model "${MODEL}" \
-    --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
     --arg context "${ai_context}" \
     '{
       model: $model,
       messages: [
-        { role: "system", content: $system },
-        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context: " + $context) }
-      ],
-      temperature: 0.3,
-      max_tokens: 300
+        { role: "user", content: ("You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}\n\nWrite a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
+      ]
     }')
 
   ai_response=$(curl -s -X POST "${MODELS_URL}" \
@@ -158,11 +154,20 @@ README excerpt: ${readme_content}"
     -d "${ai_payload}" || echo "")
 
   if [[ -n "${ai_response}" ]]; then
-    descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-    # Try to parse as JSON, strip markdown fences if present
-    descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-    description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
-    description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
+    # Check for API error
+    api_error=$(echo "${ai_response}" | jq -r '.error.message // empty' 2>/dev/null)
+    if [[ -n "${api_error}" ]]; then
+      echo "  AI API error: ${api_error}"
+      description_en="${description_raw}"
+      description_de="${description_raw}"
+    else
+      descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+      # Strip markdown fences if present
+      descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+      description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
+      description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
+      echo "  AI description generated"
+    fi
   else
     echo "  AI request failed, using original description"
     description_en="${description_raw}"
@@ -224,26 +229,12 @@ ${all_descriptions}"
 
 profile_payload=$(jq -nc \
   --arg model "${MODEL}" \
-  --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format:
-{
-  \"about_en\": [\"paragraph 1\", \"paragraph 2\"],
-  \"about_de\": [\"paragraph 1\", \"paragraph 2\"],
-  \"skills\": [
-    {\"category\": \"Languages\", \"items\": [\"...\"]},
-    {\"category\": \"Frontend\", \"items\": [\"...\"]},
-    ...
-  ]
-}
-Skills categories should be derived from the actual tech stack. Only include technologies that are evident from the repositories. Group them logically (Languages, Frontend, Backend, Tools, Embedded, etc.)." \
   --arg context "${profile_context}" \
   '{
     model: $model,
     messages: [
-      { role: "system", content: $system },
-      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience — only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
-    ],
-    temperature: 0.3,
-    max_tokens: 800
+      { role: "user", content: ("You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format:\n{\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}\n\nGenerate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
+    ]
   }')
 
 profile_response=$(curl -s -X POST "${MODELS_URL}" \
