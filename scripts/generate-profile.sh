@@ -114,9 +114,13 @@ for i in $(seq 0 $((repo_count - 1))); do
   first_image=$(echo "${readme_content}" | grep -oP '!\[[^\]]*\]\(\K[^\)]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || \
     echo "${readme_oneline}" | grep -oP '<img[^>]+src="\K[^"]+' | grep -viP 'shields\.io|badge|workflows|codecov|coveralls|travis|circleci|img\.shields' | head -1 || echo "")
 
-  # Extract first video URL from README (<video src="..."> or github user-content video links)
+  # Extract first video URL from README:
+  # 1. <video src="..."> tags
+  # 2. Bare URLs ending in .mp4/.webm/.mov
+  # 3. Markdown links with video filenames: [*.webm](URL) or [*.mp4](URL)
   first_video=$(echo "${readme_oneline}" | grep -oP '<video[^>]+src="\K[^"]+' | head -1 || \
-    echo "${readme_content}" | grep -oP 'https://[^)"\s]+\.(mp4|webm|mov)' | head -1 || echo "")
+    echo "${readme_content}" | grep -oP 'https://[^)"\s]+\.(mp4|webm|mov)' | head -1 || \
+    echo "${readme_content}" | grep -oP '\[[^\]]*\.(mp4|webm|mov)\]\(\K[^\)]+' | head -1 || echo "")
 
   # Make relative URLs absolute
   if [[ -n "${first_image}" && ! "${first_image}" =~ ^https?:// ]]; then
