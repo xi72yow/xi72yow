@@ -6,7 +6,7 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
-A Linux fork of GitHub Desktop, synchronized with the official upstream repository and adapted for specific Linux distributions. Written in TypeScript and SCSS, it provides a desktop client for managing GitHub repositories.
+A Linux fork of GitHub Desktop, maintained by the community and synced with the official upstream repository, featuring compatibility with specific Linux distributions.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
 
@@ -22,7 +22,7 @@ A Linux fork of GitHub Desktop, synchronized with the official upstream reposito
 
 ### [sei](https://github.com/xi72yow/sei)
 
-Manages environment variable secrets using GNOME Keyring instead of plaintext .env files. Provides a terminal-based editor and command-line injection tool to securely handle secrets, preventing access by file-based tools or AI agents.
+Stores environment variable secrets in GNOME Keyring instead of plaintext .env files, providing a TUI for editing and a CLI for injecting secrets into applications. Prevents access by file-based tools, AI agents, and accidental commits to version control systems.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797" alt="sei" width="600"></p>
 
@@ -38,7 +38,7 @@ Manages environment variable secrets using GNOME Keyring instead of plaintext .e
 
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
-A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Includes a terminal UI for configuration, multi-device support, and systemd integration for managing presets and virtual devices.
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Supports multi-device mapping, terminal UI for configuration, and integration with systemd for daemon management.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
 
@@ -54,7 +54,7 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
 
-ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between user and LEDs, and a graphical interface for configuration, with plans for CLI support.
+ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs using a PC and local network. It includes firmware, a core for mediating between the user and LEDs, and a graphical interface for configuration, with plans for CLI support.
 
 <p align="center"><video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video></p>
 

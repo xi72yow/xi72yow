@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-04-05T19:03:20Z",
+  "updated_at": "2026-04-05T19:53:37Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops software solutions focused on system-level integrations, desktop applications, and secure environment management. His projects include adaptations of existing tools for Linux environments, such as desktop-drac, which modifies GitHub Desktop for compatibility with specific Linux distributions. Other works, like sei, address security concerns by enabling encrypted handling of environment variables, while input-remapper-rs facilitates kernel-level input device remapping for both Wayland and X11 environments. Additionally, ScreenChaser demonstrates his interest in hardware-software interaction, providing control systems for Neopixel LEDs over local networks.",
-      "Maximilian employs a pragmatic and modular approach to development, leveraging languages and tools suited to the specific requirements of each project. His use of Rust in input-remapper-rs highlights a focus on performance and safety for system-level programming, while TypeScript and SCSS are utilized for user-facing applications like desktop-drac. Dockerfile and Shell scripting are integrated into workflows for deployment and automation, and GNOME Keyring is utilized for secure credential management in sei. Across projects, he demonstrates an emphasis on compatibility, maintainability, and adherence to technical standards."
+      "Maximilian Reinke develops software solutions with a focus on system-level tools, gaming applications, and user interface enhancements. His projects include a 2D top-down zombie survival game ('Klotzkoepfe'), a Linux-compatible fork of GitHub Desktop ('desktop-drac'), and utilities like 'sei' for secure environment variable management and 'input-remapper-rs' for advanced input device remapping. Additionally, he has worked on 'ScreenChaser,' a system for controlling Neopixel LEDs over a local network, combining firmware development with user-facing configuration tools.",
+      "In his technical approach, Maximilian leverages a diverse set of programming languages and tools, including Rust for system-level programming, TypeScript and JavaScript for user interfaces, and C for performance-critical components. He employs Docker for containerization and Shell scripting for automation. His projects often integrate with Linux-specific technologies, such as GNOME Keyring and systemd, and demonstrate a strong emphasis on cross-platform compatibility and efficient resource management."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Softwarelösungen mit Schwerpunkt auf Systemintegration, Desktop-Anwendungen und sicherer Umgebungsverwaltung. Zu seinen Projekten gehören Anpassungen bestehender Tools für Linux-Umgebungen, wie desktop-drac, eine modifizierte Version von GitHub Desktop, die für spezifische Linux-Distributionen optimiert wurde. Weitere Arbeiten, wie sei, befassen sich mit Sicherheitsaspekten, indem sie eine verschlüsselte Handhabung von Umgebungsvariablen ermöglichen. Input-remapper-rs bietet Kernel-Level-Remapping von Eingabegeräten für Wayland- und X11-Umgebungen. ScreenChaser zeigt sein Interesse an der Interaktion zwischen Hardware und Software, indem es Steuerungssysteme für Neopixel-LEDs über lokale Netzwerke bereitstellt.",
-      "Maximilian verfolgt einen pragmatischen und modularen Entwicklungsansatz und nutzt Programmiersprachen und Tools, die den spezifischen Anforderungen jedes Projekts entsprechen. Sein Einsatz von Rust in input-remapper-rs unterstreicht den Fokus auf Leistung und Sicherheit bei der Systemprogrammierung, während TypeScript und SCSS für benutzerorientierte Anwendungen wie desktop-drac verwendet werden. Dockerfile und Shell-Skripte werden in Workflows für Bereitstellung und Automatisierung integriert, und GNOME Keyring wird für die sichere Verwaltung von Zugangsdaten in sei eingesetzt. Über alle Projekte hinweg legt er Wert auf Kompatibilität, Wartbarkeit und die Einhaltung technischer Standards."
+      "Maximilian Reinke entwickelt Softwarelösungen mit einem Fokus auf systemnahe Tools, Gaming-Anwendungen und Verbesserungen von Benutzeroberflächen. Zu seinen Projekten gehören ein 2D-Top-Down-Zombie-Survival-Spiel ('Klotzkoepfe'), ein Linux-kompatibler Fork von GitHub Desktop ('desktop-drac') sowie Werkzeuge wie 'sei' zur sicheren Verwaltung von Umgebungsvariablen und 'input-remapper-rs' zur erweiterten Neuzuordnung von Eingabegeräten. Darüber hinaus hat er an 'ScreenChaser' gearbeitet, einem System zur Steuerung von Neopixel-LEDs über ein lokales Netzwerk, das Firmware-Entwicklung mit benutzerfreundlichen Konfigurationstools kombiniert.",
+      "In seinem technischen Ansatz verwendet Maximilian eine Vielzahl von Programmiersprachen und Tools, darunter Rust für systemnahe Programmierung, TypeScript und JavaScript für Benutzeroberflächen sowie C für performancekritische Komponenten. Er nutzt Docker zur Containerisierung und Shell-Skripte zur Automatisierung. Seine Projekte integrieren häufig Linux-spezifische Technologien wie GNOME Keyring und systemd und legen großen Wert auf plattformübergreifende Kompatibilität und effizientes Ressourcenmanagement."
     ],
     "language_stats": [
       {
@@ -110,8 +110,8 @@
       "homepage": null,
       "image": "https://xi72yow.de/data/pictures/screenchaser_logo.png",
       "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
-      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between user and LEDs, and a graphical interface for configuration, with plans for CLI support.",
-      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Vermittlung zwischen Benutzer und LEDs sowie eine grafische Oberfläche zur Konfiguration, mit geplanten CLI-Unterstützung.",
+      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs using a PC and local network. It includes firmware, a core for mediating between the user and LEDs, and a graphical interface for configuration, with plans for CLI support.",
+      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk. Es umfasst Firmware, einen Kern zur Vermittlung zwischen Benutzer und LEDs sowie eine grafische Oberfläche zur Konfiguration, mit geplanten CLI-Unterstützung.",
       "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
       "tech_stack": [
         "TypeScript",
@@ -146,8 +146,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031",
       "video": null,
-      "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Includes a terminal UI for configuration, multi-device support, and systemd integration for managing presets and virtual devices.",
-      "description_de": "Ein in Rust entwickeltes Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput, kompatibel mit Wayland und X11. Enthält eine Terminal-Benutzeroberfläche zur Konfiguration, Unterstützung für mehrere Geräte und Systemd-Integration zur Verwaltung von Presets und virtuellen Geräten.",
+      "description_en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput, compatible with Wayland and X11. Supports multi-device mapping, terminal UI for configuration, and integration with systemd for daemon management.",
+      "description_de": "Ein auf Rust basierendes Tool zur Neuzuordnung von Eingabegeräteereignissen auf Kernel-Ebene mit evdev und uinput, kompatibel mit Wayland und X11. Unterstützt Multi-Geräte-Mapping, Terminal-UI zur Konfiguration und Integration mit systemd für die Daemon-Verwaltung.",
       "readme_teaser": "input-remapper-rs Remap input device events on kernel level (evdev/uinput). Works on Wayland and X11. Rust rewrite of , focusing on performance and simplicity. Compatible with existing input-remapper preset files. Features - Key-to-key and key-to-combination remapping (e.g. mouse button -> Ctrl+C) -",
       "tech_stack": [
         "Rust",
@@ -196,8 +196,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797",
       "video": null,
-      "description_en": "Manages environment variable secrets using GNOME Keyring instead of plaintext .env files. Provides a terminal-based editor and command-line injection tool to securely handle secrets, preventing access by file-based tools or AI agents.",
-      "description_de": "Verwaltet Umgebungsvariablen-Geheimnisse mit GNOME Keyring anstelle von Klartext-.env-Dateien. Bietet einen terminalbasierten Editor und ein Befehlszeilen-Injektionstool, um Geheimnisse sicher zu handhaben und den Zugriff durch dateibasierte Tools oder KI-Agenten zu verhindern.",
+      "description_en": "Stores environment variable secrets in GNOME Keyring instead of plaintext .env files, providing a TUI for editing and a CLI for injecting secrets into applications. Prevents access by file-based tools, AI agents, and accidental commits to version control systems.",
+      "description_de": "Speichert Umgebungsvariablen-Geheimnisse im GNOME Keyring anstelle von Klartext-.env-Dateien und bietet eine TUI zur Bearbeitung sowie eine CLI zum Injizieren von Geheimnissen in Anwendungen. Verhindert den Zugriff durch dateibasierte Tools, KI-Agenten und versehentliche Commits in Versionskontrollsysteme.",
       "readme_teaser": "sei - Save Env Inject > You don't leave your front door open just because you'll need to get back in tomorrow. Manages environment secrets in GNOME Keyring instead of .env files. TUI for editing, CLI for injection. Why? .env files sit in the project directory — any tool with file access can read t",
       "tech_stack": [
         "Rust",
@@ -239,8 +239,8 @@
       "homepage": null,
       "image": "https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35",
       "video": null,
-      "description_en": "A Linux fork of GitHub Desktop, synchronized with the official upstream repository and adapted for specific Linux distributions. Written in TypeScript and SCSS, it provides a desktop client for managing GitHub repositories.",
-      "description_de": "Ein Linux-Fork von GitHub Desktop, synchronisiert mit dem offiziellen Upstream-Repository und angepasst für spezifische Linux-Distributionen. Geschrieben in TypeScript und SCSS, bietet es einen Desktop-Client zur Verwaltung von GitHub-Repositories.",
+      "description_en": "A Linux fork of GitHub Desktop, maintained by the community and synced with the official upstream repository, featuring compatibility with specific Linux distributions.",
+      "description_de": "Ein Linux-Fork von GitHub Desktop, der von der Community gepflegt und mit dem offiziellen Upstream-Repository synchronisiert wird, mit Kompatibilität für bestimmte Linux-Distributionen.",
       "readme_teaser": "- The Linux Fork (desktop-drac) is an open-source -based GitHub app. It is written in and uses . desktop-drac is a community-maintained Linux fork, originally based on (no longer actively maintained), now synced directly with the official upstream. <source src=\"https://github.com/user-attachments/as",
       "tech_stack": [
         "TypeScript",
@@ -265,6 +265,48 @@
         {
           "message": "fix: increase RecentRepositoriesLength to 7",
           "date": "2026-03-12T12:58:14Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "klotzkoepfe",
+      "url": "https://github.com/xi72yow/klotzkoepfe",
+      "homepage": null,
+      "image": null,
+      "video": null,
+      "description_en": "Klotzkoepfe is a 2D top-down zombie survival shooter for up to two players on one keyboard. Players face increasingly difficult waves of zombies, unlock weapons by destroying crates, and aim to survive as long as possible through tactical cooperation and strategic use of resources.",
+      "description_de": "Klotzkoepfe ist ein 2D-Top-Down-Zombie-Survival-Shooter für bis zu zwei Spieler an einer Tastatur. Spieler kämpfen gegen immer stärkere Zombie-Wellen, schalten Waffen durch das Zerstören von Kisten frei und versuchen, durch taktisches Zusammenspiel und strategischen Ressourceneinsatz möglichst lange zu überleben.",
+      "readme_teaser": "Klotzkoepfe Klotzkoepfe ist ein rasanter 2D-Top-Down-Zombie-Survival-Shooter fuer bis zu zwei Spieler an einer Tastatur. Welle um Welle stuermen immer staerkere Zombies auf euch ein, waehrend ihr durch das Zerstoeren von Kisten neue Waffen wie Schrotflinten, Granaten, Raketen und Minen freischaltet.",
+      "tech_stack": [
+        "Rust",
+        "WGSL",
+        "Shell"
+      ],
+      "topics": [
+        "bevy",
+        "game",
+        "local-multiplayer",
+        "rust-lang",
+        "zombie"
+      ],
+      "stars": null,
+      "is_fork": false,
+      "featured": "xx",
+      "last_commits": [
+        {
+          "message": "Add gameplay video to README\n\nAdded gameplay video link to README.",
+          "date": "2026-04-05T19:51:31Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "simplify README to game description and install instructions",
+          "date": "2026-04-05T19:42:00Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "skip test job in CI, no tests exist yet",
+          "date": "2026-04-04T20:35:46Z",
           "author": "xi72yow"
         }
       ]
