@@ -21,7 +21,7 @@ export default defineConfig({
   transformers: [transformerDirectives()],
   shortcuts: {
     "accent": "text-sky-600 dark:text-sky-400",
-    "accent-bg": "bg-sky-600 dark:bg-sky-500",
+    "accent-bg": "bg-sky-700 dark:bg-sky-500",
     "card": "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg",
     "section-container": "max-w-5xl mx-auto px-6 py-10 md:py-20",
   },

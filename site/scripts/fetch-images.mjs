@@ -30,7 +30,7 @@ try {
   const res = await fetch(photoUrl);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
-  await sharp(buf).webp({ quality: 85 }).toFile(join(import.meta.dirname, "../public/photo.webp"));
+  await sharp(buf).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 85 }).toFile(join(import.meta.dirname, "../public/photo.webp"));
   console.log("  → photo.webp");
 } catch (e) {
   console.error(`  Failed: ${e.message}`);
