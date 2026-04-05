@@ -1,20 +1,20 @@
 # Build context should be the parent directory:
-#   docker build -f site/Containerfile -t reinke-portfolio .
-# This allows access to both site/ and repos.json
+#   docker build -f xi72yow-site/Containerfile -t xi72yow-site .
+# This allows access to both xi72yow-site/ and repos.json
 
 FROM dhi.io/node:25-debian13-dev AS build
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY site/package.json site/package-lock.json* ./
+COPY xi72yow-site/package.json xi72yow-site/package-lock.json* ./
 RUN npm install
-COPY site/ .
+COPY xi72yow-site/ .
 COPY repos.json ../repos.json
 RUN npm run build
 
 FROM dhi.io/node:25-debian13
 WORKDIR /app
 COPY --from=build /app/dist ./dist
-COPY site/serve.mjs ./serve.mjs
+COPY xi72yow-site/serve.mjs ./serve.mjs
 EXPOSE 3000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
   CMD ["node", "-e", "fetch('http://localhost:3000/').then(r=>{process.exit(r.ok?0:1)}).catch(()=>process.exit(1))"]

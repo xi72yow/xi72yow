@@ -1,0 +1,309 @@
+---
+import { SITE } from "../config";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} — ${SITE.title}`;
+---
+
+<!doctype html>
+<html lang="en" id="root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}. ${SITE.catchphrase}`} />
+    <meta name="author" content={SITE.name} />
+    <link rel="canonical" href={`https://${SITE.domain}/`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}.`} />
+    <meta property="og:url" content={`https://${SITE.domain}/`} />
+    <meta property="og:image" content={SITE.photoUrl} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={`${SITE.alias} — ${SITE.name}, ${SITE.title}.`} />
+    <meta name="twitter:image" content={SITE.photoUrl} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": SITE.alias,
+      "alternateName": SITE.name,
+      "url": `https://${SITE.domain}`,
+      "email": `mailto:${SITE.email}`,
+      "image": SITE.photoUrl,
+      "sameAs": [SITE.githubUrl, SITE.linkedin]
+    })} />
+
+    <!-- Favicon Set -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#af0069" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#af0069" />
+    <meta name="theme-color" content="#222" />
+
+    <title>{pageTitle}</title>
+  </head>
+  <body class="bg-[#222] text-neutral-100 font-sans antialiased relative overflow-x-hidden">
+    <!-- Snowfall canvas (winter only, injected by JS) -->
+    <div id="snowfall" class="fixed inset-0 pointer-events-none z-50" aria-hidden="true"></div>
+
+    <!-- Background image overlay -->
+    <div class="fixed inset-0 pointer-events-none" style="z-index: -10; background: url('/assets/bg.webp') no-repeat center center fixed; background-size: cover;" aria-hidden="true"></div>
+
+    <!-- Background glow orbs -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+    <!-- Slimacy canvas -->
+    <canvas id="slimacy" width="57" height="111" class="fixed z-40 pointer-events-none" style="image-rendering: pixelated;" aria-hidden="true"></canvas>
+
+    <slot />
+
+    <!-- Console ASCII Art -->
+    <script is:inline>
+    console.log(`
+  \x1b[35m▒██   ██▒ ██▓▓██   ██▓ ▒█████   █     █░     ▓█████▄ ▓█████\x1b[0m
+  \x1b[35m▒▒ █ █ ▒░▓██▒ ▒██  ██▒▒██▒  ██▒▓█░ █ ░█░     ▒██▀ ██▌▓█   ▀\x1b[0m
+  \x1b[33m░░  █   ░▒██▒  ▒██ ██░▒██░  ██▒▒█░ █ ░█      ░██   █▌▒███\x1b[0m
+  \x1b[33m ░ █ █ ▒ ░██░  ░ ▐██▓░▒██   ██░░█░ █ ░█      ░▓█▄   ▌▒▓█  ▄\x1b[0m
+  \x1b[35m▒██▒ ▒██▒░██░  ░ ██▒▓░░ ████▓▒░░░██▒██▓  ██▓ ░▒████▓ ░▒████▒\x1b[0m
+  \x1b[33m▒▒ ░ ░▓ ░░▓     ██▒▒▒ ░ ▒░▒░▒░ ░ ▓░▒ ▒   ▒▓▒  ▒▒▓  ▒ ░░ ▒░ ░\x1b[0m
+  \x1b[35m░░   ░▒ ░ ▒ ░ ▓██ ░▒░   ░ ▒ ▒░   ▒ ░ ░   ░▒   ░ ▒  ▒  ░ ░  ░\x1b[0m
+  \x1b[33m ░    ░   ▒ ░ ▒ ▒ ░░  ░ ░ ░ ▒    ░   ░   ░    ░ ░  ░    ░\x1b[0m
+  \x1b[35m ░    ░   ░   ░ ░         ░ ░      ░      ░     ░       ░  ░\x1b[0m
+  \x1b[33m              ░ ░                         ░   ░\x1b[0m
+    `);
+    </script>
+
+    <!-- Snowfall (Nov, Dec, Jan) -->
+    <script is:inline>
+    !function(){
+      var month = new Date().getMonth();
+      if (month !== 10 && month !== 11 && month !== 0) return;
+
+      var el = document.getElementById("snowfall");
+      var canvas = document.createElement("canvas");
+      var w = el.offsetWidth, h = el.offsetHeight;
+      canvas.width = w; canvas.height = h;
+      canvas.style.width = "100%"; canvas.style.height = "100%";
+      el.appendChild(canvas);
+      var ctx = canvas.getContext("2d");
+
+      var max = Math.floor(w / 40);
+      var flakes = [];
+      for (var i = 0; i < max; i++) {
+        flakes.push({
+          x: Math.random() * w,
+          y: -(Math.random() * 800 + 20),
+          r: Math.random() * 5 + 2,
+          speed: Math.random() * 0.5 + 0.5,
+          amp: Math.random(),
+          wl: Math.random() * 100 + 200
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = 0; i < flakes.length; i++) {
+          var f = flakes[i];
+          f.y += f.speed;
+          f.x += f.amp * Math.sin(f.y * 2 * Math.PI / f.wl);
+          if (f.y > h) { f.y = -(Math.random() * 200 + 20); f.x = Math.random() * w; }
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255,0.8)";
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+
+      window.addEventListener("resize", function() {
+        w = el.offsetWidth; h = el.offsetHeight;
+        canvas.width = w; canvas.height = h;
+      });
+    }()
+    </script>
+
+    <!-- Slimacy pixel character -->
+    <script is:inline>
+    !function(){
+      var canvas = document.getElementById("slimacy");
+      if (!canvas) return;
+      var ctx = canvas.getContext("2d");
+      ctx.imageSmoothingEnabled = false;
+
+      var scale = 3, sw = 19, sh = 37;
+      var dw = window.innerWidth, dh = window.innerHeight;
+      var dx = 15, reverse = false, dir = 1;
+      var FPS = 9, time = new Date();
+      var idleLoop = [0,1,0,2], jumpLoop = [0,1,2,3,4,5,6,7];
+      var loopIdx = 0, mode = "jump";
+
+      canvas.style.left = -(sh * scale) + "px";
+      canvas.style.top = Math.floor(Math.random() * (dh - sh * scale - sh * scale) + sh * scale) + "px";
+
+      var img = new Image();
+      img.src = "/slime.png";
+      img.onload = function(){ requestAnimationFrame(tick); };
+
+      function drawFrame(fx, fy) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, fx * sw, fy * sh, sw, sh, 0, 0, sw * scale, sh * scale);
+      }
+
+      function flipDir() {
+        reverse = !reverse; dx = -dx;
+        dir = dir === 0 ? 1 : 0;
+        canvas.style.top = Math.floor(Math.random() * (dh - sh * scale * 2) + sh * scale) + "px";
+      }
+
+      function tick() {
+        if (new Date() - time < 1000 / FPS) { requestAnimationFrame(tick); return; }
+        time = new Date();
+
+        var loop = mode === "jump" ? jumpLoop : idleLoop;
+        drawFrame(loop[loopIdx], dir);
+
+        if (mode === "jump" && loopIdx > 3 && loopIdx < 7) {
+          var left = parseInt(canvas.style.left);
+          if ((dw < left && !reverse) || (-(sw * scale) > left && reverse)) {
+            flipDir();
+          } else {
+            canvas.style.left = (left + dx) + "px";
+          }
+        }
+
+        loopIdx++;
+        if (loopIdx >= loop.length) {
+          loopIdx = 0;
+          mode = Math.random() < 0.5 ? (mode === "jump" ? "idle" : "jump") : mode;
+        }
+        requestAnimationFrame(tick);
+      }
+    }()
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: "xi72yow";
+    src: url("/assets/xi72yowde.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  /* Headings use xi72yow brand font */
+  h1, h2, h3 {
+    font-family: "xi72yow", sans-serif;
+    text-shadow:
+      0px 0px 1px #373737,
+      0px 1px 1px #373737,
+      0px 2px 1px #373737,
+      1px 1px 1px #373737;
+  }
+
+  /* Background glow orbs */
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .bg-glow-1 {
+    width: 600px;
+    height: 600px;
+    background: #af0069;
+    top: -10%;
+    right: -5%;
+    animation: drift1 20s ease-in-out infinite;
+  }
+
+  .bg-glow-2 {
+    width: 500px;
+    height: 500px;
+    background: #fb0;
+    bottom: 10%;
+    left: -10%;
+    animation: drift2 25s ease-in-out infinite;
+  }
+
+  @keyframes drift1 {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-60px, 40px); }
+    50% { transform: translate(-30px, 80px); }
+    75% { transform: translate(40px, 30px); }
+  }
+
+  @keyframes drift2 {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -30px); }
+    50% { transform: translate(80px, 20px); }
+    75% { transform: translate(20px, -50px); }
+  }
+
+  /* Flicker animation for logo (Gold/Black drop-shadow switch) */
+  @keyframes flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+      filter: drop-shadow(5px 5px 5px #ffbb00);
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+      filter: drop-shadow(5px 5px 5px #000000);
+    }
+  }
+
+  /* Divider utility */
+  .divider-gradient {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #fb0, transparent);
+    opacity: 0.3;
+  }
+
+  /* Custom scrollbar */
+  *::-webkit-scrollbar {
+    background-color: #000;
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    border-radius: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    height: 56px;
+    border-radius: 8px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+    background-color: #af0069;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #fb0;
+  }
+</style>

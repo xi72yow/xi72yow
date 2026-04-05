@@ -3,6 +3,7 @@ set -euo pipefail
 
 GITHUB_USER="xi72yow"
 FEATURED_TOPIC="x"
+FUN_TOPIC="xx"
 API_URL="https://api.github.com"
 MODELS_URL="https://models.inference.ai.azure.com/chat/completions"
 MODEL="gpt-4o"
@@ -21,12 +22,14 @@ echo "Fetching public repos for ${GITHUB_USER}..."
 all_repos_json=$(curl -sf "${CURL_AUTH[@]}" \
   "${API_URL}/users/${GITHUB_USER}/repos?type=public&per_page=100&sort=updated")
 
-# Filter to only repos with the featured topic
-repos_json=$(echo "${all_repos_json}" | jq -c "[.[] | select(.topics | index(\"${FEATURED_TOPIC}\"))]")
+# Filter to repos with featured topic (x) or fun topic (xx)
+repos_json=$(echo "${all_repos_json}" | jq -c "[.[] | select((.topics | index(\"${FEATURED_TOPIC}\")) or (.topics | index(\"${FUN_TOPIC}\")))]")
 
 repo_count=$(echo "${repos_json}" | jq 'length')
 all_count=$(echo "${all_repos_json}" | jq 'length')
-echo "Found ${all_count} public repos, ${repo_count} tagged with '${FEATURED_TOPIC}'."
+x_count=$(echo "${all_repos_json}" | jq -c "[.[] | select(.topics | index(\"${FEATURED_TOPIC}\"))] | length")
+xx_count=$(echo "${all_repos_json}" | jq -c "[.[] | select(.topics | index(\"${FUN_TOPIC}\"))] | length")
+echo "Found ${all_count} public repos, ${x_count} tagged '${FEATURED_TOPIC}', ${xx_count} tagged '${FUN_TOPIC}' (${repo_count} total featured)."
 
 # ── Aggregate language stats across ALL public non-fork repos ────────────
 echo "Aggregating language stats across all non-fork public repos..."
@@ -67,7 +70,15 @@ for i in $(seq 0 $((repo_count - 1))); do
   stars=$(echo "${repo}" | jq -r '.stargazers_count')
   fork=$(echo "${repo}" | jq -r '.fork')
   description_raw=$(echo "${repo}" | jq -r '.description // empty')
-  topics=$(echo "${repo}" | jq -c "[.topics // [] | .[] | select(. != \"${FEATURED_TOPIC}\")]")
+  topics=$(echo "${repo}" | jq -c "[.topics // [] | .[] | select(. != \"${FEATURED_TOPIC}\" and . != \"${FUN_TOPIC}\")]")
+  # Determine featured tier: "x" = both sites, "xx" = fun site only
+  has_x=$(echo "${repo}" | jq -r "[.topics // [] | .[] | select(. == \"${FEATURED_TOPIC}\")] | length")
+  has_xx=$(echo "${repo}" | jq -r "[.topics // [] | .[] | select(. == \"${FUN_TOPIC}\")] | length")
+  if [[ "${has_x}" -gt 0 ]]; then
+    featured_tier="x"
+  else
+    featured_tier="xx"
+  fi
 
   # Skip the profile repo itself
   if [[ "${name}" == "${GITHUB_USER}" ]]; then
@@ -199,6 +210,7 @@ README excerpt: ${readme_content}"
     --arg image "${first_image}" \
     --arg video "${first_video}" \
     --arg teaser "${readme_teaser}" \
+    --arg featured "${featured_tier}" \
     '{
       name: $name,
       url: $url,
@@ -212,6 +224,7 @@ README excerpt: ${readme_content}"
       topics: $topics,
       stars: $stars,
       is_fork: $fork,
+      featured: $featured,
       last_commits: $commits
     }')
 
@@ -315,7 +328,7 @@ echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
   echo ""
 
   {
-    section_repos=$(echo "${repos_output}" | jq -c '.')
+    section_repos=$(echo "${repos_output}" | jq -c '[.[] | select(.featured == "x")]')
     count=$(echo "${section_repos}" | jq 'length')
 
     for j in $(seq 0 $((count - 1))); do

@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="space-y-2 mb-12">
+  <h2
+    class="glitch-text text-4xl sm:text-5xl lg:text-6xl font-800 tracking-tight"
+    data-text={title}
+  >
+    {title}
+  </h2>
+  <p class="text-secondary">
+    {subtitle}
+  </p>
+</div>
+
+<style>
+  .glitch-text {
+    position: relative;
+    color: #fff;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .glitch-text::before {
+    color: #af0069;
+    animation: glitchText1 3s infinite;
+    clip-path: inset(0 0 80% 0);
+  }
+
+  .glitch-text::after {
+    color: #fb0;
+    animation: glitchText2 3s infinite;
+    clip-path: inset(80% 0 0 0);
+  }
+
+  @keyframes glitchText1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(3px, -3px); }
+    60% { transform: translate(-2px, 1px); }
+    80% { transform: translate(1px, -2px); }
+  }
+
+  @keyframes glitchText2 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(3px, -2px); }
+    40% { transform: translate(-3px, 2px); }
+    60% { transform: translate(2px, -1px); }
+    80% { transform: translate(-1px, 3px); }
+  }
+</style>

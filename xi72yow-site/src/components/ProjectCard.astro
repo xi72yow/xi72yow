@@ -8,8 +8,7 @@ interface Commit {
 interface Props {
   name: string;
   url: string;
-  descriptionEn: string;
-  descriptionDe: string;
+  description: string;
   readmeTeaser: string | null;
   techStack: string[];
   image: string | null;
@@ -18,7 +17,7 @@ interface Props {
   commits: Commit[];
 }
 
-const { name, url, descriptionEn, descriptionDe, readmeTeaser, techStack, image, video, isFork, commits } = Astro.props;
+const { name, url, description, readmeTeaser, techStack, image, video, isFork, commits } = Astro.props;
 const localImage = image ? `/images/${name}.webp` : null;
 
 function formatDate(dateStr: string): string {
@@ -35,23 +34,23 @@ function shortMessage(msg: string): string {
 }
 
 const badgeColors: Record<string, string> = {
-  TypeScript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-  JavaScript: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-  Rust: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-  C: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
-  Shell: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  Dockerfile: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
-  SCSS: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
+  TypeScript: "bg-blue-900/60 text-blue-300 border border-blue-700/40",
+  JavaScript: "bg-yellow-900/60 text-yellow-300 border border-yellow-700/40",
+  Rust: "bg-orange-900/60 text-orange-300 border border-orange-700/40",
+  C: "bg-gray-800/60 text-gray-300 border border-gray-600/40",
+  Shell: "bg-green-900/60 text-green-300 border border-green-700/40",
+  Dockerfile: "bg-cyan-900/60 text-cyan-300 border border-cyan-700/40",
+  SCSS: "bg-pink-900/60 text-pink-300 border border-pink-700/40",
 };
 
 function getBadgeClass(tech: string): string {
-  return badgeColors[tech] || "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300";
+  return badgeColors[tech] || "bg-neutral-800/60 text-neutral-300 border border-neutral-600/40";
 }
 ---
 
-<article class="card overflow-hidden hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300 group flex flex-col">
+<article class="card overflow-hidden hover:shadow-[0_0_30px_rgba(175,0,105,0.3),0_0_60px_rgba(255,187,0,0.1)] hover:border-[#af0069] transition-all duration-300 group flex flex-col">
   {video ? (
-    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden relative video-container cursor-pointer" data-video-src={video}>
+    <div class="aspect-video bg-[rgba(0,0,0,0.3)] overflow-hidden relative video-container cursor-pointer" data-video-src={video}>
       {localImage ? (
         <img
           src={localImage}
@@ -61,7 +60,7 @@ function getBadgeClass(tech: string): string {
         />
       ) : (
         <div class="w-full h-full flex items-center justify-center video-thumb">
-          <span class="text-neutral-400 dark:text-neutral-500 text-sm font-mono">{name}</span>
+          <span class="text-muted text-sm font-mono">{name}</span>
         </div>
       )}
       <div class="video-play-overlay absolute inset-0 flex flex-col items-center justify-center bg-black/30 hover:bg-black/50 transition-colors">
@@ -72,7 +71,7 @@ function getBadgeClass(tech: string): string {
       </div>
     </div>
   ) : localImage ? (
-    <div class="aspect-video bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+    <div class="aspect-video bg-[rgba(0,0,0,0.3)] overflow-hidden">
       <img
         src={localImage}
         alt={name}
@@ -89,12 +88,12 @@ function getBadgeClass(tech: string): string {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="text-lg font-700 hover:accent transition-colors"
+        class="text-lg font-700 hover:text-[#fb0] transition-colors"
       >
         {name}
       </a>
       {isFork && (
-        <span class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 font-mono">
+        <span class="text-xs px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] text-[#a7a7a7] font-mono">
           fork
         </span>
       )}
@@ -102,7 +101,7 @@ function getBadgeClass(tech: string): string {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="ml-auto text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+        class="ml-auto text-neutral-500 hover:text-neutral-300 transition-colors"
         aria-label={`View ${name} on GitHub`}
       >
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -111,16 +110,13 @@ function getBadgeClass(tech: string): string {
       </a>
     </div>
 
-    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed" data-lang="en">
-      {descriptionEn}
-    </p>
-    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed hidden" data-lang="de">
-      {descriptionDe}
+    <p class="text-sm text-neutral-400 leading-relaxed">
+      {description}
     </p>
 
     {readmeTeaser && (
       <div class="readme-teaser">
-        <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+        <p class="text-xs text-neutral-500 leading-relaxed">
           {readmeTeaser}
         </p>
         <a
@@ -128,8 +124,6 @@ function getBadgeClass(tech: string): string {
           target="_blank"
           rel="noopener noreferrer"
           class="readme-teaser-link text-xs font-mono accent hover:underline"
-          data-i18n-en="Read more on GitHub →"
-          data-i18n-de="Weiterlesen auf GitHub →"
         >
           Read more on GitHub →
         </a>
@@ -149,16 +143,16 @@ function getBadgeClass(tech: string): string {
 
     {commits.length > 0 && (
       <details class="pt-2">
-        <summary class="text-xs font-mono text-neutral-500 dark:text-neutral-400 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors select-none">
+        <summary class="text-xs font-mono text-neutral-500 cursor-pointer hover:text-neutral-300 transition-colors select-none">
           Recent commits
         </summary>
         <ul class="mt-2 space-y-1.5">
           {commits.map((commit) => (
             <li class="text-xs flex gap-2">
-              <span class="text-neutral-500 dark:text-neutral-400 font-mono whitespace-nowrap shrink-0">
+              <span class="text-neutral-500 font-mono whitespace-nowrap shrink-0">
                 {formatDate(commit.date)}
               </span>
-              <span class="text-neutral-600 dark:text-neutral-400 truncate">
+              <span class="text-neutral-400 truncate">
                 {shortMessage(commit.message)}
               </span>
             </li>

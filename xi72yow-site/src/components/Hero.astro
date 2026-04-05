@@ -1,0 +1,78 @@
+---
+import { SITE } from "../config";
+---
+
+<section class="section-container min-h-[80vh] flex items-center">
+  <div class="flex flex-col md:flex-row items-center gap-12 w-full">
+    <div class="flex-1 space-y-6">
+      <p class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1">heydidudi my friend!</p>
+
+      <!-- Logo with flicker -->
+      <div class="hero-fade hero-fade-2">
+        <img
+          src="/assets/logo.webp"
+          alt={SITE.alias}
+          class="h-16 sm:h-20 md:h-24 logo-flicker"
+        />
+      </div>
+
+      <p class="text-2xl sm:text-3xl text-secondary font-500 hero-fade hero-fade-3">
+        {SITE.title}
+      </p>
+      <p class="text-sm sm:text-base text-secondary leading-relaxed max-w-lg hero-fade hero-fade-3">
+        {SITE.catchphrase}
+      </p>
+      <div class="flex gap-4 pt-4 hero-fade hero-fade-4">
+        <a
+          href={`mailto:${SITE.email}`}
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#af0069] to-[#fb0] text-white rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:shadow-[0_1.5rem_2.8rem_rgba(175,0,105,0.4),0_1rem_1rem_rgba(255,187,0,0.2)] hover:translate-y-[-2px] transition-all duration-200"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Get in touch
+        </a>
+        <a
+          href="#projects"
+          class="inline-flex items-center gap-2 px-5 py-2.5 border border-[#fb0] rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:bg-[rgba(255,187,0,0.1)] transition-all duration-200"
+        >
+          View projects
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="flex-shrink-0 hero-fade hero-fade-3">
+      <img
+        src={SITE.photoUrl}
+        alt={SITE.name}
+        class="w-56 sm:w-64 md:w-80 lg:w-96 mx-auto drop-shadow-[0_0_20px_rgba(175,0,105,0.3)]"
+        loading="eager"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-fade {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: heroFadeIn 0.6s ease-out forwards;
+  }
+  .hero-fade-1 { animation-delay: 0.1s; }
+  .hero-fade-2 { animation-delay: 0.25s; }
+  .hero-fade-3 { animation-delay: 0.4s; }
+  .hero-fade-4 { animation-delay: 0.55s; }
+
+  @keyframes heroFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logo-flicker {
+    animation: flicker 10s linear infinite;
+  }
+</style>

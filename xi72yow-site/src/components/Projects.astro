@@ -1,25 +1,23 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
+import GlitchHeadline from "./GlitchHeadline.astro";
 import reposData from "../../../repos.json";
 
-const repos = reposData.repos.filter((r: any) => r.featured === "x");
+const repos = reposData.repos;
 ---
 
 <section id="projects" class="section-container">
-  <div class="space-y-2 mb-12">
-    <h2 class="text-3xl sm:text-4xl font-800 tracking-tight" data-i18n-en="Projects" data-i18n-de="Projekte">Projects</h2>
-    <p class="text-neutral-500 dark:text-neutral-400" data-i18n-en="Open-source work and side projects" data-i18n-de="Open-Source-Arbeit und Nebenprojekte">
-      Open-source work and side projects
-    </p>
-  </div>
+  <GlitchHeadline
+    title="Projects"
+    subtitle="Open-source work and side projects"
+  />
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {repos.map((repo) => (
       <ProjectCard
         name={repo.name}
         url={repo.url}
-        descriptionEn={repo.description_en}
-        descriptionDe={repo.description_de}
+        description={repo.description_en}
         readmeTeaser={repo.readme_teaser}
         techStack={repo.tech_stack}
         image={repo.image}

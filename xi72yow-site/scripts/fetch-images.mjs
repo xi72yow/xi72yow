@@ -1,4 +1,4 @@
-import { readFileSync, mkdirSync, unlinkSync } from "node:fs";
+import { readFileSync, mkdirSync, writeFileSync, unlinkSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { join } from "node:path";
@@ -45,7 +45,6 @@ for (const repo of repos.repos) {
       const tmpVideo = join(outDir, `${repo.name}_tmp.mp4`);
 
       // Write partial video to disk
-      const { writeFileSync } = await import("node:fs");
       writeFileSync(tmpVideo, buf);
 
       // Extract first frame with ffmpeg
