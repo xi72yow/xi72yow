@@ -5,7 +5,7 @@ GITHUB_USER="xi72yow"
 FEATURED_TOPIC="x"
 API_URL="https://api.github.com"
 MODELS_URL="https://models.inference.ai.azure.com/chat/completions"
-MODEL="gpt-4o"
+MODEL="o4-mini"
 
 # Auth header (works in Actions via GITHUB_TOKEN, optional for local testing)
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then

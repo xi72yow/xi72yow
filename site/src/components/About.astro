@@ -50,7 +50,7 @@ const langColors: Record<string, string> = {
     </div>
 
     <div class="space-y-5">
-      <h3 class="text-xs font-mono accent tracking-wider uppercase" data-i18n-en="Lines of code" data-i18n-de="Codezeilen">Lines of code</h3>
+      <h3 class="text-xs font-mono accent tracking-wider uppercase">Code</h3>
 
       <!-- Stacked bar -->
       <div class="flex w-full h-3 rounded-full overflow-hidden">
@@ -73,10 +73,7 @@ const langColors: Record<string, string> = {
               />
               <span class="text-neutral-700 dark:text-neutral-300">{lang.name}</span>
             </div>
-            <div class="flex items-center gap-3 text-neutral-400 dark:text-neutral-500 font-mono text-xs">
-              <span>{formatBytes(lang.bytes)}</span>
-              <span class="w-12 text-right">{lang.percentage}%</span>
-            </div>
+            <span class="text-neutral-400 dark:text-neutral-500 font-mono text-xs">{lang.percentage}%</span>
           </div>
         ))}
       </div>
