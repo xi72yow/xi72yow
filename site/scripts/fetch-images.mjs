@@ -104,24 +104,36 @@ try {
     .png()
     .toBuffer();
 
-  // Fetch Inter font for OG image
-  console.log("  Fetching Inter font...");
-  const interBold = await fetch("https://fonts.bunny.net/inter/files/inter-latin-800-normal.woff2").then(r => r.arrayBuffer());
-  const interMedium = await fetch("https://fonts.bunny.net/inter/files/inter-latin-500-normal.woff2").then(r => r.arrayBuffer());
-  const interRegular = await fetch("https://fonts.bunny.net/inter/files/inter-latin-400-normal.woff2").then(r => r.arrayBuffer());
-  const interBoldB64 = Buffer.from(interBold).toString("base64");
-  const interMediumB64 = Buffer.from(interMedium).toString("base64");
-  const interRegularB64 = Buffer.from(interRegular).toString("base64");
+  // Download Inter font files for OG image rendering
+  console.log("  Installing Inter font...");
+  const fontDir = join(import.meta.dirname, "../public/fonts");
+  mkdirSync(fontDir, { recursive: true });
+  for (const [weight, file] of [["400", "inter-latin-400-normal.ttf"], ["500", "inter-latin-500-normal.ttf"], ["800", "inter-latin-800-normal.ttf"]]) {
+    const url = `https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-${weight}-normal.ttf`;
+    const dest = join(fontDir, file);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+    } catch (e) {
+      console.error(`  Font ${weight} failed: ${e.message}`);
+    }
+  }
+  // Install fonts system-wide for librsvg
+  const fontConfigDir = "/tmp/fonts";
+  mkdirSync(fontConfigDir, { recursive: true });
+  for (const f of ["inter-latin-400-normal.ttf", "inter-latin-500-normal.ttf", "inter-latin-800-normal.ttf"]) {
+    try { const { copyFileSync } = await import("node:fs"); copyFileSync(join(fontDir, f), join(fontConfigDir, f)); } catch {}
+  }
+  try {
+    writeFileSync("/tmp/fonts.conf", `<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd"><fontconfig><dir>${fontConfigDir}</dir></fontconfig>`);
+    process.env.FONTCONFIG_FILE = "/tmp/fonts.conf";
+  } catch {}
 
   // Background with subtle glow bubbles + text overlay as SVG
   const bgSvg = Buffer.from(`
     <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <style>
-          @font-face { font-family: "Inter"; font-weight: 800; src: url("data:font/woff2;base64,${interBoldB64}") format("woff2"); }
-          @font-face { font-family: "Inter"; font-weight: 500; src: url("data:font/woff2;base64,${interMediumB64}") format("woff2"); }
-          @font-face { font-family: "Inter"; font-weight: 400; src: url("data:font/woff2;base64,${interRegularB64}") format("woff2"); }
-        </style>
         <radialGradient id="g1" cx="15%" cy="30%" r="40%">
           <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.12"/>
           <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
