@@ -3,7 +3,8 @@
 # This allows access to both site/ and repos.json
 
 FROM dhi.io/node:25-debian13-dev AS build
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
+ADD https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz /tmp/ffmpeg.tar.xz
+RUN cd /tmp && tar xf ffmpeg.tar.xz && cp ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ && rm -rf /tmp/ffmpeg*
 WORKDIR /app
 COPY site/package.json site/package-lock.json* ./
 RUN npm install
