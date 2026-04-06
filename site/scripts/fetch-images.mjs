@@ -271,17 +271,64 @@ for (const file of readmeFiles) {
   }
 }
 
+// Extract and generate video thumbnails from READMEs
+const videoThumbs = {};
+if (hasFFmpeg) {
+  for (const file of readmeFiles) {
+    const content = readFileSync(join(readmeDir, file), "utf-8");
+    const videoMatches = [...content.matchAll(/<video[^>]+src=["'](https?:\/\/[^"']+)["'][^>]*>/gi)];
+    for (const m of videoMatches) {
+      const videoUrl = m[1];
+      if (videoThumbs[videoUrl]) continue;
+      const hash = urlHash(videoUrl);
+      const thumbName = `readme-video-${hash}.webp`;
+      const thumbDest = join(outDir, thumbName);
+      if (existsSync(thumbDest)) {
+        videoThumbs[videoUrl] = `/images/${thumbName}`;
+        console.log(`  ${file}: cached video thumb ${thumbName}`);
+        continue;
+      }
+      console.log(`  ${file}: extracting video thumbnail...`);
+      try {
+        const res = await fetch(videoUrl, { headers: { Range: "bytes=0-5000000" } });
+        if (!res.ok && res.status !== 206) throw new Error(`HTTP ${res.status}`);
+        const buf = Buffer.from(await res.arrayBuffer());
+        const ext = videoUrl.match(/\.(mp4|webm|mov)/i)?.[1] || "mp4";
+        const tmpVideo = join(outDir, `_tmp_readme_video.${ext}`);
+        const tmpFrame = join(outDir, "_tmp_readme_frame.png");
+        writeFileSync(tmpVideo, buf);
+        execFileSync("ffmpeg", ["-y", "-i", tmpVideo, "-vframes", "1", "-ss", "0.1", "-f", "image2", tmpFrame], { stdio: "ignore" });
+        await sharp(tmpFrame).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 }).toFile(thumbDest);
+        try { unlinkSync(tmpVideo); } catch {}
+        try { unlinkSync(tmpFrame); } catch {}
+        videoThumbs[videoUrl] = `/images/${thumbName}`;
+        console.log(`    → ${thumbName}`);
+      } catch (e) {
+        console.error(`    Video thumb failed: ${e.message}`);
+      }
+    }
+  }
+}
+
 // Write processed readmes with local image URLs
 const processedDir = join(import.meta.dirname, "../../readmes-processed");
 mkdirSync(processedDir, { recursive: true });
 for (const file of readmeFiles) {
   let content = readFileSync(join(readmeDir, file), "utf-8");
   for (const [url, localPath] of Object.entries(manifest)) {
-    // Replace all occurrences (in markdown img syntax and HTML src attributes)
     while (content.includes(url)) {
       content = content.replace(url, localPath);
     }
   }
+  // Replace <video> tags with consent wrapper + thumbnail
+  content = content.replace(
+    /<video[^>]+src=["']([^"']+)["'][^>]*>[\s\S]*?<\/video>/gi,
+    (_, src) => {
+      const thumb = videoThumbs[src];
+      const bgStyle = thumb ? ` style="background:url('${thumb}') center/cover no-repeat"` : "";
+      return `<div class="video-consent" data-video-src="${src}"${bgStyle}><div class="video-consent-overlay"><button class="video-consent-btn" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><p class="video-consent-notice">Click to load video (connects to GitHub)</p></div></div>`;
+    }
+  );
   writeFileSync(join(processedDir, file), content);
 }
 console.log(`\nProcessed ${readmeFiles.length} readmes → readmes-processed/`);

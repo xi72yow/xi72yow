@@ -179,5 +179,11 @@ function formatDate(date: Date): string {
   .prose .mermaid {
     margin: 2.5em 0;
     text-align: center;
+    overflow-x: auto;
+  }
+  .prose .mermaid svg {
+    max-width: 100%;
+    height: auto;
+    background: transparent !important;
   }
 </style>
