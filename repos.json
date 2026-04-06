@@ -1,45 +1,45 @@
 {
-  "updated_at": "2026-04-06T11:06:58Z",
+  "updated_at": "2026-04-06T12:54:23Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops software across a diverse range of domains, including gaming, system utilities, and hardware control. His projects demonstrate a focus on creating practical tools and applications, such as a 2D zombie survival game ('klotzkoepfe'), a Linux-specific fork of GitHub Desktop ('desktop-drac'), and utilities for secure environment variable management ('sei') and input device remapping ('input-remapper-rs'). Additionally, he has worked on hardware integration projects like 'ScreenChaser', which provides a system for controlling Neopixel LEDs over a network.",
-      "Maximilian employs a methodical and systems-oriented approach to development, leveraging programming languages and tools such as Rust, TypeScript, JavaScript, C, and Shell scripting. His projects often incorporate technologies like Docker for containerization and WGSL for graphics-related tasks. The technical implementations reflect a strong emphasis on Linux environments, with integration into system-level components such as GNOME Keyring and systemd. His work spans both graphical user interfaces and terminal-based utilities, ensuring adaptability across different use cases."
+      "Maximilian Reinke develops software solutions spanning embedded systems, desktop applications, and game development. His projects include ScreenChaser, a system for controlling Neopixel LEDs over a network; klotzkoepfe, a local multiplayer zombie survival game; and desktop-drac, a Linux-specific adaptation of GitHub Desktop. Additionally, he has created tools like sei for secure environment variable management and input-remapper-rs for remapping input device events at the kernel level.",
+      "In his work, Maximilian employs a range of programming languages and technologies, including Rust, C, TypeScript, JavaScript, and Shell scripting. His projects often integrate with Linux systems, leveraging tools like systemd and GNOME Keyring for functionality. He utilizes Docker for containerization and WGSL for shader programming in graphical applications. His technical approach emphasizes modularity, cross-platform compatibility, and efficient resource management."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Software in verschiedenen Bereichen, darunter Spiele, Systemwerkzeuge und Hardwaresteuerung. Seine Projekte zeigen einen Fokus auf die Erstellung praktischer Werkzeuge und Anwendungen, wie ein 2D-Zombie-Survival-Spiel ('klotzkoepfe'), einen Linux-spezifischen Fork von GitHub Desktop ('desktop-drac') sowie Werkzeuge für die sichere Verwaltung von Umgebungsvariablen ('sei') und die Neuzuordnung von Eingabegeräten ('input-remapper-rs'). Darüber hinaus hat er an Hardware-Integrationsprojekten wie 'ScreenChaser' gearbeitet, einem System zur Steuerung von Neopixel-LEDs über ein Netzwerk.",
-      "Maximilian verfolgt einen methodischen und systemorientierten Entwicklungsansatz und nutzt Programmiersprachen und Werkzeuge wie Rust, TypeScript, JavaScript, C und Shell-Skripte. Seine Projekte integrieren häufig Technologien wie Docker zur Containerisierung und WGSL für grafikbezogene Aufgaben. Die technischen Implementierungen zeigen einen starken Fokus auf Linux-Umgebungen, mit Integration in systemnahe Komponenten wie GNOME Keyring und systemd. Seine Arbeit umfasst sowohl grafische Benutzeroberflächen als auch terminalbasierte Werkzeuge, um unterschiedliche Anwendungsfälle abzudecken."
+      "Maximilian Reinke entwickelt Softwarelösungen in den Bereichen eingebettete Systeme, Desktop-Anwendungen und Spieleentwicklung. Zu seinen Projekten gehören ScreenChaser, ein System zur Steuerung von Neopixel-LEDs über ein Netzwerk; klotzkoepfe, ein lokales Multiplayer-Zombie-Survival-Spiel; und desktop-drac, eine Linux-spezifische Anpassung von GitHub Desktop. Darüber hinaus hat er Werkzeuge wie sei für die sichere Verwaltung von Umgebungsvariablen und input-remapper-rs zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene entwickelt.",
+      "In seiner Arbeit verwendet Maximilian eine Vielzahl von Programmiersprachen und Technologien, darunter Rust, C, TypeScript, JavaScript und Shell-Skripte. Seine Projekte integrieren sich häufig in Linux-Systeme und nutzen Werkzeuge wie systemd und GNOME Keyring. Für die Containerisierung setzt er Docker ein, während er WGSL für Shader-Programmierung in grafischen Anwendungen verwendet. Sein technischer Ansatz legt den Fokus auf Modularität, plattformübergreifende Kompatibilität und effizientes Ressourcenmanagement."
     ],
     "language_stats": [
       {
         "name": "Rust",
         "bytes": 670771,
-        "percentage": 24.4
+        "percentage": 24.2
       },
       {
         "name": "JavaScript",
-        "bytes": 606995,
-        "percentage": 22.1
+        "bytes": 607646,
+        "percentage": 21.9
       },
       {
         "name": "HTML",
         "bytes": 526996,
-        "percentage": 19.2
+        "percentage": 19
       },
       {
         "name": "TypeScript",
-        "bytes": 475896,
-        "percentage": 17.3
+        "bytes": 477437,
+        "percentage": 17.2
       },
       {
         "name": "Shell",
         "bytes": 161909,
-        "percentage": 5.9
+        "percentage": 5.8
       },
       {
         "name": "Astro",
-        "bytes": 101056,
-        "percentage": 3.7
+        "bytes": 122712,
+        "percentage": 4.4
       },
       {
         "name": "CSS",
@@ -73,7 +73,7 @@
       },
       {
         "name": "Dockerfile",
-        "bytes": 9637,
+        "bytes": 9755,
         "percentage": 0.4
       },
       {
@@ -104,42 +104,6 @@
     ]
   },
   "repos": [
-    {
-      "name": "ScreenChaser",
-      "url": "https://github.com/xi72yow/ScreenChaser",
-      "homepage": null,
-      "image": "https://xi72yow.de/data/pictures/screenchaser_logo.png",
-      "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
-      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between the user and LEDs, and a graphical user interface for configuration, with plans for CLI support in future versions.",
-      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Vermittlung zwischen Benutzer und LEDs sowie eine grafische Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen.",
-      "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
-      "tech_stack": [
-        "TypeScript",
-        "JavaScript",
-        "C"
-      ],
-      "topics": [],
-      "stars": null,
-      "is_fork": false,
-      "featured": "x",
-      "last_commits": [
-        {
-          "message": "Update README.md",
-          "date": "2024-03-17T14:47:53Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "chore: bump deps\n\ntodo: mantine migration",
-          "date": "2024-02-18T13:53:50Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "chore(app): disable auto scan",
-          "date": "2023-08-30T14:21:16Z",
-          "author": "xi72yow"
-        }
-      ]
-    },
     {
       "name": "input-remapper-rs",
       "url": "https://github.com/xi72yow/input-remapper-rs",
@@ -307,6 +271,42 @@
         {
           "message": "simplify README to game description and install instructions",
           "date": "2026-04-05T19:42:00Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "ScreenChaser",
+      "url": "https://github.com/xi72yow/ScreenChaser",
+      "homepage": null,
+      "image": "https://github.com/user-attachments/assets/68ee7efc-abe7-4434-9705-45d8488a7ab1",
+      "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
+      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a graphical user interface for configuration, with plans for CLI support in future versions.",
+      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Kommunikationsverwaltung und eine grafische Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen.",
+      "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
+      "tech_stack": [
+        "TypeScript",
+        "JavaScript",
+        "C"
+      ],
+      "topics": [],
+      "stars": null,
+      "is_fork": false,
+      "featured": "x",
+      "last_commits": [
+        {
+          "message": "Update image sources in README for dark and light modes",
+          "date": "2026-04-06T12:53:08Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "Update README.md",
+          "date": "2024-03-17T14:47:53Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "chore: bump deps\n\ntodo: mantine migration",
+          "date": "2024-02-18T13:53:50Z",
           "author": "xi72yow"
         }
       ]

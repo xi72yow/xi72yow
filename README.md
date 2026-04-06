@@ -4,6 +4,22 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ## Selected Projects
 
+### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
+
+ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a graphical user interface for configuration, with plans for CLI support in future versions.
+
+<p align="center"><video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video></p>
+
+**Tech:** TypeScript, JavaScript, C
+
+<details><summary>Recent activity</summary>
+
+- `2026-04-06` Update image sources in README for dark and light modes
+- `2024-03-17` Update README.md
+- `2024-02-18` chore: bump deps
+
+</details>
+
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
 A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
@@ -49,22 +65,6 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 - `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
 - `2026-03-28` fix: mount host /dev into test container for uinput device visibility
 - `2026-03-28` fix: modprobe uinput on runner, not inside container
-
-</details>
-
-### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
-
-ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between the user and LEDs, and a graphical user interface for configuration, with plans for CLI support in future versions.
-
-<p align="center"><video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video></p>
-
-**Tech:** TypeScript, JavaScript, C
-
-<details><summary>Recent activity</summary>
-
-- `2024-03-17` Update README.md
-- `2024-02-18` chore: bump deps
-- `2023-08-30` chore(app): disable auto scan
 
 </details>
 
