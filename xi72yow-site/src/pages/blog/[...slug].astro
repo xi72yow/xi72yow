@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import MermaidInit from "../../components/MermaidInit.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -54,30 +55,18 @@ function formatDate(date: Date): string {
     </div>
   </main>
   <script is:inline>
-    document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll(".prose pre").forEach(function(pre) {
+    function initCodeGlow() {
+      document.querySelectorAll(".prose pre:not(.code-glow pre)").forEach(function(pre) {
         var wrapper = document.createElement("div");
         wrapper.className = "code-glow";
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
       });
-      var blocks = document.querySelectorAll('pre[data-language="mermaid"]');
-      if (!blocks.length) return;
-      var s = document.createElement("script");
-      s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
-      s.onload = function() {
-        mermaid.initialize({ startOnLoad: false, theme: "dark" });
-        blocks.forEach(function(pre) {
-          var div = document.createElement("div");
-          div.className = "mermaid";
-          div.textContent = pre.textContent;
-          pre.replaceWith(div);
-        });
-        mermaid.run();
-      };
-      document.head.appendChild(s);
-    });
+    }
+    document.addEventListener("DOMContentLoaded", initCodeGlow);
+    document.addEventListener("astro:page-load", initCodeGlow);
   </script>
+  <MermaidInit />
 </Base>
 
 <style is:global>

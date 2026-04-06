@@ -1,0 +1,21 @@
+<script>
+import mermaid from "mermaid";
+
+function initMermaid() {
+  const blocks = document.querySelectorAll('pre[data-language="mermaid"], pre > code.language-mermaid');
+  if (!blocks.length) return;
+  const theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default";
+  mermaid.initialize({ startOnLoad: false, theme });
+  blocks.forEach((el) => {
+    const pre = el.tagName === "CODE" ? el.parentElement! : el;
+    const div = document.createElement("div");
+    div.className = "mermaid";
+    div.textContent = pre.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+}
+
+initMermaid();
+document.addEventListener("astro:page-load", initMermaid);
+</script>
