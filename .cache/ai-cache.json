@@ -1,0 +1,66 @@
+{
+  "repo:klotzkoepfe": {
+    "hash": "a1408f936beb4bc62e675d78d7f5740164eb89c2b6ac84544d8fa42ea225c6f3",
+    "data": {
+      "en": "Klotzkoepfe is a 2D top-down zombie survival shooter for up to two players on a single keyboard, featuring waves of increasingly stronger zombies and unlockable weapons like shotguns, grenades, and mines. Players must coordinate tactics and weapon usage to survive and achieve the highest combo multiplier.",
+      "de": "Klotzkoepfe ist ein 2D-Top-Down-Zombie-Survival-Shooter für bis zu zwei Spieler an einer Tastatur, bei dem immer stärkere Zombie-Wellen angreifen und Waffen wie Schrotflinten, Granaten und Minen freigeschaltet werden können. Spieler müssen taktisch zusammenarbeiten und Waffen gezielt einsetzen, um zu überleben und den höchsten Combo-Multiplikator zu erreichen."
+    }
+  },
+  "repo:desktop-drac": {
+    "hash": "9485d0385694dbe8c3f3414dd3ac960285ef41bf2c5fd7ee04515cf77f172134",
+    "data": {
+      "en": "A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.",
+      "de": "Ein Linux-spezifischer Fork von GitHub Desktop, synchronisiert mit dem offiziellen Upstream-Repository und angepasst für die Kompatibilität mit einer benutzerdefinierten Linux-Distribution."
+    }
+  },
+  "repo:sei": {
+    "hash": "53c4d23133467d1cc4c43c3b34417343c5321f8c1debea17a18e40a04eaaea19",
+    "data": {
+      "en": "Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.",
+      "de": "Verwaltet Umgebungsvariablen sicher, indem sie im GNOME Keyring statt in Klartext-.env-Dateien gespeichert werden. Bietet eine TUI zum Bearbeiten und eine CLI zum Injizieren von Geheimnissen in Anwendungen."
+    }
+  },
+  "repo:input-remapper-rs": {
+    "hash": "50a7fe7a8eb99ecfb5dfa8a34aa5d6d2b7ca05fbd53c98ed4f34398f20fa07c6",
+    "data": {
+      "en": "A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.",
+      "de": "Ein in Rust geschriebenes Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene mit evdev und uinput. Unterstützt die Zuordnung mehrerer Geräte, terminalbasierte Konfiguration und Integration mit systemd auf Linux-Systemen."
+    }
+  },
+  "repo:ScreenChaser": {
+    "hash": "3e67d15c9f7f2c8ebaf414f80a09b114d896f8f3a5cee273943ed2fe96cad231",
+    "data": {
+      "en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for mediating between the user and LEDs, and a graphical user interface for configuration, with plans for CLI support in future versions.",
+      "de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Vermittlung zwischen Benutzer und LEDs sowie eine grafische Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen."
+    }
+  },
+  "profile": {
+    "hash": "ef7305291d8dc7d9a63d46a0babbc80b47540e2de4fa923c81f14d0927b578b3",
+    "data": {
+      "about_en": [
+        "Maximilian Reinke develops software across a diverse range of domains, including gaming, system utilities, and hardware control. His projects demonstrate a focus on creating practical tools and applications, such as a 2D zombie survival game ('klotzkoepfe'), a Linux-specific fork of GitHub Desktop ('desktop-drac'), and utilities for secure environment variable management ('sei') and input device remapping ('input-remapper-rs'). Additionally, he has worked on hardware integration projects like 'ScreenChaser', which provides a system for controlling Neopixel LEDs over a network.",
+        "Maximilian employs a methodical and systems-oriented approach to development, leveraging programming languages and tools such as Rust, TypeScript, JavaScript, C, and Shell scripting. His projects often incorporate technologies like Docker for containerization and WGSL for graphics-related tasks. The technical implementations reflect a strong emphasis on Linux environments, with integration into system-level components such as GNOME Keyring and systemd. His work spans both graphical user interfaces and terminal-based utilities, ensuring adaptability across different use cases."
+      ],
+      "about_de": [
+        "Maximilian Reinke entwickelt Software in verschiedenen Bereichen, darunter Spiele, Systemwerkzeuge und Hardwaresteuerung. Seine Projekte zeigen einen Fokus auf die Erstellung praktischer Werkzeuge und Anwendungen, wie ein 2D-Zombie-Survival-Spiel ('klotzkoepfe'), einen Linux-spezifischen Fork von GitHub Desktop ('desktop-drac') sowie Werkzeuge für die sichere Verwaltung von Umgebungsvariablen ('sei') und die Neuzuordnung von Eingabegeräten ('input-remapper-rs'). Darüber hinaus hat er an Hardware-Integrationsprojekten wie 'ScreenChaser' gearbeitet, einem System zur Steuerung von Neopixel-LEDs über ein Netzwerk.",
+        "Maximilian verfolgt einen methodischen und systemorientierten Entwicklungsansatz und nutzt Programmiersprachen und Werkzeuge wie Rust, TypeScript, JavaScript, C und Shell-Skripte. Seine Projekte integrieren häufig Technologien wie Docker zur Containerisierung und WGSL für grafikbezogene Aufgaben. Die technischen Implementierungen zeigen einen starken Fokus auf Linux-Umgebungen, mit Integration in systemnahe Komponenten wie GNOME Keyring und systemd. Seine Arbeit umfasst sowohl grafische Benutzeroberflächen als auch terminalbasierte Werkzeuge, um unterschiedliche Anwendungsfälle abzudecken."
+      ]
+    }
+  },
+  "blog:hello-world": {
+    "hash": "8f6cca108a27c31ab787cf1871e9d9869b263e33658c1be9a601f9e0e940e193",
+    "data": {
+      "title": "Hallo Welt",
+      "description": "Erster Beitrag auf diesem Blog. Eine kurze Einführung, was Sie hier erwarten können.",
+      "body": "Dies ist der erste Beitrag auf diesem Blog. Ich plane, über Dinge zu schreiben, die ich baue, Probleme, die ich löse, und Werkzeuge, die ich nützlich finde.\n\nBleiben Sie dran."
+    }
+  },
+  "blog:markdown-showcase": {
+    "hash": "e12a3ce339617a85b5556b1f068292a3c94a3a1de44375d9fa6e27f282c5b54d",
+    "data": {
+      "title": "Markdown Showcase",
+      "description": "Ein Demo-Post, der alle unterstützten Markdown-Funktionen zeigt: Überschriften, Code, Bilder, Tabellen und mehr.",
+      "body": "Dieser Beitrag demonstriert alles, was Sie in Blog-Artikeln verwenden können.\n\n## Textformatierung\n\nRegulärer Absatztext mit **fett**, *kursiv*, ~~durchgestrichen~~ und `Inline-Code`. Sie können auch **_fett kursiv_** Text kombinieren.\n\n> Blockzitate sind nützlich, um wichtige Informationen hervorzuheben oder externe Quellen zu zitieren. Sie können sich über mehrere Zeilen erstrecken.\n>\n> Sogar über mehrere Absätze.\n\n## Links\n\n- [Externer Link zu GitHub](https://github.com/xi72yow)\n- [Ein weiterer Link](https://reinke.ing)\n\n## Bilder\n\n![Platzhalterbild](https://placehold.co/800x400/0ea5e9/fff?text=Blog+Image)\n\nBilder werden responsiv gerendert und erhalten automatisch abgerundete Ecken.\n\n## Codeblöcke\n\nInline: Verwenden Sie `npm install`, um Abhängigkeiten zu installieren.\n\nEingezäunter Block mit Syntaxhinweis:\n\n```rust\nfn main() {\n    let message = \"Hello from reinke.ing\";\n    println!(\"{message}\");\n\n    let numbers: Vec<i32> = (1..=10)\n        .filter(|n| n % 2 == 0)\n        .collect();\n\n    for n in &numbers {\n        println!(\"Even: {n}\");\n    }\n}\n```\n\n```typescript\ninterface BlogPost {\n  title: string;\n  date: Date;\n  tags: string[];\n  draft: boolean;\n}\n\nasync function fetchPosts(): Promise<BlogPost[]> {\n  const response = await fetch(\"/api/posts\");\n  return response.json();\n}\n```\n\n```bash\n# Deploy-Skript\ndocker build -f Containerfile -t my-app .\ndocker run -d -p 3000:3000 my-app\necho \"Erfolgreich bereitgestellt\"\n```\n\n## Listen\n\nUngeordnet:\n\n- Erstes Element\n- Zweites Element mit einer längeren Beschreibung, die in die nächste Zeile umbricht, um zu zeigen, wie Listenelemente längere Textinhalte behandeln\n- Drittes Element\n  - Verschachteltes Element A\n  - Verschachteltes Element B\n\nGeordnet:\n\n1. Schritt eins\n2. Schritt zwei\n3. Schritt drei\n\n## Tabellen\n\n| Werkzeug | Sprache | Anwendungsfall |\n|----------|---------|----------------|\n| Astro | TypeScript | Statische Websites |\n| UnoCSS | CSS | Utility-first Styling |\n| Sharp | C/Node | Bildverarbeitung |\n| Marked | JavaScript | Markdown-Rendering |\n\n## Details / Ausklappbar\n\n<details>\n<summary>Klicken, um zu erweitern</summary>\n\nVersteckter Inhalt geht hier hin. Nützlich für lange Codebeispiele, Logs oder ergänzende Informationen, die den Hauptfluss stören würden.\n\n```json\n{\n  \"name\": \"reinke-portfolio\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\"\n}\n```\n\n</details>\n\n## Überschriften-Hierarchie\n\n### H3 Unterüberschrift\n\nInhalt unter H3.\n\n#### H4 Unterüberschrift\n\nInhalt unter H4.\n\n## Diagramme (Mermaid)\n\nMermaid-Diagramme werden clientseitig gerendert. Umschließen Sie Ihr Diagramm mit einem eingezäunten Codeblock mit dem `mermaid` Sprach-Tag.\n\nFlussdiagramm:\n\n```mermaid\ngraph LR\n    A[Markdown] --> B[Astro Build]\n    B --> C[Static HTML]\n    C --> D[Deploy]\n    D --> E[reinke.ing]\n```\n\nSequenzdiagramm:\n\n```mermaid\nsequenceDiagram\n    participant U as Benutzer\n    participant S as Server\n    participant DB as Datenbank\n    U->>S: GET /api/posts\n    S->>DB: SELECT * FROM posts\n    DB-->>S: Ergebnisse\n    S-->>U: JSON-Antwort\n```\n\nGit-Graph:\n\n```mermaid\ngitGraph\n    commit id: \"init\"\n    branch feature\n    commit id: \"add blog\"\n    commit id: \"add projects\"\n    checkout main\n    merge feature id: \"merge\"\n    commit id: \"deploy\"\n```\n\n## Horizontale Linien\n\nVerwenden Sie `---`, um visuelle Trennlinien zwischen Abschnitten zu erstellen:\n\n---\n\nDas deckt alle wichtigen Markdown-Funktionen ab. Schreiben Sie Ihre Beiträge in `src/content/blog/` und sie werden automatisch angezeigt."
+    }
+  }
+}
