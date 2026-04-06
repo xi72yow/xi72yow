@@ -17,6 +17,31 @@ else
   CURL_AUTH=()
 fi
 
+# ── AI cache (hash-based to save tokens) ───────────────────────────────
+CACHE_FILE=".cache/ai-cache.json"
+mkdir -p .cache
+if [[ -f "${CACHE_FILE}" ]]; then
+  ai_cache=$(cat "${CACHE_FILE}")
+else
+  ai_cache="{}"
+fi
+
+cache_get() {
+  local key="$1" hash="$2"
+  local stored_hash
+  stored_hash=$(echo "${ai_cache}" | jq -r --arg k "${key}" '.[$k].hash // empty')
+  if [[ "${stored_hash}" == "${hash}" ]]; then
+    echo "${ai_cache}" | jq -c --arg k "${key}" '.[$k].data'
+    return 0
+  fi
+  return 1
+}
+
+cache_set() {
+  local key="$1" hash="$2" data="$3"
+  ai_cache=$(echo "${ai_cache}" | jq --arg k "${key}" --arg h "${hash}" --argjson d "${data}" '.[$k] = {hash: $h, data: $d}')
+}
+
 # ── Fetch all public repos ──────────────────────────────────────────────
 echo "Fetching public repos for ${GITHUB_USER}..."
 all_repos_json=$(curl -sf "${CURL_AUTH[@]}" \
@@ -146,51 +171,59 @@ for i in $(seq 0 $((repo_count - 1))); do
   # Trim README for AI context
   readme_content=$(echo "${readme_content}" | head -c 2000)
 
-  # ── AI: Generate descriptions (EN + DE) ─────────────────────────────
+  # ── AI: Generate descriptions (EN + DE) with hash cache ─────────────
   ai_context="Repository: ${name}
 Original description: ${description_raw}
 Languages: ${languages}
 Topics: ${topics}
 README excerpt: ${readme_content}"
 
-  ai_payload=$(jq -nc \
-    --arg model "${MODEL}" \
-    --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
-    --arg context "${ai_context}" \
-    '{
-      model: $model,
-      messages: [
-        { role: "system", content: $system },
-        { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
-      ],
-      temperature: 0.3,
-      max_tokens: 300
-    }')
+  context_hash=$(printf '%s' "${ai_context}" | sha256sum | cut -d' ' -f1)
+  cached_desc=$(cache_get "repo:${name}" "${context_hash}" || echo "")
 
-  ai_response=$(curl -s -X POST "${MODELS_URL}" \
-    "${CURL_AUTH[@]}" \
-    -H "Content-Type: application/json" \
-    -d "${ai_payload}" || echo "")
+  if [[ -n "${cached_desc}" && "${cached_desc}" != "null" ]]; then
+    description_en=$(echo "${cached_desc}" | jq -r '.en // empty')
+    description_de=$(echo "${cached_desc}" | jq -r '.de // empty')
+    echo "  Using cached AI description (hash match)"
+  else
+    ai_payload=$(jq -nc \
+      --arg model "${MODEL}" \
+      --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
+      --arg context "${ai_context}" \
+      '{
+        model: $model,
+        messages: [
+          { role: "system", content: $system },
+          { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
+        ],
+        temperature: 0.3,
+        max_tokens: 300
+      }')
 
-  if [[ -n "${ai_response}" ]]; then
-    # Check for API error
-    api_error=$(echo "${ai_response}" | jq -r '.error.message // empty' 2>/dev/null)
-    if [[ -n "${api_error}" ]]; then
-      echo "  AI API error: ${api_error}"
+    ai_response=$(curl -s -X POST "${MODELS_URL}" \
+      "${CURL_AUTH[@]}" \
+      -H "Content-Type: application/json" \
+      -d "${ai_payload}" || echo "")
+
+    if [[ -n "${ai_response}" ]]; then
+      api_error=$(echo "${ai_response}" | jq -r '.error.message // empty' 2>/dev/null)
+      if [[ -n "${api_error}" ]]; then
+        echo "  AI API error: ${api_error}"
+        description_en="${description_raw}"
+        description_de="${description_raw}"
+      else
+        descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+        descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+        description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
+        description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
+        echo "  AI description generated (new)"
+        cache_set "repo:${name}" "${context_hash}" "$(jq -nc --arg en "${description_en}" --arg de "${description_de}" '{en: $en, de: $de}')"
+      fi
+    else
+      echo "  AI request failed, using original description"
       description_en="${description_raw}"
       description_de="${description_raw}"
-    else
-      descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-      # Strip markdown fences if present
-      descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-      description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
-      description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
-      echo "  AI description generated"
     fi
-  else
-    echo "  AI request failed, using original description"
-    description_en="${description_raw}"
-    description_de="${description_raw}"
   fi
 
   # ── Build repo entry ────────────────────────────────────────────────
@@ -248,32 +281,45 @@ All languages/tech used across projects: ${all_languages}
 Project summaries:
 ${all_descriptions}"
 
-profile_payload=$(jq -nc \
-  --arg model "${MODEL}" \
-  --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
-  --arg context "${profile_context}" \
-  '{
-    model: $model,
-    messages: [
-      { role: "system", content: $system },
-      { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
-    ],
-    temperature: 0.3,
-    max_tokens: 800
-  }')
+profile_hash=$(printf '%s' "${profile_context}" | sha256sum | cut -d' ' -f1)
+cached_profile=$(cache_get "profile" "${profile_hash}" || echo "")
 
-profile_response=$(curl -s -X POST "${MODELS_URL}" \
-  "${CURL_AUTH[@]}" \
-  -H "Content-Type: application/json" \
-  -d "${profile_payload}" || echo "")
-
-if [[ -n "${profile_response}" ]]; then
-  profile_data=$(echo "${profile_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-  profile_data=$(echo "${profile_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-  profile_json=$(echo "${profile_data}" | jq '.' 2>/dev/null || echo "null")
+if [[ -n "${cached_profile}" && "${cached_profile}" != "null" ]]; then
+  profile_json="${cached_profile}"
+  echo "  Using cached profile (hash match)"
 else
-  echo "  Profile AI request failed, using fallback"
-  profile_json="null"
+  profile_payload=$(jq -nc \
+    --arg model "${MODEL}" \
+    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
+    --arg context "${profile_context}" \
+    '{
+      model: $model,
+      messages: [
+        { role: "system", content: $system },
+        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
+      ],
+      temperature: 0.3,
+      max_tokens: 800
+    }')
+
+  profile_response=$(curl -s -X POST "${MODELS_URL}" \
+    "${CURL_AUTH[@]}" \
+    -H "Content-Type: application/json" \
+    -d "${profile_payload}" || echo "")
+
+  if [[ -n "${profile_response}" ]]; then
+    profile_data=$(echo "${profile_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+    profile_data=$(echo "${profile_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+    profile_json=$(echo "${profile_data}" | jq '.' 2>/dev/null || echo "null")
+  else
+    echo "  Profile AI request failed, using fallback"
+    profile_json="null"
+  fi
+
+  if [[ "${profile_json}" != "null" ]]; then
+    cache_set "profile" "${profile_hash}" "${profile_json}"
+    echo "  Profile generated (new)"
+  fi
 fi
 
 # Fallback if AI failed
@@ -321,6 +367,10 @@ output_json=$(jq -nc \
 
 echo "${output_json}" | jq '.' > repos.json
 echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
+
+# ── Save AI cache ──────────────────────────────────────────────────────
+echo "${ai_cache}" | jq '.' > "${CACHE_FILE}"
+echo "AI cache saved to ${CACHE_FILE}"
 
 # ── Generate README.md ───────────────────────────────────────────────────
 {
@@ -405,4 +455,24 @@ echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
 } > README.md
 
 echo "Written README.md"
+
+# ── Write individual README files for project detail pages ──────────────
+echo "Writing README files for project detail pages..."
+mkdir -p readmes
+
+featured_repos=$(echo "${repos_output}" | jq -c '.[]')
+while IFS= read -r entry; do
+  r_name=$(echo "${entry}" | jq -r '.name')
+  r_full="xi72yow/${r_name}"
+
+  readme=$(curl -sf "${CURL_AUTH[@]}" \
+    -H "Accept: application/vnd.github.raw+json" \
+    "${API_URL}/repos/${r_full}/readme" 2>/dev/null || echo "")
+
+  if [[ -n "${readme}" ]]; then
+    printf '%s' "${readme}" > "readmes/${r_name}.md"
+    echo "  Written readmes/${r_name}.md"
+  fi
+done <<< "${featured_repos}"
+
 echo "Done!"

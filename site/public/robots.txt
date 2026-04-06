@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://reinke.ing/sitemap.xml
+Sitemap: https://reinke.ing/sitemap-index.xml

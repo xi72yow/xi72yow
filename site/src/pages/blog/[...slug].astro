@@ -1,0 +1,193 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+import { marked } from "marked";
+import translations from "../../data/blog-translations.json";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog")).filter((p) => p.data.site === "both");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const tr = (translations as any)[post.id];
+const bodyDeHtml = tr?.body ? await marked(tr.body) : "";
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+---
+
+<Base title={post.data.title}>
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-3xl mx-auto px-6 w-full">
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mb-12 group"
+      >
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="text-lg font-mono">Blog</span>
+      </a>
+
+      <h1 class="text-3xl sm:text-4xl font-800 tracking-tight mb-4">
+        {tr?.title ? (
+          <>
+            <span data-lang="en">{post.data.title}</span>
+            <span data-lang="de" class="hidden">{tr.title}</span>
+          </>
+        ) : (
+          post.data.title
+        )}
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-2 mb-8">
+        {post.data.tags.map((tag) => (
+          <span class="text-sm font-mono px-3 py-1 rounded-md bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
+            {tag}
+          </span>
+        ))}
+        <time class="text-sm font-mono text-neutral-500 dark:text-neutral-400 ml-auto">
+          {formatDate(post.data.date)}
+        </time>
+      </div>
+
+      {bodyDeHtml ? (
+        <>
+          <article class="prose" data-lang="en">
+            <Content />
+          </article>
+          <article class="prose hidden" data-lang="de" set:html={bodyDeHtml} />
+        </>
+      ) : (
+        <article class="prose">
+          <Content />
+        </article>
+      )}
+    </div>
+  </main>
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", function() {
+      var blocks = document.querySelectorAll('pre[data-language="mermaid"]');
+      if (!blocks.length) return;
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+      s.onload = function() {
+        var theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default";
+        mermaid.initialize({ startOnLoad: false, theme: theme });
+        blocks.forEach(function(pre) {
+          var div = document.createElement("div");
+          div.className = "mermaid";
+          div.textContent = pre.textContent;
+          pre.replaceWith(div);
+        });
+        mermaid.run();
+      };
+      document.head.appendChild(s);
+    });
+  </script>
+</Base>
+
+<style is:global>
+  .prose {
+    color: inherit;
+    max-width: none;
+    line-height: 1.75;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    font-weight: 700 !important;
+    font-size: revert !important;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+  }
+  .prose h1 { font-size: 1.75rem !important; }
+  .prose h2 { font-size: 1.5rem !important; }
+  .prose h3 { font-size: 1.25rem !important; }
+  .prose p { margin-bottom: 1em; }
+  .prose a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose a:hover { opacity: 0.8; }
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+  }
+  .prose code {
+    font-size: 0.875em;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    background: rgb(0 0 0 / 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose code { background: rgb(255 255 255 / 0.1); }
+  }
+  .prose pre {
+    overflow-x: auto;
+    padding: 1em;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+    background: rgb(0 0 0 / 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose pre { background: rgb(255 255 255 / 0.06); }
+  }
+  .prose pre code {
+    padding: 0;
+    background: none;
+  }
+  .prose ul, .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+  }
+  .prose ul { list-style-type: disc; }
+  .prose ol { list-style-type: decimal; }
+  .prose li { margin-bottom: 0.25em; }
+  .prose blockquote {
+    border-left: 3px solid rgb(0 0 0 / 0.15);
+    padding-left: 1em;
+    margin: 1.5em 0;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose blockquote { border-color: rgb(255 255 255 / 0.2); }
+  }
+  .prose hr {
+    border: none;
+    border-top: 1px solid rgb(0 0 0 / 0.1);
+    margin: 2em 0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose hr { border-color: rgb(255 255 255 / 0.1); }
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+  }
+  .prose th, .prose td {
+    border: 1px solid rgb(0 0 0 / 0.1);
+    padding: 0.5em 0.75em;
+    text-align: left;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose th, .prose td { border-color: rgb(255 255 255 / 0.1); }
+  }
+  .prose th { font-weight: 600; }
+  .prose .mermaid {
+    margin: 2.5em 0;
+    text-align: center;
+  }
+</style>

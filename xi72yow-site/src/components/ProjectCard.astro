@@ -85,9 +85,7 @@ function getBadgeClass(tech: string): string {
     <div class="space-y-4">
     <div class="flex items-center gap-3">
       <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/projects/${name}`}
         class="text-lg font-700 hover:text-[#fb0] transition-colors"
       >
         {name}
@@ -120,12 +118,10 @@ function getBadgeClass(tech: string): string {
           {readmeTeaser}
         </p>
         <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={`/projects/${name}`}
           class="readme-teaser-link text-xs font-mono accent hover:underline"
         >
-          Read more on GitHub →
+          Read more →
         </a>
       </div>
     )}

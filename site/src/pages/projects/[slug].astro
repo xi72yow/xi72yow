@@ -1,0 +1,218 @@
+---
+import Base from "../../layouts/Base.astro";
+import { SITE } from "../../config";
+import { marked } from "marked";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import reposData from "../../../../repos.json";
+
+export function getStaticPaths() {
+  const repos = reposData.repos.filter((r: any) => r.featured === "x");
+  return repos.map((repo: any) => ({
+    params: { slug: repo.name },
+    props: { repo },
+  }));
+}
+
+const { repo } = Astro.props;
+
+let readmeHtml = "";
+try {
+  let md = readFileSync(
+    join(import.meta.dirname, "../../../../readmes", `${repo.name}.md`),
+    "utf-8"
+  );
+  // Rewrite relative image/link URLs to absolute GitHub raw URLs
+  const rawBase = `https://raw.githubusercontent.com/xi72yow/${repo.name}/main/`;
+  md = md.replace(/!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g, `![$1](${rawBase}$2)`);
+  md = md.replace(/\]\((?!https?:\/\/|#|mailto:)([^)]+)\)/g, `](${rawBase}$1)`);
+  readmeHtml = await marked(md);
+} catch {
+  // No README file available
+}
+
+const localImage = repo.image ? `/images/${repo.name}.webp` : null;
+
+const badgeColors: Record<string, string> = {
+  TypeScript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  JavaScript: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  Rust: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  C: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
+  Shell: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+  Dockerfile: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
+  SCSS: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
+};
+
+function getBadgeClass(tech: string): string {
+  return badgeColors[tech] || "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300";
+}
+---
+
+<Base title={repo.name}>
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-3xl mx-auto px-6 w-full">
+      <a
+        href="/#projects"
+        class="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mb-12 group"
+      >
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="text-lg font-mono" data-i18n-en="Projects" data-i18n-de="Projekte">Projects</span>
+      </a>
+
+      {localImage && (
+        <div class="aspect-video rounded-xl overflow-hidden mb-8 bg-neutral-100 dark:bg-neutral-800">
+          <img src={localImage} alt={repo.name} class="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <h1 class="text-3xl sm:text-4xl font-800 tracking-tight mb-4">{repo.name}</h1>
+
+      <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-2" data-lang="en">
+        {repo.description_en}
+      </p>
+      <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-2 hidden" data-lang="de">
+        {repo.description_de}
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 mb-8">
+        {repo.tech_stack.map((tech: string) => (
+          <span class={`text-xs font-mono px-2 py-0.5 rounded-md ${getBadgeClass(tech)}`}>
+            {tech}
+          </span>
+        ))}
+        <a
+          href={repo.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors ml-auto"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          GitHub
+        </a>
+        {repo.homepage && (
+          <a
+            href={repo.homepage}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Live
+          </a>
+        )}
+      </div>
+
+      {readmeHtml && (
+        <div class="border-t border-neutral-200 dark:border-neutral-800 pt-8">
+          <article class="prose" set:html={readmeHtml} />
+        </div>
+      )}
+    </div>
+  </main>
+</Base>
+
+<style is:global>
+  .prose {
+    color: inherit;
+    max-width: none;
+    line-height: 1.75;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    font-weight: 700 !important;
+    font-size: revert !important;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+  }
+  .prose h1 { font-size: 1.75rem !important; }
+  .prose h2 { font-size: 1.5rem !important; }
+  .prose h3 { font-size: 1.25rem !important; }
+  .prose p { margin-bottom: 1em; }
+  .prose a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose a:hover { opacity: 0.8; }
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+  }
+  .prose code {
+    font-size: 0.875em;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    background: rgb(0 0 0 / 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose code { background: rgb(255 255 255 / 0.1); }
+  }
+  .prose pre {
+    overflow-x: auto;
+    padding: 1em;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+    background: rgb(0 0 0 / 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose pre { background: rgb(255 255 255 / 0.06); }
+  }
+  .prose pre code {
+    padding: 0;
+    background: none;
+  }
+  .prose ul, .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+  }
+  .prose ul { list-style-type: disc; }
+  .prose ol { list-style-type: decimal; }
+  .prose li { margin-bottom: 0.25em; }
+  .prose blockquote {
+    border-left: 3px solid rgb(0 0 0 / 0.15);
+    padding-left: 1em;
+    margin: 1.5em 0;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose blockquote { border-color: rgb(255 255 255 / 0.2); }
+  }
+  .prose hr {
+    border: none;
+    border-top: 1px solid rgb(0 0 0 / 0.1);
+    margin: 2em 0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose hr { border-color: rgb(255 255 255 / 0.1); }
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+  }
+  .prose th, .prose td {
+    border: 1px solid rgb(0 0 0 / 0.1);
+    padding: 0.5em 0.75em;
+    text-align: left;
+  }
+  @media (prefers-color-scheme: dark) {
+    .prose th, .prose td { border-color: rgb(255 255 255 / 0.1); }
+  }
+  .prose th {
+    font-weight: 600;
+  }
+  .prose details { margin: 1em 0; }
+  .prose summary { cursor: pointer; font-weight: 600; }
+  .prose video {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+  }
+</style>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xi72yow.de/sitemap.xml
+Sitemap: https://xi72yow.de/sitemap-index.xml

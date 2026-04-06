@@ -8,6 +8,11 @@ const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
 <footer>
   <div class="divider-gradient"></div>
   <div class="max-w-5xl mx-auto px-6 py-12 flex flex-col gap-8">
+    <!-- Animated SVG Logo with glitch -->
+    <div class="glitch-logo flex justify-center">
+      <img src="/assets/logo_ani.svg" alt={SITE.alias} class="h-32 sm:h-40" />
+    </div>
+
     <!-- Random movie quote -->
     <div class="text-center py-4">
       <blockquote class="text-[#fb0] text-2xl font-brand italic leading-relaxed">
@@ -51,15 +56,12 @@ const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
         </a>
       </div>
 
-      <!-- Animated SVG Logo with glitch -->
-      <div class="glitch-logo">
-        <img src="/assets/logo_ani.svg" alt={SITE.alias} class="h-16" />
-      </div>
-
       <div class="flex items-center gap-3 text-sm text-[#a7a7a7]">
         <span>{SITE.alias} &middot; {SITE.domain}</span>
         <span>&middot;</span>
         <a href="https://reinke.ing" target="_blank" rel="noopener noreferrer" class="hover:text-[#fb0] transition-colors">reinke.ing</a>
+        <span>&middot;</span>
+        <a href="/blog" class="hover:text-[#fb0] transition-colors">Blog</a>
         <span>&middot;</span>
         <a href="/impressum" class="hover:text-[#fb0] transition-colors">Impressum</a>
       </div>

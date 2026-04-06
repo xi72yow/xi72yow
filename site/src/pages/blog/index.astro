@@ -1,0 +1,243 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import translations from "../../data/blog-translations.json";
+
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft && p.data.site === "both")
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function getTitleDe(post: any): string | undefined {
+  return post.data.titleDe || (translations as any)[post.id]?.title;
+}
+
+function getDescDe(post: any): string | undefined {
+  return post.data.descriptionDe || (translations as any)[post.id]?.description;
+}
+---
+
+<Base title="Blog">
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-3xl mx-auto px-6 w-full">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mb-12 group"
+      >
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="text-lg font-mono" data-i18n-en="Home" data-i18n-de="Home">Home</span>
+      </a>
+
+      <div class="mb-16">
+        <h1 class="text-3xl sm:text-4xl font-800 tracking-tight mb-4">Blog</h1>
+        <p class="text-neutral-500 dark:text-neutral-400" data-i18n-en="Thoughts, tutorials, and project updates" data-i18n-de="Gedanken, Tutorials und Projekt-Updates">
+          Thoughts, tutorials, and project updates
+        </p>
+      </div>
+
+      <div class="relative mb-10">
+        <input
+          id="blog-search"
+          type="text"
+          data-i18n-placeholder-en="Search posts..."
+          data-i18n-placeholder-de="Beiträge suchen..."
+          placeholder="Search posts..."
+          class="w-full bg-neutral-100 dark:bg-white/5 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:border-sky-500 dark:focus:border-sky-400 outline-none py-3 pl-10 pr-4 text-neutral-900 dark:text-neutral-200 placeholder-neutral-400 dark:placeholder-neutral-500 font-mono transition-colors"
+        />
+        <svg class="w-5 h-5 absolute left-3 top-3.5 text-neutral-400 dark:text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 mb-8">
+        {allTags.map((tag) => (
+          <button
+            class="tag-filter text-xs font-mono px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 hover:border-sky-500 dark:hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 border border-transparent transition-colors cursor-pointer"
+            data-tag={tag.toLowerCase()}
+          >
+            {tag}
+          </button>
+        ))}
+        <button
+          id="sort-toggle"
+          class="tag-filter text-xs font-mono px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 hover:text-sky-600 dark:hover:text-sky-400 border border-transparent transition-colors cursor-pointer ml-auto flex items-center gap-1"
+          data-dir="desc"
+        >
+          <svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          <span data-i18n-en="Date" data-i18n-de="Datum">Date</span>
+        </button>
+      </div>
+
+      {posts.length === 0 ? (
+        <p class="text-neutral-500 dark:text-neutral-400" data-i18n-en="No posts yet. Check back soon!" data-i18n-de="Noch keine Beiträge. Schau bald wieder vorbei!">
+          No posts yet. Check back soon!
+        </p>
+      ) : (
+        <div id="blog-posts" class="space-y-8">
+          {posts.map((post) => (
+            <article class="group blog-post" data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(" ")} ${getTitleDe(post) || ""} ${getDescDe(post) || ""}`.toLowerCase()} data-date={post.data.date.toISOString()} data-tags={post.data.tags.map(t => t.toLowerCase()).join(",")}>
+              <a href={`/blog/${post.id}`} class="block py-4">
+                <h2 class="text-2xl font-700 group-hover:accent transition-colors">
+                  {getTitleDe(post) ? (
+                    <>
+                      <span data-lang="en">{post.data.title}</span>
+                      <span data-lang="de" class="hidden">{getTitleDe(post)}</span>
+                    </>
+                  ) : post.data.title}
+                </h2>
+                <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                  {post.data.tags.map((tag) => (
+                    <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border border-transparent blog-tag transition-colors" data-tag={tag.toLowerCase()}>
+                      {tag}
+                    </span>
+                  ))}
+                  <time class="text-xs font-mono text-neutral-500 dark:text-neutral-400 ml-auto">
+                    {formatDate(post.data.date)}
+                  </time>
+                </div>
+                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed">
+                  {getDescDe(post) ? (
+                    <>
+                      <span data-lang="en">{post.data.description}</span>
+                      <span data-lang="de" class="hidden">{getDescDe(post)}</span>
+                    </>
+                  ) : post.data.description}
+                </p>
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+      <p id="no-results" class="text-neutral-500 dark:text-neutral-400 hidden" data-i18n-en="No matching posts found." data-i18n-de="Keine passenden Beiträge gefunden.">No matching posts found.</p>
+    </div>
+  </main>
+</Base>
+
+<script is:inline>
+  var activeTags = [];
+  var sortDir = "desc";
+  var ACCENT = "#0ea5e9";
+
+  function setActive(el, on) {
+    el.style.borderColor = on ? ACCENT : "";
+    el.style.color = on ? ACCENT : "";
+  }
+
+  function toggleTag(tag) {
+    var idx = activeTags.indexOf(tag);
+    if (idx === -1) activeTags.push(tag);
+    else activeTags.splice(idx, 1);
+  }
+
+  function isTagActive(tag) {
+    return activeTags.indexOf(tag) !== -1;
+  }
+
+  function highlightText(el, q) {
+    if (!q) { clearHighlights(el); return; }
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(node) {
+      var text = node.textContent;
+      var idx = text.toLowerCase().indexOf(q);
+      if (idx === -1) return;
+      var span = document.createElement("span");
+      span.innerHTML = text.substring(0, idx)
+        + '<mark style="background:rgba(14,165,233,0.3);color:inherit;border-radius:2px;padding:0 2px">' + text.substring(idx, idx + q.length) + '</mark>'
+        + text.substring(idx + q.length);
+      node.parentNode.replaceChild(span, node);
+    });
+  }
+
+  function clearHighlights(el) {
+    el.querySelectorAll("mark").forEach(function(m) { m.replaceWith(m.textContent); });
+    el.normalize();
+  }
+
+  function updateAllStyles() {
+    document.querySelectorAll(".tag-filter:not(#sort-toggle)").forEach(function(b) {
+      setActive(b, isTagActive(b.getAttribute("data-tag")));
+    });
+    document.querySelectorAll(".blog-tag").forEach(function(s) {
+      setActive(s, isTagActive(s.getAttribute("data-tag")));
+    });
+  }
+
+  function applyFilters() {
+    var q = document.getElementById("blog-search").value.toLowerCase().trim();
+    var container = document.getElementById("blog-posts");
+    var posts = Array.from(container.querySelectorAll(".blog-post"));
+    var visible = 0;
+
+    posts.sort(function(a, b) {
+      var da = new Date(a.getAttribute("data-date")).getTime();
+      var db = new Date(b.getAttribute("data-date")).getTime();
+      return sortDir === "desc" ? db - da : da - db;
+    });
+    posts.forEach(function(p) { container.appendChild(p); });
+
+    posts.forEach(function(post) {
+      clearHighlights(post);
+      var matchSearch = !q || post.getAttribute("data-search").includes(q);
+      var tags = post.getAttribute("data-tags");
+      var postTags = tags.split(",");
+      var matchTag = !activeTags.length || activeTags.every(function(t) { return postTags.indexOf(t) !== -1; });
+      var show = matchSearch && matchTag;
+      post.style.display = show ? "" : "none";
+      if (show) {
+        visible++;
+        if (q) highlightText(post, q);
+      }
+    });
+
+    updateAllStyles();
+    document.getElementById("no-results").classList.toggle("hidden", visible > 0);
+  }
+
+  document.getElementById("blog-search").addEventListener("input", applyFilters);
+
+  document.querySelectorAll(".tag-filter:not(#sort-toggle)").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      toggleTag(btn.getAttribute("data-tag"));
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll(".blog-tag").forEach(function(span) {
+    span.style.cursor = "pointer";
+    span.addEventListener("click", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleTag(span.getAttribute("data-tag"));
+      applyFilters();
+    });
+  });
+
+  document.getElementById("sort-toggle").addEventListener("click", function() {
+    sortDir = sortDir === "desc" ? "asc" : "desc";
+    this.querySelector("svg").style.transform = sortDir === "asc" ? "rotate(180deg)" : "";
+    applyFilters();
+  });
+
+  // i18n placeholder
+  !function(){
+    var lang = navigator.language?.startsWith("de") ? "de" : "en";
+    var input = document.getElementById("blog-search");
+    var ph = input.getAttribute("data-i18n-placeholder-" + lang);
+    if (ph) input.placeholder = ph;
+  }();
+</script>
