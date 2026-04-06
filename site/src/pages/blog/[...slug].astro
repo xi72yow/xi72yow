@@ -1,6 +1,5 @@
 ---
 import Base from "../../layouts/Base.astro";
-import MermaidInit from "../../components/MermaidInit.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -85,7 +84,7 @@ function formatDate(date: Date): string {
       )}
     </div>
   </main>
-  <MermaidInit />
+
 </Base>
 
 <style is:global>

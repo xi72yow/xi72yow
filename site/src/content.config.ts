@@ -24,4 +24,9 @@ const blogDe = defineCollection({
   }),
 });
 
-export const collections = { blog, blogDe };
+const readmes = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "../readmes" }),
+  schema: z.object({}),
+});
+
+export const collections = { blog, blogDe, readmes };

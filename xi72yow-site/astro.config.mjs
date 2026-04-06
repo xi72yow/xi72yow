@@ -1,8 +1,20 @@
 import { defineConfig } from "astro/config";
 import UnoCSS from "@unocss/astro";
 import sitemap from "@astrojs/sitemap";
+import rehypeVideoConsent from "../shared/rehype-video-consent.mjs";
+
 export default defineConfig({
   site: "https://xi72yow.de",
+  markdown: {
+    syntaxHighlight: {
+      type: "shiki",
+      excludeLangs: ["mermaid"],
+    },
+    shikiConfig: {
+      theme: "github-dark",
+    },
+    rehypePlugins: [rehypeVideoConsent],
+  },
   integrations: [UnoCSS({ injectReset: true }), sitemap(), {
     name: "seasonal-toolbar",
     hooks: {
