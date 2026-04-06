@@ -1,21 +1,28 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { getCollection, render } from "astro:content";
-import { marked } from "marked";
-import translations from "../../data/blog-translations.json";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).filter((p) => p.data.site === "both");
+  const dePostsRaw = await getCollection("blogDe");
+  const dePosts = Object.fromEntries(dePostsRaw.map((p) => [p.id, p]));
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, dePost: dePosts[post.id] || null },
   }));
 }
 
-const { post } = Astro.props;
+const { post, dePost } = Astro.props;
 const { Content } = await render(post);
-const tr = (translations as any)[post.id];
-const bodyDeHtml = tr?.body ? await marked(tr.body) : "";
+let ContentDe: any = null;
+let titleDe = post.data.titleDe;
+let descDe = post.data.descriptionDe;
+if (dePost) {
+  const rendered = await render(dePost);
+  ContentDe = rendered.Content;
+  titleDe = titleDe || dePost.data.title;
+  descDe = descDe || dePost.data.description;
+}
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
@@ -40,10 +47,10 @@ function formatDate(date: Date): string {
       </a>
 
       <h1 class="text-3xl sm:text-4xl font-800 tracking-tight mb-4">
-        {tr?.title ? (
+        {titleDe ? (
           <>
             <span data-lang="en">{post.data.title}</span>
-            <span data-lang="de" class="hidden">{tr.title}</span>
+            <span data-lang="de" class="hidden">{titleDe}</span>
           </>
         ) : (
           post.data.title
@@ -61,12 +68,14 @@ function formatDate(date: Date): string {
         </time>
       </div>
 
-      {bodyDeHtml ? (
+      {ContentDe ? (
         <>
           <article class="prose" data-lang="en">
             <Content />
           </article>
-          <article class="prose hidden" data-lang="de" set:html={bodyDeHtml} />
+          <article class="prose hidden" data-lang="de">
+            <ContentDe />
+          </article>
         </>
       ) : (
         <article class="prose">
@@ -77,14 +86,16 @@ function formatDate(date: Date): string {
   </main>
   <script is:inline>
     document.addEventListener("DOMContentLoaded", function() {
-      var blocks = document.querySelectorAll('pre[data-language="mermaid"]');
+      // Find mermaid blocks from both Astro/Shiki (data-language) and marked (class)
+      var blocks = document.querySelectorAll('pre[data-language="mermaid"], pre > code.language-mermaid');
       if (!blocks.length) return;
       var s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
       s.onload = function() {
         var theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default";
         mermaid.initialize({ startOnLoad: false, theme: theme });
-        blocks.forEach(function(pre) {
+        blocks.forEach(function(el) {
+          var pre = el.tagName === "CODE" ? el.parentElement : el;
           var div = document.createElement("div");
           div.className = "mermaid";
           div.textContent = pre.textContent;

@@ -1,11 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { getCollection } from "astro:content";
-import translations from "../../data/blog-translations.json";
 
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft && p.data.site === "both")
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const dePostsRaw = await getCollection("blogDe");
+const dePosts = Object.fromEntries(dePostsRaw.map((p) => [p.id, p]));
 
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 
@@ -18,11 +20,11 @@ function formatDate(date: Date): string {
 }
 
 function getTitleDe(post: any): string | undefined {
-  return post.data.titleDe || (translations as any)[post.id]?.title;
+  return post.data.titleDe || dePosts[post.id]?.data.title;
 }
 
 function getDescDe(post: any): string | undefined {
-  return post.data.descriptionDe || (translations as any)[post.id]?.description;
+  return post.data.descriptionDe || dePosts[post.id]?.data.description;
 }
 ---
 

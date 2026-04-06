@@ -1,7 +1,8 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { SITE } from "../../config";
-import { marked } from "marked";
+import { marked, Renderer } from "marked";
+import { createHighlighter } from "shiki";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import reposData from "../../../../repos.json";
@@ -26,7 +27,21 @@ try {
   const rawBase = `https://raw.githubusercontent.com/xi72yow/${repo.name}/main/`;
   md = md.replace(/!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g, `![$1](${rawBase}$2)`);
   md = md.replace(/\]\((?!https?:\/\/|#|mailto:)([^)]+)\)/g, `](${rawBase}$1)`);
-  readmeHtml = await marked(md);
+
+  const highlighter = await createHighlighter({
+    themes: ["github-dark"],
+    langs: ["rust", "typescript", "javascript", "bash", "json", "html", "css", "c", "toml", "yaml", "shell", "dockerfile"],
+  });
+  const renderer = new Renderer();
+  renderer.code = function({ text, lang }) {
+    try {
+      return highlighter.codeToHtml(text, { lang: lang || "text", theme: "github-dark" });
+    } catch {
+      return `<pre><code>${text}</code></pre>`;
+    }
+  };
+  readmeHtml = await marked(md, { renderer });
+  highlighter.dispose();
 } catch {
   // No README file available
 }
