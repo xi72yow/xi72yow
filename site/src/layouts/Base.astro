@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../config";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -49,13 +50,18 @@ const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} - ${SITE.tit
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
+    <ClientRouter />
   </head>
   <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans antialiased relative overflow-x-hidden">
     <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-3" aria-hidden="true"></div>
     <slot />
-    <script is:inline>!function(){var l=navigator.language?.startsWith("de")?"de":"en";document.documentElement.lang=l;document.querySelectorAll("[data-lang]").forEach(function(e){e.classList.toggle("hidden",e.getAttribute("data-lang")!==l)});document.querySelectorAll("[data-i18n-"+l+"]").forEach(function(e){e.textContent=e.getAttribute("data-i18n-"+l)})}()</script>
+    <script is:inline>
+    function applyLang(){var l=navigator.language?.startsWith("de")?"de":"en";document.documentElement.lang=l;document.querySelectorAll("[data-lang]").forEach(function(e){e.classList.toggle("hidden",e.getAttribute("data-lang")!==l)});document.querySelectorAll("[data-i18n-"+l+"]").forEach(function(e){e.textContent=e.getAttribute("data-i18n-"+l)})}
+    applyLang();
+    document.addEventListener("astro:page-load",applyLang);
+    </script>
   </body>
 </html>
 

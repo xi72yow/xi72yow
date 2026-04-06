@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../config";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -57,10 +58,11 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
     <meta name="theme-color" content="#222" />
 
     <title>{pageTitle}</title>
+    <ClientRouter />
   </head>
   <body class="bg-[#222] text-neutral-100 font-sans antialiased relative overflow-x-hidden">
-    <!-- Snowfall canvas (winter only, injected by JS) -->
-    <div id="snowfall" class="fixed inset-0 pointer-events-none z-50" aria-hidden="true"></div>
+    <!-- Seasonal effects canvas -->
+    <div id="seasonal" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true" transition:persist></div>
 
     <!-- Background image overlay -->
     <div class="fixed inset-0 pointer-events-none" style="z-index: -10; background: url('/assets/bg.webp') no-repeat center center fixed; background-size: cover;" aria-hidden="true"></div>
@@ -70,7 +72,7 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
     <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
 
     <!-- Slimacy canvas -->
-    <canvas id="slimacy" width="57" height="111" class="fixed z-40 pointer-events-none" style="image-rendering: pixelated;" aria-hidden="true"></canvas>
+    <canvas id="slimacy" width="57" height="111" class="fixed z-40 pointer-events-none" style="image-rendering: pixelated;" aria-hidden="true" transition:persist></canvas>
 
     <slot />
 
@@ -90,13 +92,11 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
     `);
     </script>
 
-    <!-- Snowfall (Nov, Dec, Jan) -->
+    <!-- Seasonal effects (all seasons, always in dev) -->
     <script is:inline>
     !function(){
-      var month = new Date().getMonth();
-      if (month !== 10 && month !== 11 && month !== 0) return;
-
-      var el = document.getElementById("snowfall");
+      var el = document.getElementById("seasonal");
+      if (el.querySelector("canvas")) return;
       var canvas = document.createElement("canvas");
       var w = el.offsetWidth, h = el.offsetHeight;
       canvas.width = w; canvas.height = h;
@@ -104,31 +104,465 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
       el.appendChild(canvas);
       var ctx = canvas.getContext("2d");
 
-      var max = Math.floor(w / 40);
-      var flakes = [];
-      for (var i = 0; i < max; i++) {
-        flakes.push({
-          x: Math.random() * w,
-          y: -(Math.random() * 800 + 20),
-          r: Math.random() * 5 + 2,
-          speed: Math.random() * 0.5 + 0.5,
-          amp: Math.random(),
-          wl: Math.random() * 100 + 200
-        });
+      var now = new Date(), m = now.getMonth(), d = now.getDate();
+      var isDev = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+      var isNewYear = m === 0 && d <= 7;
+      var isValentine = m === 1 && d === 14;
+      var isBirthday = m === 5 && d === 15;
+      var isHalloween = m === 9 && d >= 25;
+      var isNikolaus = m === 11 && d === 6;
+      var isChristmas = m === 11 && d >= 24 && d <= 26;
+
+      // Determine season: special days > seasons
+      var season;
+      if (isValentine) season = "valentine";
+      else if (isBirthday) season = "birthday";
+      else if (isHalloween) season = "halloween";
+      else if (isNikolaus) season = "nikolaus";
+      else if (isChristmas) season = "christmas";
+      else if (isNewYear) season = "newyear";
+      else if (m >= 10 || m <= 1) season = "winter";
+      else if (m >= 2 && m <= 4) season = "spring";
+      else if (m >= 5 && m <= 7) season = "summer";
+      else season = "autumn";
+
+      function getSeason() {
+        if (isDev && typeof window.__seasonOverride === "string") return window.__seasonOverride;
+        return season;
       }
 
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
+      // ---- WINTER: subtle snow ----
+      // Full snow for winter
+      var snowCount = Math.floor(w / 40);
+      var snow = [];
+      for (var i = 0; i < snowCount; i++) {
+        snow.push({ x: Math.random()*w, y: -(Math.random()*800+20), r: Math.random()*5+2, speed: Math.random()*0.5+0.5, amp: Math.random(), wl: Math.random()*100+200 });
+      }
+      // Subtle snow for newyear background
+      var snowLiteCount = Math.floor(w / 80);
+      var snowLite = [];
+      for (var i = 0; i < snowLiteCount; i++) {
+        snowLite.push({ x: Math.random()*w, y: -(Math.random()*800+20), r: Math.random()*3+1, speed: Math.random()*0.3+0.3, amp: Math.random()*0.5, wl: Math.random()*100+200 });
+      }
+      function drawSnowFlakes(flakes, opacity) {
         for (var i = 0; i < flakes.length; i++) {
           var f = flakes[i];
-          f.y += f.speed;
-          f.x += f.amp * Math.sin(f.y * 2 * Math.PI / f.wl);
-          if (f.y > h) { f.y = -(Math.random() * 200 + 20); f.x = Math.random() * w; }
+          f.y += f.speed; f.x += f.amp * Math.sin(f.y*2*Math.PI/f.wl);
+          if (f.y > h) { f.y = -(Math.random()*200+20); f.x = Math.random()*w; }
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+          ctx.fillStyle = "rgba(255,255,255,"+opacity+")"; ctx.fill();
+        }
+      }
+      function drawSnow() { drawSnowFlakes(snow, 0.8); }
+      function drawSnowLite() { drawSnowFlakes(snowLite, 0.5); }
+
+      // ---- NEW YEAR: fireworks ----
+      var rockets = [];
+      var sparks = [];
+      var fwColors = ["#ff3366","#ffbb00","#33ccff","#ff6600","#cc33ff","#00ff88"];
+      var lastRocket = 0;
+      function spawnRocket() {
+        var tx = Math.random()*w*0.6+w*0.2;
+        var ty = Math.random()*h*0.3+h*0.1;
+        // start from bottom with random horizontal offset, creating an angled trajectory
+        var sx = tx + (Math.random()-0.5)*w*0.4;
+        var sy = h;
+        var dx = tx-sx, dy = ty-sy;
+        var dist = Math.sqrt(dx*dx+dy*dy) || 1;
+        var spd = 3+Math.random()*2;
+        rockets.push({ x: sx, y: sy, tx: tx, ty: ty, vx: dx/dist*spd, vy: dy/dist*spd, color: fwColors[Math.floor(Math.random()*fwColors.length)], trail: [] });
+      }
+      function drawFireworks() {
+        // subtle snow in background during new year
+        drawSnowLite();
+        var t = Date.now();
+        if (t - lastRocket > 600 + Math.random()*800) { spawnRocket(); lastRocket = t; }
+        // rockets
+        for (var i = rockets.length-1; i >= 0; i--) {
+          var r = rockets[i];
+          r.trail.push({x:r.x,y:r.y,a:1});
+          r.x += r.vx; r.y += r.vy;
+          // trail
+          for (var j = r.trail.length-1; j >= 0; j--) {
+            r.trail[j].a -= 0.04;
+            if (r.trail[j].a <= 0) { r.trail.splice(j,1); continue; }
+            ctx.beginPath(); ctx.arc(r.trail[j].x,r.trail[j].y,1.5,0,Math.PI*2);
+            ctx.fillStyle = "rgba(255,255,255,"+r.trail[j].a+")"; ctx.fill();
+          }
+          // head
+          ctx.beginPath(); ctx.arc(r.x,r.y,2,0,Math.PI*2);
+          ctx.fillStyle = r.color; ctx.fill();
+          // explode when close to target
+          var ddx = r.x-r.tx, ddy = r.y-r.ty;
+          if (Math.sqrt(ddx*ddx+ddy*ddy) < 10) {
+            for (var s = 0; s < 40+Math.random()*20; s++) {
+              var angle = Math.random()*Math.PI*2;
+              var vel = 1+Math.random()*3;
+              sparks.push({ x:r.x, y:r.y, vx:Math.cos(angle)*vel, vy:Math.sin(angle)*vel, a:1, color:r.color, gravity:0.03+Math.random()*0.02 });
+            }
+            rockets.splice(i,1);
+          }
+        }
+        // sparks
+        for (var i = sparks.length-1; i >= 0; i--) {
+          var s = sparks[i];
+          s.x += s.vx; s.y += s.vy; s.vy += s.gravity; s.a -= 0.012;
+          if (s.a <= 0) { sparks.splice(i,1); continue; }
+          ctx.beginPath(); ctx.arc(s.x,s.y,1.5,0,Math.PI*2);
+          ctx.globalAlpha = s.a; ctx.fillStyle = s.color; ctx.fill(); ctx.globalAlpha = 1;
+        }
+      }
+
+      // ---- SPRING: cherry blossom petals ----
+      var petalCount = Math.floor(w / 50);
+      var petals = [];
+      var petalColors = ["rgba(255,183,197,0.7)","rgba(255,150,170,0.6)","rgba(255,200,210,0.8)","rgba(255,130,160,0.5)"];
+      for (var i = 0; i < petalCount; i++) {
+        petals.push({ x: Math.random()*w, y: -(Math.random()*800+20), r: Math.random()*4+3, speed: Math.random()*0.5+0.3, drift: Math.random()*2-1, wobble: Math.random()*Math.PI*2, wobbleSpeed: 0.02+Math.random()*0.02, rot: Math.random()*Math.PI*2, rotSpeed: 0.01+Math.random()*0.02, color: petalColors[Math.floor(Math.random()*petalColors.length)] });
+      }
+      function drawPetals() {
+        for (var i = 0; i < petals.length; i++) {
+          var p = petals[i];
+          p.y += p.speed; p.wobble += p.wobbleSpeed;
+          p.x += p.drift*0.3 + Math.sin(p.wobble)*0.8;
+          p.rot += p.rotSpeed;
+          if (p.y > h+10) { p.y = -(Math.random()*200+20); p.x = Math.random()*w; }
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
           ctx.beginPath();
-          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(255,255,255,0.8)";
+          ctx.moveTo(0,-p.r);
+          ctx.bezierCurveTo(p.r*0.8,-p.r*0.3, p.r*0.6,p.r*0.5, 0,p.r);
+          ctx.bezierCurveTo(-p.r*0.6,p.r*0.5, -p.r*0.8,-p.r*0.3, 0,-p.r);
+          ctx.fillStyle = p.color; ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // ---- SUMMER: fireflies ----
+      var flyCount = Math.floor(w / 60);
+      var flies = [];
+      for (var i = 0; i < flyCount; i++) {
+        flies.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, phase: Math.random()*Math.PI*2, pulseSpeed: 0.02+Math.random()*0.03, r: Math.random()*2+1.5, target: {x: Math.random()*w, y: Math.random()*h}, timer: 0 });
+      }
+      function drawFireflies() {
+        for (var i = 0; i < flies.length; i++) {
+          var f = flies[i];
+          f.phase += f.pulseSpeed;
+          f.timer++;
+          // drift toward random target
+          if (f.timer > 200+Math.random()*200) { f.target = {x:Math.random()*w, y:Math.random()*h}; f.timer = 0; }
+          var dx = f.target.x-f.x, dy = f.target.y-f.y;
+          var dist = Math.sqrt(dx*dx+dy*dy) || 1;
+          f.vx += dx/dist*0.005; f.vy += dy/dist*0.005;
+          f.vx *= 0.99; f.vy *= 0.99;
+          f.x += f.vx; f.y += f.vy;
+          // wrap
+          if (f.x < -10) f.x = w+10; if (f.x > w+10) f.x = -10;
+          if (f.y < -10) f.y = h+10; if (f.y > h+10) f.y = -10;
+          var glow = (Math.sin(f.phase)+1)/2 * 0.6 + 0.1;
+          // outer glow
+          var grad = ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*6);
+          grad.addColorStop(0,"rgba(180,255,80,"+glow*0.3+")");
+          grad.addColorStop(1,"rgba(180,255,80,0)");
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r*6,0,Math.PI*2);
+          ctx.fillStyle = grad; ctx.fill();
+          // core
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+          ctx.fillStyle = "rgba(200,255,100,"+glow+")"; ctx.fill();
+        }
+      }
+
+      // ---- AUTUMN: falling leaves ----
+      var leafCount = Math.floor(w / 60);
+      var leaves = [];
+      var leafColors = ["#c0392b","#e67e22","#d4a017","#b5651d","#cc5500","#8B4513"];
+      for (var i = 0; i < leafCount; i++) {
+        leaves.push({ x: Math.random()*w, y: -(Math.random()*800+20), r: Math.random()*5+4, speed: Math.random()*0.4+0.3, drift: Math.random()*1.5-0.5, wobble: Math.random()*Math.PI*2, wobbleSpeed: 0.015+Math.random()*0.015, rot: Math.random()*Math.PI*2, rotSpeed: 0.008+Math.random()*0.015, color: leafColors[Math.floor(Math.random()*leafColors.length)] });
+      }
+      function drawLeaves() {
+        for (var i = 0; i < leaves.length; i++) {
+          var l = leaves[i];
+          l.y += l.speed; l.wobble += l.wobbleSpeed;
+          l.x += l.drift*0.3 + Math.sin(l.wobble)*1.2;
+          l.rot += l.rotSpeed;
+          if (l.y > h+10) { l.y = -(Math.random()*200+20); l.x = Math.random()*w; }
+          ctx.save(); ctx.translate(l.x,l.y); ctx.rotate(l.rot);
+          ctx.beginPath();
+          // leaf shape
+          ctx.moveTo(0,-l.r);
+          ctx.bezierCurveTo(l.r*1.2,-l.r*0.5, l.r*0.8,l.r*0.5, 0,l.r);
+          ctx.bezierCurveTo(-l.r*0.8,l.r*0.5, -l.r*1.2,-l.r*0.5, 0,-l.r);
+          ctx.fillStyle = l.color; ctx.globalAlpha = 0.7; ctx.fill();
+          // stem
+          ctx.beginPath(); ctx.moveTo(0,-l.r); ctx.lineTo(0,l.r);
+          ctx.strokeStyle = l.color; ctx.lineWidth = 0.5; ctx.globalAlpha = 0.5; ctx.stroke();
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
+      }
+
+      // ---- HALLOWEEN: fog clouds + green fire (bottom right) ----
+      var fogParticles = [];
+      var fogCount = Math.floor(w / 80);
+      for (var i = 0; i < fogCount; i++) {
+        fogParticles.push({ x: Math.random()*w, y: Math.random()*h, r: 80+Math.random()*150, vx: (Math.random()-0.5)*0.2, vy: (Math.random()-0.5)*0.05, a: Math.random()*0.1+0.03, phase: Math.random()*Math.PI*2, phaseSpeed: 0.002+Math.random()*0.003 });
+      }
+      // green fire across entire bottom, reaching up to 80% height
+      var fireParticles = [];
+      var fireCount = 15;
+      for (var i = 0; i < fireCount; i++) {
+        fireParticles.push({ x: Math.random()*w, y: h+Math.random()*10, r: 3+Math.random()*5, speed: 0.3+Math.random()*0.8, life: 1, decay: 0.001+Math.random()*0.003, drift: (Math.random()-0.5)*0.3, wobble: Math.random()*Math.PI*2, wobbleSpeed: 0.02+Math.random()*0.03 });
+      }
+      function resetFireParticle(p) {
+        p.x = Math.random()*w; p.y = h+Math.random()*10;
+        p.life = 1; p.speed = 0.3+Math.random()*0.8;
+        p.r = 3+Math.random()*5; p.decay = 0.001+Math.random()*0.003;
+        p.drift = (Math.random()-0.5)*0.3;
+      }
+      function drawHalloween() {
+        // green fire rising from bottom right
+        for (var i = 0; i < fireParticles.length; i++) {
+          var p = fireParticles[i];
+          p.y -= p.speed; p.wobble += p.wobbleSpeed;
+          p.x += p.drift + Math.sin(p.wobble)*0.5;
+          p.life -= p.decay;
+          if (p.life <= 0) { resetFireParticle(p); continue; }
+          var intensity = p.life;
+          var g = Math.floor(180*intensity+40);
+          var r = Math.floor(30*intensity);
+          var br = Math.floor(10*intensity);
+          // glow
+          var grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+          grad.addColorStop(0,"rgba("+r+","+g+","+br+","+intensity*0.4+")");
+          grad.addColorStop(1,"rgba("+r+","+g+","+br+",0)");
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);
+          ctx.fillStyle = grad; ctx.fill();
+          // core
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r*intensity,0,Math.PI*2);
+          ctx.fillStyle = "rgba("+Math.min(r+60,255)+","+Math.min(g+40,255)+","+br+","+intensity*0.8+")";
           ctx.fill();
         }
+        // large fog clouds drifting across screen
+        for (var i = 0; i < fogParticles.length; i++) {
+          var f = fogParticles[i];
+          f.phase += f.phaseSpeed;
+          f.x += f.vx + Math.sin(f.phase)*0.15;
+          f.y += f.vy + Math.cos(f.phase*0.7)*0.08;
+          if (f.x < -f.r*1.5) f.x = w+f.r;
+          if (f.x > w+f.r*1.5) f.x = -f.r;
+          if (f.y < -f.r) f.y = h*0.5+Math.random()*h*0.3;
+          if (f.y > h+f.r) f.y = -f.r;
+          var pulsed = f.a + Math.sin(f.phase)*0.015;
+          var grad = ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);
+          grad.addColorStop(0,"rgba(220,220,230,"+pulsed+")");
+          grad.addColorStop(0.4,"rgba(210,210,220,"+pulsed*0.6+")");
+          grad.addColorStop(0.7,"rgba(200,200,210,"+pulsed*0.3+")");
+          grad.addColorStop(1,"rgba(180,180,190,0)");
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+          ctx.fillStyle = grad; ctx.fill();
+        }
+      }
+
+      // ---- BIRTHDAY: confetti cannon from mascot ----
+      var confetti = [];
+      var confettiColors = ["#ff3366","#ffbb00","#33ccff","#ff6600","#cc33ff","#00ff88","#ff69b4","#af0069","#ffd700","#ff1493"];
+      var lastConfetti = 0;
+      function spawnConfettiBurst() {
+        var pos = getSlimacyPos();
+        if (!pos) return;
+        // random cannon direction: up, up-left, up-right
+        var baseAngle = -Math.PI/2 + (Math.random()-0.5)*Math.PI*0.8;
+        for (var i = 0; i < 30; i++) {
+          var angle = baseAngle + (Math.random()-0.5)*Math.PI*0.5;
+          var vel = 2+Math.random()*4;
+          var size = 2+Math.random()*10;
+          // shape: 0=rect, 1=circle, 2=triangle, 3=glitter
+          var shape = Math.random() < 0.25 ? 3 : Math.floor(Math.random()*3);
+          confetti.push({ x:pos.x, y:pos.y, vx:Math.cos(angle)*vel, vy:Math.sin(angle)*vel, rot:Math.random()*Math.PI*2, rotSpeed:0.03+Math.random()*0.08, size:size, a:1, color:confettiColors[Math.floor(Math.random()*confettiColors.length)], shape:shape, glitterPhase:Math.random()*Math.PI*2 });
+        }
+      }
+      function drawBirthday() {
+        var t = Date.now();
+        if (t - lastConfetti > 2500+Math.random()*2000) { spawnConfettiBurst(); lastConfetti = t; }
+        for (var i = confetti.length-1; i >= 0; i--) {
+          var c = confetti[i];
+          c.x += c.vx; c.y += c.vy;
+          c.vy += 0.025; // lighter gravity, slower fall
+          c.vx *= 0.995; // less air resistance
+          c.rot += c.rotSpeed;
+          c.a -= 0.003;
+          if (c.a <= 0 || c.y > h+20) { confetti.splice(i,1); continue; }
+          ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(c.rot);
+          ctx.globalAlpha = c.a;
+          if (c.shape === 3) {
+            // glitter: flashing sparkle
+            c.glitterPhase += 0.1;
+            var flash = (Math.sin(c.glitterPhase)+1)/2;
+            ctx.globalAlpha = c.a * (0.3+flash*0.7);
+            ctx.fillStyle = "#fff";
+            ctx.beginPath();
+            // 4-point star sparkle
+            var gs = c.size*0.5;
+            ctx.moveTo(0,-gs); ctx.lineTo(gs*0.2,-gs*0.2); ctx.lineTo(gs,0);
+            ctx.lineTo(gs*0.2,gs*0.2); ctx.lineTo(0,gs); ctx.lineTo(-gs*0.2,gs*0.2);
+            ctx.lineTo(-gs,0); ctx.lineTo(-gs*0.2,-gs*0.2); ctx.closePath();
+            ctx.fill();
+            // colored core
+            ctx.globalAlpha = c.a * flash * 0.5;
+            ctx.fillStyle = c.color;
+            ctx.beginPath(); ctx.arc(0,0,gs*0.3,0,Math.PI*2); ctx.fill();
+          } else {
+            ctx.fillStyle = c.color;
+            if (c.shape === 0) { // rectangle
+              ctx.fillRect(-c.size/2,-c.size/4,c.size,c.size/2);
+            } else if (c.shape === 1) { // circle
+              ctx.beginPath(); ctx.arc(0,0,c.size/3,0,Math.PI*2); ctx.fill();
+            } else { // triangle
+              ctx.beginPath(); ctx.moveTo(0,-c.size/2); ctx.lineTo(c.size/3,c.size/3); ctx.lineTo(-c.size/3,c.size/3); ctx.closePath(); ctx.fill();
+            }
+          }
+          ctx.globalAlpha = 1; ctx.restore();
+        }
+      }
+
+      // ---- VALENTINE: hearts from mascot ----
+      var hearts = [];
+      var heartColors = ["rgba(255,60,100,0.8)","rgba(255,100,130,0.7)","rgba(220,30,70,0.8)","rgba(255,150,170,0.6)"];
+      var lastHeart = 0;
+      function getSlimacyPos() {
+        var sc = document.getElementById("slimacy");
+        if (!sc) return null;
+        return { x: parseInt(sc.style.left||0)+sc.width/2, y: parseInt(sc.style.top||0)+10 };
+      }
+      function drawHeart(cx,cy,size) {
+        ctx.beginPath();
+        var x = cx, y = cy;
+        ctx.moveTo(x, y+size*0.3);
+        ctx.bezierCurveTo(x,y, x-size,y, x-size,y+size*0.3);
+        ctx.bezierCurveTo(x-size,y+size*0.7, x,y+size, x,y+size*1.2);
+        ctx.bezierCurveTo(x,y+size, x+size,y+size*0.7, x+size,y+size*0.3);
+        ctx.bezierCurveTo(x+size,y, x,y, x,y+size*0.3);
+        ctx.fill();
+      }
+      function drawValentine() {
+        var t = Date.now();
+        var pos = getSlimacyPos();
+        if (pos && t - lastHeart > 1200+Math.random()*800) {
+          hearts.push({ x:pos.x, y:pos.y, vx:(Math.random()-0.5)*1.5, vy:-(0.5+Math.random()*1), size:5+Math.random()*8, a:1, rot:Math.random()*0.4-0.2, color:heartColors[Math.floor(Math.random()*heartColors.length)] });
+          lastHeart = t;
+        }
+        for (var i = hearts.length-1; i >= 0; i--) {
+          var hrt = hearts[i];
+          hrt.x += hrt.vx; hrt.y += hrt.vy;
+          hrt.vy -= 0.003;
+          hrt.a -= 0.006;
+          if (hrt.a <= 0) { hearts.splice(i,1); continue; }
+          ctx.save(); ctx.translate(hrt.x,hrt.y); ctx.rotate(hrt.rot);
+          ctx.globalAlpha = hrt.a; ctx.fillStyle = hrt.color;
+          drawHeart(0,0,hrt.size);
+          ctx.globalAlpha = 1; ctx.restore();
+        }
+      }
+
+      // ---- CHRISTMAS: snow + golden stars ----
+      var xmasStars = [];
+      var xmasStarCount = Math.floor(w / 100);
+      for (var i = 0; i < xmasStarCount; i++) {
+        xmasStars.push({ x: Math.random()*w, y: -(Math.random()*800+20), r: 3+Math.random()*4, speed: 0.2+Math.random()*0.3, rot: Math.random()*Math.PI*2, rotSpeed: 0.01+Math.random()*0.02, wobble: Math.random()*Math.PI*2, wobbleSpeed: 0.01+Math.random()*0.01, a: 0.5+Math.random()*0.4 });
+      }
+      function drawStar(cx,cy,r,points,rot) {
+        ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot);
+        ctx.beginPath();
+        for (var i = 0; i < points*2; i++) {
+          var rad = i%2===0 ? r : r*0.4;
+          var angle = Math.PI/points*i - Math.PI/2;
+          if (i===0) ctx.moveTo(Math.cos(angle)*rad, Math.sin(angle)*rad);
+          else ctx.lineTo(Math.cos(angle)*rad, Math.sin(angle)*rad);
+        }
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+      function drawChristmas() {
+        drawSnowLite();
+        // golden stars
+        for (var i = 0; i < xmasStars.length; i++) {
+          var s = xmasStars[i];
+          s.y += s.speed; s.wobble += s.wobbleSpeed;
+          s.x += Math.sin(s.wobble)*0.3;
+          s.rot += s.rotSpeed;
+          if (s.y > h+10) { s.y = -(Math.random()*200+20); s.x = Math.random()*w; }
+          ctx.globalAlpha = s.a;
+          // star glow
+          var grad = ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*3);
+          grad.addColorStop(0,"rgba(255,187,0,0.3)");
+          grad.addColorStop(1,"rgba(255,187,0,0)");
+          ctx.fillStyle = grad;
+          ctx.beginPath(); ctx.arc(s.x,s.y,s.r*3,0,Math.PI*2); ctx.fill();
+          // star shape
+          ctx.fillStyle = "#ffbb00";
+          drawStar(s.x,s.y,s.r,5,s.rot);
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      // ---- NIKOLAUS: lite snow + shooting stars ----
+      var shootingStars = [];
+      var lastShootingStar = 0;
+      function spawnShootingStar() {
+        var sx = Math.random()*w*0.9;
+        var sy = -10;
+        var angle = Math.PI/5 + Math.random()*Math.PI/5;
+        var speed = 2+Math.random()*2;
+        shootingStars.push({ x:sx, y:sy, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed, life:1, decay:0.002+Math.random()*0.001, trail:[] });
+      }
+      function drawNikolaus() {
+        drawSnowLite();
+        var t = Date.now();
+        if (t - lastShootingStar > 8000+Math.random()*12000) { spawnShootingStar(); lastShootingStar = t; }
+        for (var i = shootingStars.length-1; i >= 0; i--) {
+          var ss = shootingStars[i];
+          ss.trail.push({x:ss.x,y:ss.y,a:ss.life});
+          // slow down as it fades
+          ss.x += ss.vx*ss.life; ss.y += ss.vy*ss.life;
+          ss.life -= ss.decay;
+          // only remove once trail is also gone
+          if (ss.life <= 0 && ss.trail.length === 0) { shootingStars.splice(i,1); continue; }
+          // draw trail
+          for (var j = ss.trail.length-1; j >= 0; j--) {
+            ss.trail[j].a -= 0.015;
+            if (ss.trail[j].a <= 0) { ss.trail.splice(j,1); continue; }
+            var tr = ss.trail[j];
+            var trSize = 4*tr.a;
+            ctx.beginPath(); ctx.arc(tr.x,tr.y,trSize,0,Math.PI*2);
+            ctx.fillStyle = "rgba(255,220,130,"+tr.a*0.6+")"; ctx.fill();
+          }
+          if (ss.life <= 0) continue;
+          // head glow — shrinks with life
+          var glowR = 25*ss.life;
+          var grad = ctx.createRadialGradient(ss.x,ss.y,0,ss.x,ss.y,glowR);
+          grad.addColorStop(0,"rgba(255,240,180,"+ss.life*0.6+")");
+          grad.addColorStop(1,"rgba(255,200,80,0)");
+          ctx.beginPath(); ctx.arc(ss.x,ss.y,glowR,0,Math.PI*2);
+          ctx.fillStyle = grad; ctx.fill();
+          // head core — shrinks with life
+          ctx.beginPath(); ctx.arc(ss.x,ss.y,5*ss.life,0,Math.PI*2);
+          ctx.fillStyle = "rgba(255,255,220,"+ss.life+")"; ctx.fill();
+        }
+      }
+
+      // ---- Main draw loop ----
+      function draw() {
+        ctx.clearRect(0,0,w,h);
+        var s = getSeason();
+        if (s === "winter") drawSnow();
+        else if (s === "newyear") drawFireworks();
+        else if (s === "spring") drawPetals();
+        else if (s === "summer") drawFireflies();
+        else if (s === "autumn") drawLeaves();
+        else if (s === "birthday") drawBirthday();
+        else if (s === "halloween") drawHalloween();
+        else if (s === "valentine") drawValentine();
+        else if (s === "nikolaus") drawNikolaus();
+        else if (s === "christmas") drawChristmas();
         requestAnimationFrame(draw);
       }
       draw();
@@ -144,7 +578,8 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
     <script is:inline>
     !function(){
       var canvas = document.getElementById("slimacy");
-      if (!canvas) return;
+      if (!canvas || canvas.dataset.init) return;
+      canvas.dataset.init = "1";
       var ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = false;
 
