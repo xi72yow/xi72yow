@@ -25,7 +25,7 @@ const blogDe = defineCollection({
 });
 
 const readmes = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "../readmes" }),
+  loader: glob({ pattern: "**/*.md", base: "../readmes-processed" }),
   schema: z.object({}),
 });
 

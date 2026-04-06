@@ -14,7 +14,12 @@ COPY repos.json ../repos.json
 COPY blog/ ../blog/
 COPY blog-de/ ../blog-de/
 COPY readmes/ ../readmes/
-RUN npm run build
+COPY shared/ ../shared/
+RUN --mount=type=cache,target=/tmp/image-cache \
+    cp -r /tmp/image-cache/* public/images/ 2>/dev/null || true && \
+    node scripts/fetch-images.mjs && \
+    cp -r public/images/* /tmp/image-cache/
+RUN rm -rf dist && npx astro build && node scripts/render-mermaid.mjs
 
 FROM dhi.io/node:25-debian13
 WORKDIR /app

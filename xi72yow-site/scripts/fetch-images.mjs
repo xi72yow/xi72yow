@@ -1,5 +1,6 @@
-import { readFileSync, mkdirSync, writeFileSync, unlinkSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync, readdirSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import sharp from "sharp";
 import { join } from "node:path";
 
@@ -21,15 +22,20 @@ for (const repo of repos.repos) {
   // Fetch repo image
   if (repo.image) {
     const filename = `${repo.name}.webp`;
-    console.log(`Fetching ${repo.name} image...`);
-    try {
-      const res = await fetch(repo.image);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const buf = Buffer.from(await res.arrayBuffer());
-      await sharp(buf).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 }).toFile(join(outDir, filename));
-      console.log(`  → ${filename}`);
-    } catch (e) {
-      console.error(`  Failed: ${e.message}`);
+    const dest = join(outDir, filename);
+    if (existsSync(dest)) {
+      console.log(`Skipping ${repo.name} image (cached)`);
+    } else {
+      console.log(`Fetching ${repo.name} image...`);
+      try {
+        const res = await fetch(repo.image);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const buf = Buffer.from(await res.arrayBuffer());
+        await sharp(buf).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 }).toFile(dest);
+        console.log(`  → ${filename}`);
+      } catch (e) {
+        console.error(`  Failed: ${e.message}`);
+      }
     }
   }
 
@@ -73,16 +79,107 @@ for (const repo of repos.repos) {
 }
 
 // Profile photo
-const photoUrl = "https://github.com/user-attachments/assets/708d1434-91f0-45c7-81e8-c51178313213";
-console.log("Fetching profile photo...");
-try {
-  const res = await fetch(photoUrl);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const buf = Buffer.from(await res.arrayBuffer());
-  await sharp(buf).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 85 }).toFile(join(import.meta.dirname, "../public/photo.webp"));
-  console.log("  → photo.webp");
-} catch (e) {
-  console.error(`  Failed: ${e.message}`);
+const photoDest = join(import.meta.dirname, "../public/photo.webp");
+if (existsSync(photoDest)) {
+  console.log("Skipping profile photo (cached)");
+} else {
+  const photoUrl = "https://github.com/user-attachments/assets/708d1434-91f0-45c7-81e8-c51178313213";
+  console.log("Fetching profile photo...");
+  try {
+    const res = await fetch(photoUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const buf = Buffer.from(await res.arrayBuffer());
+    await sharp(buf).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 85 }).toFile(photoDest);
+    console.log("  → photo.webp");
+  } catch (e) {
+    console.error(`  Failed: ${e.message}`);
+  }
 }
+
+// README images — download all external images and rewrite URLs in processed copies
+console.log("\nProcessing README images...");
+const readmeDir = join(import.meta.dirname, "../../readmes");
+const manifest = {};
+
+function urlHash(url) {
+  return createHash("sha256").update(url).digest("hex").slice(0, 12);
+}
+
+function extractImageUrls(md) {
+  const urls = new Set();
+  for (const m of md.matchAll(/!\[[^\]]*\]\((\s*https?:\/\/[^)\s]+)\s*\)/g)) {
+    urls.add(m[1].trim());
+  }
+  for (const m of md.matchAll(/<img[^>]+src=["'](https?:\/\/[^"']+)["'][^>]*>/gi)) {
+    urls.add(m[1]);
+  }
+  return [...urls];
+}
+
+let readmeFiles = [];
+try {
+  readmeFiles = readdirSync(readmeDir).filter((f) => f.endsWith(".md"));
+} catch {}
+
+for (const file of readmeFiles) {
+  const content = readFileSync(join(readmeDir, file), "utf-8");
+  const urls = extractImageUrls(content);
+  for (const url of urls) {
+    if (manifest[url]) continue;
+    const hash = urlHash(url);
+    const webpName = `readme-${hash}.webp`;
+    const svgName = `readme-${hash}.svg`;
+
+    // Check cache
+    if (existsSync(join(outDir, webpName))) {
+      manifest[url] = `/images/${webpName}`;
+      console.log(`  ${file}: cached ${webpName}`);
+      continue;
+    }
+    if (existsSync(join(outDir, svgName))) {
+      manifest[url] = `/images/${svgName}`;
+      console.log(`  ${file}: cached ${svgName}`);
+      continue;
+    }
+
+    console.log(`  ${file}: ${url.slice(0, 80)}...`);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const buf = Buffer.from(await res.arrayBuffer());
+      const contentType = res.headers.get("content-type") || "";
+
+      if (contentType.includes("svg")) {
+        writeFileSync(join(outDir, svgName), buf);
+        manifest[url] = `/images/${svgName}`;
+        console.log(`    → ${svgName}`);
+      } else {
+        await sharp(buf)
+          .resize({ width: 1200, withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toFile(join(outDir, webpName));
+        manifest[url] = `/images/${webpName}`;
+        console.log(`    → ${webpName}`);
+      }
+    } catch (e) {
+      console.error(`    Failed: ${e.message}`);
+    }
+  }
+}
+
+// Write processed readmes with local image URLs
+const processedDir = join(import.meta.dirname, "../../readmes-processed");
+mkdirSync(processedDir, { recursive: true });
+for (const file of readmeFiles) {
+  let content = readFileSync(join(readmeDir, file), "utf-8");
+  for (const [url, localPath] of Object.entries(manifest)) {
+    while (content.includes(url)) {
+      content = content.replace(url, localPath);
+    }
+  }
+  writeFileSync(join(processedDir, file), content);
+}
+console.log(`\nProcessed ${readmeFiles.length} readmes → readmes-processed/`);
+console.log(`README images: ${Object.keys(manifest).length} URLs rewritten`);
 
 console.log("Done.");
