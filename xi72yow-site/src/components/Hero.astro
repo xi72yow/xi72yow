@@ -22,10 +22,10 @@ import { SITE } from "../config";
       <p class="text-sm sm:text-base text-secondary leading-relaxed max-w-lg hero-fade hero-fade-3">
         {SITE.catchphrase}
       </p>
-      <div class="flex gap-4 pt-4 hero-fade hero-fade-4">
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 hero-fade hero-fade-4">
         <a
           href={`mailto:${SITE.email}`}
-          class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#af0069] to-[#fb0] text-white rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:shadow-[0_1.5rem_2.8rem_rgba(175,0,105,0.4),0_1rem_1rem_rgba(255,187,0,0.2)] hover:translate-y-[-2px] transition-all duration-200"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#af0069] to-[#fb0] text-white rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:shadow-[0_1.5rem_2.8rem_rgba(175,0,105,0.4),0_1rem_1rem_rgba(255,187,0,0.2)] hover:translate-y-[-2px] transition-all duration-200"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -34,7 +34,7 @@ import { SITE } from "../config";
         </a>
         <a
           href="#projects"
-          class="inline-flex items-center gap-2 px-5 py-2.5 border border-[#fb0] rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:bg-[rgba(255,187,0,0.1)] transition-all duration-200"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-[#fb0] rounded-[6px] font-600 text-sm uppercase tracking-[0.1em] hover:bg-[rgba(255,187,0,0.1)] transition-all duration-200"
         >
           View projects
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
