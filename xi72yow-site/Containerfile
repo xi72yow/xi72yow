@@ -11,6 +11,8 @@ COPY xi72yow-site/package.json xi72yow-site/package-lock.json* ./
 RUN npm install
 COPY xi72yow-site/ .
 COPY repos.json ../repos.json
+COPY blog/ ../blog/
+COPY readmes/ ../readmes/
 RUN npm run build
 
 FROM dhi.io/node:25-debian13

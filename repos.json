@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-06T10:40:45Z",
+  "updated_at": "2026-04-06T11:06:58Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
@@ -28,18 +28,18 @@
       },
       {
         "name": "TypeScript",
-        "bytes": 475710,
+        "bytes": 475896,
         "percentage": 17.3
       },
       {
         "name": "Shell",
-        "bytes": 162059,
+        "bytes": 161909,
         "percentage": 5.9
       },
       {
         "name": "Astro",
-        "bytes": 100016,
-        "percentage": 3.6
+        "bytes": 101056,
+        "percentage": 3.7
       },
       {
         "name": "CSS",

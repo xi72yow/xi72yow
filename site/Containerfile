@@ -11,6 +11,9 @@ COPY site/package.json site/package-lock.json* ./
 RUN npm install
 COPY site/ .
 COPY repos.json ../repos.json
+COPY blog/ ../blog/
+COPY blog-de/ ../blog-de/
+COPY readmes/ ../readmes/
 RUN npm run build
 
 FROM dhi.io/node:25-debian13
