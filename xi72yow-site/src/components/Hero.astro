@@ -104,12 +104,7 @@ import { SITE } from "../config";
         typingStarted = true;
         setTimeout(() => heroTypeSequence(el), 1750);
       } else if (season !== "birthday") {
-        // reset to static text, signal mascot
         el.textContent = "heydidudi my friend!";
-        if (!window.__heroTypingDone) {
-          window.__heroTypingDone = true;
-          window.dispatchEvent(new Event("hero-typing-done"));
-        }
       }
     }
 
@@ -168,9 +163,6 @@ import { SITE } from "../config";
     await delay(500);
     cursor.remove();
 
-    // signal mascot to enter
-    window.__heroTypingDone = true;
-    window.dispatchEvent(new Event("hero-typing-done"));
   }
 
   initHeroTyping();

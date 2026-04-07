@@ -696,13 +696,11 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
 
       var img = new Image();
       img.src = "/slime.png";
-      function start() {
-        canvas.style.opacity = "1";
-        requestAnimationFrame(tick);
-      }
       img.onload = function(){
-        if (window.__heroTypingDone) { start(); }
-        else { window.addEventListener("hero-typing-done", start, { once: true }); }
+        setTimeout(function() {
+          canvas.style.opacity = "1";
+          requestAnimationFrame(tick);
+        }, 5000);
       };
 
       function drawFrame(fx, fy) {
