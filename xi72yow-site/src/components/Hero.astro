@@ -5,7 +5,7 @@ import { SITE } from "../config";
 <section class="section-container min-h-[80vh] flex items-center">
   <div class="flex flex-col md:flex-row items-center gap-12 w-full">
     <div class="flex-1 space-y-6">
-      <p class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1">heydidudi my friend!</p>
+      <p id="hero-typing" class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1">&nbsp;</p>
 
       <!-- Logo with flicker -->
       <div class="hero-fade hero-fade-2">
@@ -76,3 +76,86 @@ import { SITE } from "../config";
     animation: flicker 10s linear infinite;
   }
 </style>
+
+<style is:global>
+  .hero-cursor {
+    display: inline-block;
+    width: 0.6ch;
+    height: 1.15em;
+    background: #fb0;
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    animation: heroBlink 1s step-end infinite;
+  }
+  @keyframes heroBlink {
+    50% { opacity: 0; }
+  }
+</style>
+
+<script>
+  function initHeroTyping() {
+    const el = document.getElementById("hero-typing");
+    if (!el) return;
+
+    // wait for fade-in to finish (0.1s delay + 1.6s animation)
+    setTimeout(() => heroTypeSequence(el), 1750);
+  }
+
+  async function heroTypeSequence(el: HTMLElement) {
+    const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const typeDelay = () => 70 + Math.random() * 80;
+    const delDelay = () => 60 + Math.random() * 50;
+
+    const cursor = document.createElement("span");
+    cursor.className = "hero-cursor";
+    el.textContent = "";
+    el.appendChild(cursor);
+
+    const typeStr = async (s: string) => {
+      for (const ch of s) { cursor.before(ch); await delay(typeDelay()); }
+    };
+    const delChars = async (n: number) => {
+      for (let d = 0; d < n; d++) {
+        const t = cursor.previousSibling;
+        if (t && t.nodeType === Node.TEXT_NODE) {
+          t.textContent = t.textContent!.slice(0, -1);
+          if (t.textContent === "") t.remove();
+        }
+        await delay(delDelay());
+      }
+    };
+
+    // 1. type "heydidudi my friend!"
+    await typeStr("heydidudi my friend!");
+
+    await delay(800 + Math.random() * 400);
+
+    // delete "friend!"
+    await delChars("friend!".length);
+    await delay(300 + Math.random() * 200);
+
+    // 2. type "good lo" — aborted typo
+    await typeStr("good lo");
+    await delay(400 + Math.random() * 300);
+    await delChars("good lo".length);
+    await delay(250 + Math.random() * 150);
+
+    // 3. type "charmant" — french detour
+    await typeStr("charmant");
+    await delay(600 + Math.random() * 400);
+    await delChars("charmant".length);
+    await delay(250 + Math.random() * 150);
+
+    // 4. type "brilliant friend!" — final
+    await typeStr("brilliant friend!");
+    await delay(500);
+    cursor.remove();
+
+    // signal mascot to enter
+    window.__heroTypingDone = true;
+    window.dispatchEvent(new Event("hero-typing-done"));
+  }
+
+  initHeroTyping();
+  document.addEventListener("astro:page-load", initHeroTyping);
+</script>
