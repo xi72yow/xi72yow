@@ -30,6 +30,7 @@ export default defineToolbarApp({
       btn.style.marginBottom = "4px";
       btn.addEventListener("click", () => {
         (window as any).__seasonOverride = s;
+        window.dispatchEvent(new CustomEvent("season-change", { detail: s }));
         // highlight active
         container.querySelectorAll("astro-dev-toolbar-button").forEach((b: any) => {
           b.toggleAttribute("active", b.dataset.season === s);

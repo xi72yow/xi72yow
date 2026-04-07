@@ -2,10 +2,10 @@
 import { SITE } from "../config";
 ---
 
-<section class="section-container min-h-[80vh] flex items-center">
+<section class="section-container min-h-[80vh] mb-32 md:mb-48 flex items-center">
   <div class="flex flex-col md:flex-row items-center gap-12 w-full">
     <div class="flex-1 space-y-6">
-      <p id="hero-typing" class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1">&nbsp;</p>
+      <p id="hero-typing" class="text-lg sm:text-xl font-mono accent tracking-wider uppercase hero-fade hero-fade-1">heydidudi my friend!</p>
 
       <!-- Logo with flicker -->
       <div class="hero-fade hero-fade-2">
@@ -97,8 +97,25 @@ import { SITE } from "../config";
     const el = document.getElementById("hero-typing");
     if (!el) return;
 
-    // wait for fade-in to finish (0.1s delay + 1.6s animation)
-    setTimeout(() => heroTypeSequence(el), 1750);
+    let typingStarted = false;
+
+    function onSeason(season: string) {
+      if (season === "birthday" && !typingStarted) {
+        typingStarted = true;
+        setTimeout(() => heroTypeSequence(el), 1750);
+      } else if (season !== "birthday") {
+        // reset to static text, signal mascot
+        el.textContent = "heydidudi my friend!";
+        if (!window.__heroTypingDone) {
+          window.__heroTypingDone = true;
+          window.dispatchEvent(new Event("hero-typing-done"));
+        }
+      }
+    }
+
+    window.addEventListener("season-change", ((e: CustomEvent) => {
+      onSeason(e.detail);
+    }) as EventListener);
   }
 
   async function heroTypeSequence(el: HTMLElement) {
