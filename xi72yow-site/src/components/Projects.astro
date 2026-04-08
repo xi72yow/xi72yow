@@ -17,7 +17,7 @@ const repos = reposData.repos;
       <ProjectCard
         name={repo.name}
         url={repo.url}
-        description={repo.description_en}
+        description={repo.description_en_casual ?? repo.description_en}
         readmeTeaser={repo.readme_teaser}
         techStack={repo.tech_stack}
         image={repo.image}

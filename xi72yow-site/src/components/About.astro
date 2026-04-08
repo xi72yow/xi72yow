@@ -3,7 +3,7 @@ import GlitchHeadline from "./GlitchHeadline.astro";
 import reposData from "../../../repos.json";
 
 const profile = reposData.profile;
-const paragraphs = profile?.about_en ?? [];
+const paragraphs = profile?.about_en_casual ?? profile?.about_en ?? [];
 const langStats = profile?.language_stats ?? [];
 
 const langColors: Record<string, string> = {

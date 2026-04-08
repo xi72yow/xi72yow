@@ -184,20 +184,21 @@ README excerpt: ${readme_content}"
   if [[ -n "${cached_desc}" && "${cached_desc}" != "null" ]]; then
     description_en=$(echo "${cached_desc}" | jq -r '.en // empty')
     description_de=$(echo "${cached_desc}" | jq -r '.de // empty')
+    description_en_casual=$(echo "${cached_desc}" | jq -r '.en_casual // empty')
     echo "  Using cached AI description (hash match)"
   else
     ai_payload=$(jq -nc \
       --arg model "${MODEL}" \
-      --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\"}" \
+      --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\", \"en_casual\": \"...\"}" \
       --arg context "${ai_context}" \
       '{
         model: $model,
         messages: [
           { role: "system", content: $system },
-          { role: "user", content: ("Write a short description (1-2 sentences) for this repo in English and German. Be specific about what it does, not generic. Use a neutral, technical tone. No marketing language, no superlatives, no hype, no em dashes. Context:\n" + $context) }
+          { role: "user", content: ("Write a short description (1-2 sentences) for this repo. Provide three versions:\n\n1. en: English, formal. Neutral, technical tone.\n2. de: German, formal. Same rules.\n3. en_casual: English, casual. Relaxed and approachable, as if telling a friend about the project. Still accurate, no hype.\n\nFor all: Be specific about what it does, not generic. No marketing language, no superlatives, no em dashes. Context:\n" + $context) }
         ],
         temperature: 0.3,
-        max_tokens: 300
+        max_tokens: 400
       }')
 
     ai_response=$(curl -s -X POST "${MODELS_URL}" \
@@ -211,18 +212,21 @@ README excerpt: ${readme_content}"
         echo "  AI API error: ${api_error}"
         description_en="${description_raw}"
         description_de="${description_raw}"
+        description_en_casual="${description_raw}"
       else
         descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
         descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
         description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
         description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
+        description_en_casual=$(echo "${descriptions}" | jq -r '.en_casual // empty' 2>/dev/null || echo "${description_raw}")
         echo "  AI description generated (new)"
-        cache_set "repo:${name}" "${context_hash}" "$(jq -nc --arg en "${description_en}" --arg de "${description_de}" '{en: $en, de: $de}')"
+        cache_set "repo:${name}" "${context_hash}" "$(jq -nc --arg en "${description_en}" --arg de "${description_de}" --arg enc "${description_en_casual}" '{en: $en, de: $de, en_casual: $enc}')"
       fi
     else
       echo "  AI request failed, using original description"
       description_en="${description_raw}"
       description_de="${description_raw}"
+      description_en_casual="${description_raw}"
     fi
   fi
 
@@ -239,6 +243,7 @@ README excerpt: ${readme_content}"
     --arg homepage "${homepage}" \
     --arg desc_en "${description_en}" \
     --arg desc_de "${description_de}" \
+    --arg desc_enc "${description_en_casual}" \
     --argjson languages "${languages}" \
     --argjson topics "${topics}" \
     --argjson stars "${show_stars}" \
@@ -256,6 +261,7 @@ README excerpt: ${readme_content}"
       video: ($video | if . == "" then null else . end),
       description_en: $desc_en,
       description_de: $desc_de,
+      description_en_casual: $desc_enc,
       readme_teaser: ($teaser | if . == "" then null else . end),
       tech_stack: $languages,
       topics: $topics,
@@ -290,16 +296,16 @@ if [[ -n "${cached_profile}" && "${cached_profile}" != "null" ]]; then
 else
   profile_payload=$(jq -nc \
     --arg model "${MODEL}" \
-    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
+    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"], \"about_en_casual\": [\"paragraph 1\", \"paragraph 2\"]}" \
     --arg context "${profile_context}" \
     '{
       model: $model,
       messages: [
         { role: "system", content: $system },
-        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
+        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Provide three versions:\n\n1. about_en: English, formal. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Refer to the developer by name (Maximilian Reinke). Write in third person.\n\n2. about_de: German, formal. Same rules as about_en but in German.\n\n3. about_en_casual: English, casual. Write as if describing a fellow dev you know from GitHub. Relaxed, approachable tone. Refer to the developer as \"xi72yow\", not by real name. Can use short sentences, informal phrasing. Still technically accurate, no hype or superlatives, no em dashes.\n\nFor all versions: Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Context:\n" + $context) }
       ],
       temperature: 0.3,
-      max_tokens: 800
+      max_tokens: 1000
     }')
 
   profile_response=$(curl -s -X POST "${MODELS_URL}" \
