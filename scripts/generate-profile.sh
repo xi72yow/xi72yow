@@ -261,7 +261,7 @@ README excerpt: ${readme_content}"
       video: ($video | if . == "" then null else . end),
       description_en: $desc_en,
       description_de: $desc_de,
-      description_en_casual: $desc_enc,
+      description_en_casual: ($desc_enc | if . == "" then null else . end),
       readme_teaser: ($teaser | if . == "" then null else . end),
       tech_stack: $languages,
       topics: $topics,
