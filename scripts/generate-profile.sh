@@ -278,63 +278,119 @@ done
 # ── Generate profile (about + skills) via AI ─────────────────────────────
 echo "Generating profile section..."
 
-# Aggregate all unique languages and tech across repos
 all_languages=$(echo "${repos_output}" | jq -r '[.[].tech_stack[]] | unique | join(", ")')
-all_descriptions=$(echo "${repos_output}" | jq -r '[.[] | "\(.name): \(.description_en)"] | join("\n")')
 
-profile_context="Developer: Maximilian Reinke (GitHub: ${GITHUB_USER})
-All languages/tech used across projects: ${all_languages}
+# ── Formal profile: only "x" repos ───────────────────────────────────────
+formal_descriptions=$(echo "${repos_output}" | jq -r '[.[] | select(.featured == "x") | "\(.name): \(.description_en)"] | join("\n")')
+
+formal_context="Developer: Maximilian Reinke (GitHub: ${GITHUB_USER})
+Languages/tech: ${all_languages}
 Project summaries:
-${all_descriptions}"
+${formal_descriptions}"
 
-profile_hash=$(printf '%s' "${profile_context}" | sha256sum | cut -d' ' -f1)
-cached_profile=$(cache_get "profile" "${profile_hash}" || echo "")
+formal_hash=$(printf '%s' "${formal_context}" | sha256sum | cut -d' ' -f1)
+cached_formal=$(cache_get "profile:formal" "${formal_hash}" || echo "")
 
-if [[ -n "${cached_profile}" && "${cached_profile}" != "null" ]]; then
-  profile_json="${cached_profile}"
-  echo "  Using cached profile (hash match)"
+if [[ -n "${cached_formal}" && "${cached_formal}" != "null" ]]; then
+  formal_profile="${cached_formal}"
+  echo "  Using cached formal profile (hash match)"
 else
-  profile_payload=$(jq -nc \
+  formal_payload=$(jq -nc \
     --arg model "${MODEL}" \
-    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"], \"about_en_casual\": [\"paragraph 1\", \"paragraph 2\"]}" \
-    --arg context "${profile_context}" \
+    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
+    --arg context "${formal_context}" \
     '{
       model: $model,
       messages: [
         { role: "system", content: $system },
-        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Provide three versions:\n\n1. about_en: English, formal. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Refer to the developer by name (Maximilian Reinke). Write in third person.\n\n2. about_de: German, formal. Same rules as about_en but in German.\n\n3. about_en_casual: English, casual. Write as if describing a fellow dev you know from GitHub. Relaxed, approachable tone. Refer to the developer as \"xi72yow\", not by real name. Can use short sentences, informal phrasing. Still technically accurate, no hype or superlatives, no em dashes.\n\nFor all versions: Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Context:\n" + $context) }
+        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
       ],
       temperature: 0.3,
-      max_tokens: 1000
+      max_tokens: 600
     }')
 
-  profile_response=$(curl -s -X POST "${MODELS_URL}" \
+  formal_response=$(curl -s -X POST "${MODELS_URL}" \
     "${CURL_AUTH[@]}" \
     -H "Content-Type: application/json" \
-    -d "${profile_payload}" || echo "")
+    -d "${formal_payload}" || echo "")
 
-  if [[ -n "${profile_response}" ]]; then
-    profile_data=$(echo "${profile_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-    profile_data=$(echo "${profile_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-    profile_json=$(echo "${profile_data}" | jq '.' 2>/dev/null || echo "null")
+  if [[ -n "${formal_response}" ]]; then
+    formal_data=$(echo "${formal_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+    formal_data=$(echo "${formal_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+    formal_profile=$(echo "${formal_data}" | jq -c '.' 2>/dev/null || echo "null")
   else
-    echo "  Profile AI request failed, using fallback"
-    profile_json="null"
+    formal_profile="null"
   fi
 
-  if [[ "${profile_json}" != "null" ]]; then
-    cache_set "profile" "${profile_hash}" "${profile_json}"
-    echo "  Profile generated (new)"
+  if [[ "${formal_profile}" != "null" ]]; then
+    cache_set "profile:formal" "${formal_hash}" "${formal_profile}"
+    echo "  Formal profile generated (new)"
   fi
 fi
 
-# Fallback if AI failed
-if [[ "${profile_json}" == "null" ]]; then
+# ── Casual profile: all repos (x + xx) ───────────────────────────────────
+all_descriptions=$(echo "${repos_output}" | jq -r '[.[] | "\(.name): \(.description_en_casual // .description_en)"] | join("\n")')
+
+casual_context="Developer: xi72yow
+Languages/tech: ${all_languages}
+Project summaries:
+${all_descriptions}"
+
+casual_hash=$(printf '%s' "${casual_context}" | sha256sum | cut -d' ' -f1)
+cached_casual=$(cache_get "profile:casual" "${casual_hash}" || echo "")
+
+if [[ -n "${cached_casual}" && "${cached_casual}" != "null" ]]; then
+  casual_profile="${cached_casual}"
+  echo "  Using cached casual profile (hash match)"
+else
+  casual_payload=$(jq -nc \
+    --arg model "${MODEL}" \
+    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en_casual\": [\"paragraph 1\", \"paragraph 2\"]}" \
+    --arg context "${casual_context}" \
+    '{
+      model: $model,
+      messages: [
+        { role: "system", content: $system },
+        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Write as if describing a fellow dev you know from GitHub. Relaxed, approachable tone. Refer to the developer as \"xi72yow\", not by real name. Can use short sentences, informal phrasing. Still technically accurate, no hype or superlatives, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Context:\n" + $context) }
+      ],
+      temperature: 0.3,
+      max_tokens: 400
+    }')
+
+  casual_response=$(curl -s -X POST "${MODELS_URL}" \
+    "${CURL_AUTH[@]}" \
+    -H "Content-Type: application/json" \
+    -d "${casual_payload}" || echo "")
+
+  if [[ -n "${casual_response}" ]]; then
+    casual_data=$(echo "${casual_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
+    casual_data=$(echo "${casual_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
+    casual_profile=$(echo "${casual_data}" | jq -c '.' 2>/dev/null || echo "null")
+  else
+    casual_profile="null"
+  fi
+
+  if [[ "${casual_profile}" != "null" ]]; then
+    cache_set "profile:casual" "${casual_hash}" "${casual_profile}"
+    echo "  Casual profile generated (new)"
+  fi
+fi
+
+# ── Merge formal + casual into profile_json ──────────────────────────────
+if [[ "${formal_profile}" != "null" && "${casual_profile}" != "null" ]]; then
+  profile_json=$(echo "${formal_profile}" | jq --argjson casual "${casual_profile}" '. + $casual')
+elif [[ "${formal_profile}" != "null" ]]; then
+  profile_json="${formal_profile}"
+elif [[ "${casual_profile}" != "null" ]]; then
+  profile_json="${casual_profile}"
+else
+  echo "  Profile AI requests failed, using fallback"
   profile_json=$(jq -nc \
     --arg langs "${all_languages}" \
     '{
       about_en: ["A developer building tools across embedded systems, web applications, and Linux infrastructure."],
       about_de: ["Ein Entwickler, der Tools im Bereich Embedded-Systeme, Webanwendungen und Linux-Infrastruktur baut."],
+      about_en_casual: ["xi72yow builds tools across embedded systems, web apps, and Linux infrastructure."],
       skills: [{"category": "Technologies", "items": ($langs | split(", "))}]
     }')
 fi
