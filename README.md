@@ -4,6 +4,38 @@ From embedded systems to web apps, from security tooling to Linux infrastructure
 
 ## Selected Projects
 
+### [desktop-drac](https://github.com/xi72yow/desktop-drac)
+
+A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
+
+**Tech:** TypeScript, SCSS, JavaScript
+
+<details><summary>Recent activity</summary>
+
+- `2026-04-09` fix: adapt upstream tests for linux fork
+- `2026-04-09` Use pathToFileURL for Windows import path
+- `2026-04-09` Fix Copilot CLI import on Windows
+
+</details>
+
+### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
+
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-03-30` chore(deps): bump the all-actions group with 4 updates
+- `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
+- `2026-03-28` fix: mount host /dev into test container for uinput device visibility
+
+</details>
+
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
 
 ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a graphical user interface for configuration, with plans for CLI support in future versions.
@@ -17,22 +49,6 @@ ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and lo
 - `2026-04-06` Update image sources in README for dark and light modes
 - `2024-03-17` Update README.md
 - `2024-02-18` chore: bump deps
-
-</details>
-
-### [desktop-drac](https://github.com/xi72yow/desktop-drac)
-
-A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
-
-**Tech:** TypeScript, SCSS, JavaScript
-
-<details><summary>Recent activity</summary>
-
-- `2026-03-18` Update build-default-menu.ts
-- `2026-03-17` chore: lint
-- `2026-03-12` fix: increase RecentRepositoriesLength to 7
 
 </details>
 
@@ -52,22 +68,6 @@ Manages environment variables securely by storing them in GNOME Keyring instead 
 
 </details>
 
-### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
-
-A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
-
-**Tech:** Rust, Shell, Dockerfile
-
-<details><summary>Recent activity</summary>
-
-- `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
-- `2026-03-28` fix: mount host /dev into test container for uinput device visibility
-- `2026-03-28` fix: modprobe uinput on runner, not inside container
-
-</details>
-
 ---
 
-*Last updated: 2026-04-08*
+*Last updated: 2026-04-13*
