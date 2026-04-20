@@ -20,6 +20,22 @@ A Linux-specific fork of GitHub Desktop, synchronized with the official upstream
 
 </details>
 
+### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
+
+ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Wayland XDG Desktop Portal to capture screen content, processes colors with GPU-accelerated wgpu compute shaders, and streams the output to WLED devices via UDP. It includes a webview frontend for LED configuration, device scanning, and live previews, all within a lightweight native binary.
+
+<p align="center"><video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video></p>
+
+**Tech:** Rust, TypeScript, JavaScript
+
+<details><summary>Recent activity</summary>
+
+- `2026-04-18` fix: make APP_VERSION declaration global for tsc
+- `2026-04-18` docs: fix binary vs deb size claim in readme
+- `2026-04-18` ci: bump frontend package.json version during release
+
+</details>
+
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
 A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
@@ -33,22 +49,6 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 - `2026-03-30` chore(deps): bump the all-actions group with 4 updates
 - `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
 - `2026-03-28` fix: mount host /dev into test container for uinput device visibility
-
-</details>
-
-### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
-
-ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a graphical user interface for configuration, with plans for CLI support in future versions.
-
-<p align="center"><video src="https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4" width="600" autoplay loop muted></video></p>
-
-**Tech:** TypeScript, JavaScript, C
-
-<details><summary>Recent activity</summary>
-
-- `2026-04-06` Update image sources in README for dark and light modes
-- `2024-03-17` Update README.md
-- `2024-02-18` chore: bump deps
 
 </details>
 
@@ -70,4 +70,4 @@ Manages environment variables securely by storing them in GNOME Keyring instead 
 
 ---
 
-*Last updated: 2026-04-13*
+*Last updated: 2026-04-20*

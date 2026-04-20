@@ -1,64 +1,64 @@
 {
-  "updated_at": "2026-04-13T06:45:13Z",
+  "updated_at": "2026-04-20T06:46:14Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops tools and systems with a focus on Linux-based environments, hardware integration, and secure application configuration. His projects include a Linux-specific fork of GitHub Desktop tailored for compatibility with a custom distribution, a Rust-based input remapping tool for kernel-level event handling, and a system for controlling Neopixel LEDs over a local network. Additionally, he has created a solution for managing environment variables securely by leveraging GNOME Keyring, offering both terminal and command-line interfaces for streamlined workflows.",
-      "Maximilian's technical approach emphasizes modularity, system-level integration, and efficient resource management. He primarily works with programming languages such as Rust, TypeScript, and C, alongside tools like Docker and Shell scripting for deployment and automation. His projects often incorporate graphical user interfaces built with SCSS and JavaScript, as well as terminal-based utilities for advanced configuration. He integrates systemd and evdev for Linux-specific functionality and employs WGSL for shader-related tasks."
+      "Maximilian Reinke develops software solutions primarily targeting Linux environments, with a focus on system-level tools and desktop applications. His projects include a Linux-specific fork of GitHub Desktop tailored for compatibility with a custom Linux distribution, a Rust-based bias lighting daemon leveraging GPU-accelerated compute shaders for real-time screen analysis, and a kernel-level input remapping tool designed for multi-device configuration. Additionally, he has created a secure environment variable manager that integrates with GNOME Keyring to enhance application security.",
+      "Maximilian's technical approach emphasizes performance optimization and system integration, utilizing languages and tools such as Rust, TypeScript, SCSS, and Shell scripting. His work often incorporates GPU acceleration via wgpu compute shaders, system-level event handling through evdev and uinput, and containerization with Dockerfile. He employs terminal-based user interfaces and lightweight native binaries to deliver efficient and accessible solutions for Linux users."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Werkzeuge und Systeme mit Schwerpunkt auf Linux-Umgebungen, Hardware-Integration und sicherer Anwendungs-Konfiguration. Zu seinen Projekten gehören ein Linux-spezifischer Fork von GitHub Desktop, der für die Kompatibilität mit einer benutzerdefinierten Distribution angepasst wurde, ein Rust-basiertes Tool zur Eingabeneuverarbeitung auf Kernel-Ebene sowie ein System zur Steuerung von Neopixel-LEDs über ein lokales Netzwerk. Darüber hinaus hat er eine Lösung zur sicheren Verwaltung von Umgebungsvariablen entwickelt, die GNOME Keyring nutzt und sowohl Terminal- als auch Kommandozeilen-Schnittstellen bietet.",
-      "Maximilians technischer Ansatz betont Modularität, Systemintegration und effizientes Ressourcenmanagement. Er arbeitet hauptsächlich mit Programmiersprachen wie Rust, TypeScript und C sowie mit Tools wie Docker und Shell-Skripten für Deployment und Automatisierung. Seine Projekte umfassen häufig grafische Benutzeroberflächen, die mit SCSS und JavaScript erstellt werden, sowie terminalbasierte Werkzeuge für erweiterte Konfigurationen. Er integriert systemd und evdev für Linux-spezifische Funktionen und verwendet WGSL für shaderbezogene Aufgaben."
+      "Maximilian Reinke entwickelt Softwarelösungen, die sich hauptsächlich auf Linux-Umgebungen konzentrieren, mit einem Schwerpunkt auf systemnahen Tools und Desktop-Anwendungen. Zu seinen Projekten gehören ein Linux-spezifischer Fork von GitHub Desktop, der für die Kompatibilität mit einer benutzerdefinierten Linux-Distribution angepasst wurde, ein Bias-Lighting-Daemon auf Basis von Rust, der GPU-beschleunigte Compute-Shader für die Echtzeitanalyse von Bildschirminhalten nutzt, sowie ein Tool zur Eingabegeräte-Neuzuordnung auf Kernel-Ebene, das für Multi-Geräte-Konfigurationen ausgelegt ist. Darüber hinaus hat er einen sicheren Umgebungsvariablen-Manager entwickelt, der mit GNOME Keyring integriert ist, um die Sicherheit von Anwendungen zu verbessern.",
+      "Maximilians technischer Ansatz legt Wert auf Leistungsoptimierung und Systemintegration, wobei er Sprachen und Werkzeuge wie Rust, TypeScript, SCSS und Shell-Scripting einsetzt. Seine Arbeit umfasst häufig GPU-Beschleunigung mittels wgpu Compute-Shadern, systemnahe Ereignisverarbeitung durch evdev und uinput sowie Containerisierung mit Dockerfile. Er verwendet terminalbasierte Benutzeroberflächen und leichte native Binärdateien, um effiziente und zugängliche Lösungen für Linux-Nutzer bereitzustellen."
     ],
     "about_en_casual": [
-      "xi72yow is one of those devs who seems to have a knack for solving practical problems with a mix of creativity and precision. Their projects are all over the place in the best way—tools for Linux power users, fun games, and even LED control systems. They’ve got a Linux-first mindset, with stuff like desktop-drac, a GitHub Desktop fork tailored for a custom distro, and input-remapper-rs, which dives deep into kernel-level input handling. On the lighter side, they’ve built klotzkoepfe, a co-op zombie shooter, and ScreenChaser, which lets you sync fancy Neopixel LEDs with your PC. They also care about security, as shown by sei, a tool for managing environment variables without leaving sensitive data lying around.",
-      "When it comes to tech, xi72yow keeps things efficient and purposeful. They lean on Rust for performance-heavy tools like input-remapper-rs, while TypeScript and JavaScript pop up in projects with user interfaces, like ScreenChaser. They’re not afraid to get into the nitty-gritty, whether it’s writing kernel-level code or tweaking Dockerfiles. SCSS and WGSL show up in their repos too, hinting at a willingness to work across the stack, from styling to GPU shaders. They also seem to prefer Linux-native solutions, using tools like systemd and GNOME Keyring to integrate their projects tightly with the OS."
+      "xi72yow is all about Linux and building tools that make life easier for devs and tinkerers. Their projects range from desktop-drac, a Linux-friendly fork of GitHub Desktop, to ScreenChaser, which syncs screen colors with WLED devices for some cool ambient lighting. They’ve also got input-remapper-rs, a kernel-level input remapping tool, and sei, a utility for managing environment variables securely using GNOME Keyring. On the fun side, there’s klotzkoepfe, a zombie survival game for two players on one keyboard. It’s clear they enjoy working on stuff that’s both practical and creative.",
+      "When it comes to tech, xi72yow leans on Rust for performance-heavy tasks like input handling and GPU-based color processing. TypeScript and JavaScript pop up in their web interfaces, while Dockerfile and Shell scripting show up in projects that need deployment or system-level tweaks. They seem comfortable with Linux internals, using tools like evdev and uinput for low-level device handling and systemd for integration. WGSL and SCSS also make appearances, hinting at some GPU shader work and styling chops. Their repos are clean and focused, suggesting a preference for efficient, no-frills solutions."
     ],
     "language_stats": [
       {
         "name": "Rust",
-        "bytes": 685241,
-        "percentage": 24.2
+        "bytes": 784645,
+        "percentage": 28.3
       },
       {
         "name": "JavaScript",
-        "bytes": 635338,
-        "percentage": 22.4
+        "bytes": 659040,
+        "percentage": 23.7
       },
       {
         "name": "HTML",
-        "bytes": 526996,
-        "percentage": 18.6
+        "bytes": 531052,
+        "percentage": 19.1
       },
       {
         "name": "TypeScript",
-        "bytes": 477802,
-        "percentage": 16.8
+        "bytes": 270554,
+        "percentage": 9.7
       },
       {
         "name": "Shell",
-        "bytes": 165731,
-        "percentage": 5.8
+        "bytes": 167907,
+        "percentage": 6
       },
       {
         "name": "Astro",
         "bytes": 140785,
-        "percentage": 5
+        "percentage": 5.1
       },
       {
         "name": "CSS",
-        "bytes": 64058,
-        "percentage": 2.3
+        "bytes": 79975,
+        "percentage": 2.9
+      },
+      {
+        "name": "WGSL",
+        "bytes": 33163,
+        "percentage": 1.2
       },
       {
         "name": "Go",
         "bytes": 32545,
-        "percentage": 1.1
-      },
-      {
-        "name": "WGSL",
-        "bytes": 30002,
-        "percentage": 1.1
+        "percentage": 1.2
       },
       {
         "name": "C++",
@@ -153,43 +153,6 @@
       ]
     },
     {
-      "name": "ScreenChaser",
-      "url": "https://github.com/xi72yow/ScreenChaser",
-      "homepage": null,
-      "image": "https://github.com/user-attachments/assets/68ee7efc-abe7-4434-9705-45d8488a7ab1",
-      "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
-      "description_en": "ScreenChaser is a system for controlling Neopixel (WS2812B) LEDs via a PC and local network using UDP. It includes firmware, a core for managing communication, and a graphical user interface for configuration, with plans for CLI support in future versions.",
-      "description_de": "ScreenChaser ist ein System zur Steuerung von Neopixel-LEDs (WS2812B) über einen PC und ein lokales Netzwerk mittels UDP. Es umfasst Firmware, einen Kern zur Kommunikationsverwaltung und eine grafische Benutzeroberfläche zur Konfiguration, mit geplanten CLI-Unterstützungen in zukünftigen Versionen.",
-      "description_en_casual": null,
-      "readme_teaser": "ScreenChaser What is the ScreenChaser The ScreenChaser consists of three different software parts to control Neopixel (WS2812B LEDs) with the help of your own PC and the local network. For this purpose, the PC sends the calculated data packages to the microcontroller via UDP. The three parts consist",
-      "tech_stack": [
-        "TypeScript",
-        "JavaScript",
-        "C"
-      ],
-      "topics": [],
-      "stars": null,
-      "is_fork": false,
-      "featured": "x",
-      "last_commits": [
-        {
-          "message": "Update image sources in README for dark and light modes",
-          "date": "2026-04-06T12:53:08Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "Update README.md",
-          "date": "2024-03-17T14:47:53Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "chore: bump deps\n\ntodo: mantine migration",
-          "date": "2024-02-18T13:53:50Z",
-          "author": "xi72yow"
-        }
-      ]
-    },
-    {
       "name": "klotzkoepfe",
       "url": "https://github.com/xi72yow/klotzkoepfe",
       "homepage": null,
@@ -279,6 +242,43 @@
         {
           "message": "fix: mount host /dev into test container for uinput device visibility",
           "date": "2026-03-28T16:55:43Z",
+          "author": "xi72yow"
+        }
+      ]
+    },
+    {
+      "name": "ScreenChaser",
+      "url": "https://github.com/xi72yow/ScreenChaser",
+      "homepage": null,
+      "image": "https://raw.githubusercontent.com/xi72yow/ScreenChaser/main/docs/screenshots/main.png",
+      "video": "https://user-images.githubusercontent.com/65042627/210893593-29b303a0-6971-4d15-9e41-3c11cf5573cd.mp4",
+      "description_en": "ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Wayland XDG Desktop Portal to capture screen content, processes colors with GPU-accelerated wgpu compute shaders, and streams the output to WLED devices via UDP. It includes a webview frontend for LED configuration, device scanning, and live previews, all within a lightweight native binary.",
+      "description_de": "ScreenChaser ist ein Bias-Lighting-Daemon für Linux, der in Rust entwickelt wurde. Er nutzt das Wayland XDG Desktop Portal zur Bildschirmaufnahme, verarbeitet Farben mit GPU-beschleunigten wgpu-Compute-Shadern und streamt die Ausgabe per UDP an WLED-Geräte. Eine Webview-Oberfläche ermöglicht die Konfiguration von LEDs, das Scannen von Geräten und Live-Vorschauen, alles in einer schlanken nativen Binärdatei.",
+      "description_en_casual": "ScreenChaser is a Linux app that syncs your screen colors with WLED devices using Rust. It grabs your screen via Wayland, processes the colors on the GPU, and lets you tweak settings or preview the lights through a built-in web interface.",
+      "readme_teaser": "ScreenChaser What is ScreenChaser ScreenChaser is a Rust bias lighting daemon for Linux. It captures your screen through the Wayland XDG Desktop Portal, extracts zone colors on the GPU via wgpu compute shaders, and streams them to WLED devices over UDP. The embedded webview frontend lets you configu",
+      "tech_stack": [
+        "Rust",
+        "TypeScript",
+        "JavaScript"
+      ],
+      "topics": [],
+      "stars": null,
+      "is_fork": false,
+      "featured": "x",
+      "last_commits": [
+        {
+          "message": "fix: make APP_VERSION declaration global for tsc",
+          "date": "2026-04-18T13:50:56Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "docs: fix binary vs deb size claim in readme",
+          "date": "2026-04-18T10:47:04Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "ci: bump frontend package.json version during release",
+          "date": "2026-04-18T10:46:21Z",
           "author": "xi72yow"
         }
       ]
