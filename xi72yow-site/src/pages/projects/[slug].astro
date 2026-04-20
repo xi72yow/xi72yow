@@ -6,10 +6,11 @@ import reposData from "../../../../repos.json";
 
 export async function getStaticPaths() {
   const readmes = await getCollection("readmes");
-  const readmeMap = Object.fromEntries(readmes.map((r) => [r.id, r]));
+  // astro glob loader lowercases ids, so match case-insensitively
+  const readmeMap = Object.fromEntries(readmes.map((r) => [r.id.toLowerCase(), r]));
   return reposData.repos.map((repo: any) => ({
     params: { slug: repo.name },
-    props: { repo, readmeEntry: readmeMap[repo.name] || null },
+    props: { repo, readmeEntry: readmeMap[repo.name.toLowerCase()] || null },
   }));
 }
 
