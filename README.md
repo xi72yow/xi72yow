@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [sei](https://github.com/xi72yow/sei)
+
+Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797" alt="sei" width="600"></p>
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-04-27` fix: strip surrounding quotes from .env values on parse
+- `2026-04-18` build(deps): Bump actions/upload-pages-artifact from 4 to 5
+- `2026-04-18` build(deps): Bump softprops/action-gh-release from 2 to 3
+
+</details>
+
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
 A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
@@ -52,22 +68,6 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 
 </details>
 
-### [sei](https://github.com/xi72yow/sei)
-
-Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797" alt="sei" width="600"></p>
-
-**Tech:** Rust, Shell, Dockerfile
-
-<details><summary>Recent activity</summary>
-
-- `2026-03-29` Update README with image and command usage details
-- `2026-03-29` Update README.md
-- `2026-03-29` Update README to remove old examples
-
-</details>
-
 ---
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-04-28*

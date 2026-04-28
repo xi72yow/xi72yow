@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-04-27T06:54:08Z",
+  "updated_at": "2026-04-28T21:41:45Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops software solutions primarily targeting Linux environments, with a focus on system-level tools and desktop applications. His projects include a Linux-specific fork of GitHub Desktop tailored for compatibility with a custom Linux distribution, a Rust-based bias lighting daemon leveraging GPU-accelerated compute shaders for real-time screen analysis, and a kernel-level input remapping tool designed for multi-device configuration. Additionally, he has created a secure environment variable manager that integrates with GNOME Keyring to enhance application security.",
-      "Maximilian's technical approach emphasizes performance optimization and system integration, utilizing languages and tools such as Rust, TypeScript, SCSS, and Shell scripting. His work often incorporates GPU acceleration via wgpu compute shaders, system-level event handling through evdev and uinput, and containerization with Dockerfile. He employs terminal-based user interfaces and lightweight native binaries to deliver efficient and accessible solutions for Linux users."
+      "Maximilian Reinke develops tools and applications with a focus on Linux environments, system-level utilities, and hardware interaction. His projects include 'sei', a tool for securely managing environment variables using GNOME Keyring, and 'desktop-drac', a Linux-specific adaptation of GitHub Desktop tailored for a custom distribution. He has also worked on 'ScreenChaser', a bias lighting daemon that integrates with WLED devices using GPU-accelerated compute shaders, and 'input-remapper-rs', a utility for remapping input device events at the kernel level on Linux systems.",
+      "Maximilian employs a technical approach centered on performance, security, and system integration. His primary tools include Rust for system programming, TypeScript and JavaScript for frontend development, and SCSS for styling. He utilizes Docker for containerization and Shell scripting for automation. His work often involves leveraging advanced technologies such as wgpu for GPU acceleration and evdev/uinput for low-level hardware interaction."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Softwarelösungen, die sich hauptsächlich auf Linux-Umgebungen konzentrieren, mit einem Schwerpunkt auf systemnahen Tools und Desktop-Anwendungen. Zu seinen Projekten gehören ein Linux-spezifischer Fork von GitHub Desktop, der für die Kompatibilität mit einer benutzerdefinierten Linux-Distribution angepasst wurde, ein Bias-Lighting-Daemon auf Basis von Rust, der GPU-beschleunigte Compute-Shader für die Echtzeitanalyse von Bildschirminhalten nutzt, sowie ein Tool zur Eingabegeräte-Neuzuordnung auf Kernel-Ebene, das für Multi-Geräte-Konfigurationen ausgelegt ist. Darüber hinaus hat er einen sicheren Umgebungsvariablen-Manager entwickelt, der mit GNOME Keyring integriert ist, um die Sicherheit von Anwendungen zu verbessern.",
-      "Maximilians technischer Ansatz legt Wert auf Leistungsoptimierung und Systemintegration, wobei er Sprachen und Werkzeuge wie Rust, TypeScript, SCSS und Shell-Scripting einsetzt. Seine Arbeit umfasst häufig GPU-Beschleunigung mittels wgpu Compute-Shadern, systemnahe Ereignisverarbeitung durch evdev und uinput sowie Containerisierung mit Dockerfile. Er verwendet terminalbasierte Benutzeroberflächen und leichte native Binärdateien, um effiziente und zugängliche Lösungen für Linux-Nutzer bereitzustellen."
+      "Maximilian Reinke entwickelt Tools und Anwendungen mit einem Schwerpunkt auf Linux-Umgebungen, System-Utilities und Hardware-Interaktion. Zu seinen Projekten gehören 'sei', ein Tool zur sicheren Verwaltung von Umgebungsvariablen mit GNOME Keyring, und 'desktop-drac', eine Linux-spezifische Anpassung von GitHub Desktop für eine benutzerdefinierte Distribution. Darüber hinaus hat er an 'ScreenChaser' gearbeitet, einem Bias-Lighting-Daemon, der WLED-Geräte mit GPU-beschleunigten Compute-Shaders integriert, sowie an 'input-remapper-rs', einem Tool zur Neuzuordnung von Eingabegeräte-Ereignissen auf Kernel-Ebene unter Linux.",
+      "Maximilian verfolgt einen technischen Ansatz, der auf Leistung, Sicherheit und Systemintegration ausgerichtet ist. Seine primären Werkzeuge umfassen Rust für Systemprogrammierung, TypeScript und JavaScript für Frontend-Entwicklung sowie SCSS für Styling. Er nutzt Docker für die Containerisierung und Shell-Skripte für Automatisierung. Seine Arbeit umfasst häufig den Einsatz fortschrittlicher Technologien wie wgpu für GPU-Beschleunigung und evdev/uinput für Hardware-Interaktion auf niedriger Ebene."
     ],
     "about_en_casual": [
-      "xi72yow is all about Linux and building tools that make life easier for devs and tinkerers. Their projects range from desktop-drac, a Linux-friendly fork of GitHub Desktop, to ScreenChaser, which syncs screen colors with WLED devices for some cool ambient lighting. They’ve also got input-remapper-rs, a kernel-level input remapping tool, and sei, a utility for managing environment variables securely using GNOME Keyring. On the fun side, there’s klotzkoepfe, a zombie survival game for two players on one keyboard. It’s clear they enjoy working on stuff that’s both practical and creative.",
-      "When it comes to tech, xi72yow leans on Rust for performance-heavy tasks like input handling and GPU-based color processing. TypeScript and JavaScript pop up in their web interfaces, while Dockerfile and Shell scripting show up in projects that need deployment or system-level tweaks. They seem comfortable with Linux internals, using tools like evdev and uinput for low-level device handling and systemd for integration. WGSL and SCSS also make appearances, hinting at some GPU shader work and styling chops. Their repos are clean and focused, suggesting a preference for efficient, no-frills solutions."
+      "xi72yow is into building tools and apps that solve practical problems, mostly for Linux users. Their projects range from managing environment variables securely with 'sei' to tweaking input devices at the kernel level with 'input-remapper-rs'. They also seem to enjoy combining tech with creativity, like syncing screen colors to WLED lights in 'ScreenChaser' or making a co-op zombie shooter game called 'klotzkoepfe'. It's clear they like to tinker with both utility and fun.",
+      "When it comes to tech, xi72yow leans on Rust a lot for performance-heavy or system-level stuff, but they also use TypeScript and JavaScript for web interfaces and GUIs. Docker shows up in their repos, so they probably use it for testing or deployment. They seem comfortable with Linux-specific tools like evdev and systemd, and they’re into GPU programming with WGSL for graphics or color processing. Their projects are well-structured, and they seem to prefer terminal-based tools with optional graphical interfaces."
     ],
     "language_stats": [
       {
         "name": "Rust",
-        "bytes": 784645,
+        "bytes": 785670,
         "percentage": 28.3
       },
       {
@@ -32,12 +32,12 @@
       },
       {
         "name": "TypeScript",
-        "bytes": 270554,
+        "bytes": 270523,
         "percentage": 9.7
       },
       {
         "name": "Shell",
-        "bytes": 167907,
+        "bytes": 167892,
         "percentage": 6
       },
       {
@@ -108,50 +108,6 @@
     ]
   },
   "repos": [
-    {
-      "name": "sei",
-      "url": "https://github.com/xi72yow/sei",
-      "homepage": null,
-      "image": "https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797",
-      "video": null,
-      "description_en": "Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.",
-      "description_de": "Verwaltet Umgebungsvariablen sicher, indem sie im GNOME Keyring statt in Klartext-.env-Dateien gespeichert werden. Bietet eine TUI zum Bearbeiten und eine CLI zum Injizieren von Geheimnissen in Anwendungen.",
-      "description_en_casual": null,
-      "readme_teaser": "sei - Save Env Inject > You don't leave your front door open just because you'll need to get back in tomorrow. Manages environment secrets in GNOME Keyring instead of .env files. TUI for editing, CLI for injection. Why? .env files sit in the project directory — any tool with file access can read t",
-      "tech_stack": [
-        "Rust",
-        "Shell",
-        "Dockerfile"
-      ],
-      "topics": [
-        "developer-tools",
-        "developer-tools-ai-agent",
-        "environment-variables",
-        "rust-lang",
-        "secrets",
-        "security"
-      ],
-      "stars": null,
-      "is_fork": false,
-      "featured": "x",
-      "last_commits": [
-        {
-          "message": "Update README with image and command usage details\n\nAdded image and clarified usage of 'sei' command.",
-          "date": "2026-03-29T09:42:09Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "Update README.md",
-          "date": "2026-03-29T09:41:19Z",
-          "author": "xi72yow"
-        },
-        {
-          "message": "Update README to remove old examples\n\nRemoved outdated import and store examples from README.",
-          "date": "2026-03-29T09:36:59Z",
-          "author": "xi72yow"
-        }
-      ]
-    },
     {
       "name": "klotzkoepfe",
       "url": "https://github.com/xi72yow/klotzkoepfe",
@@ -317,6 +273,50 @@
           "message": "Fix Copilot CLI import on Windows\n\nMake Copilot CLI import path Windows-safe.\n\n- app/src/lib/stores/copilot-store.ts: construct a file:// URL importPath when running on Windows so the --eval import uses a properly escaped file URL (avoids CLI import-parsing issues). Use importPath in the cliArgs array.",
           "date": "2026-04-09T14:49:20Z",
           "author": "Sergio Padrino"
+        }
+      ]
+    },
+    {
+      "name": "sei",
+      "url": "https://github.com/xi72yow/sei",
+      "homepage": null,
+      "image": "https://github.com/user-attachments/assets/5d2d0e94-cc7f-4601-b2af-7d8f1e2e6797",
+      "video": null,
+      "description_en": "Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.",
+      "description_de": "Verwaltet Umgebungsvariablen sicher, indem sie im GNOME Keyring statt in Klartext-.env-Dateien gespeichert werden. Bietet eine TUI zum Bearbeiten und eine CLI zum Injizieren von Geheimnissen in Anwendungen.",
+      "description_en_casual": null,
+      "readme_teaser": "sei - Save Env Inject > You don't leave your front door open just because you'll need to get back in tomorrow. Manages environment secrets in GNOME Keyring instead of .env files. TUI for editing, CLI for injection. Why? .env files sit in the project directory — any tool with file access can read t",
+      "tech_stack": [
+        "Rust",
+        "Shell",
+        "Dockerfile"
+      ],
+      "topics": [
+        "developer-tools",
+        "developer-tools-ai-agent",
+        "environment-variables",
+        "rust-lang",
+        "secrets",
+        "security"
+      ],
+      "stars": null,
+      "is_fork": false,
+      "featured": "x",
+      "last_commits": [
+        {
+          "message": "fix: strip surrounding quotes from .env values on parse",
+          "date": "2026-04-27T14:41:02Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "build(deps): Bump actions/upload-pages-artifact from 4 to 5\n\nBumps [actions/upload-pages-artifact](https://github.com/actions/upload-pages-artifact) from 4 to 5.\n- [Release notes](https://github.com/actions/upload-pages-artifact/releases)\n- [Commits](https://github.com/actions/upload-pages-artifact/compare/v4...v5)\n\n---\nupdated-dependencies:\n- dependency-name: actions/upload-pages-artifact\n  dependency-version: '5'\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+          "date": "2026-04-18T23:52:29Z",
+          "author": "dependabot[bot]"
+        },
+        {
+          "message": "build(deps): Bump softprops/action-gh-release from 2 to 3\n\nBumps [softprops/action-gh-release](https://github.com/softprops/action-gh-release) from 2 to 3.\n- [Release notes](https://github.com/softprops/action-gh-release/releases)\n- [Changelog](https://github.com/softprops/action-gh-release/blob/master/CHANGELOG.md)\n- [Commits](https://github.com/softprops/action-gh-release/compare/v2...v3)\n\n---\nupdated-dependencies:\n- dependency-name: softprops/action-gh-release\n  dependency-version: '3'\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+          "date": "2026-04-18T23:52:24Z",
+          "author": "dependabot[bot]"
         }
       ]
     }
