@@ -6,8 +6,8 @@ export const SITE = {
   github: "xi72yow",
   githubUrl: "https://github.com/xi72yow",
   linkedin: "https://www.linkedin.com/in/maximilian-reinke-a0353630b/",
-  catchphrase: "From embedded systems to web apps, from security tooling to Linux infrastructure, from DevOps to developer experience. I build what's needed.",
-  catchphraseDe: "Von Embedded-Systemen bis Webanwendungen, von Security-Tooling bis Linux-Infrastruktur, von DevOps bis Developer Experience. Ich baue, was gebraucht wird.",
+  catchphrase: "From embedded systems through Linux and security tooling to DevOps, web apps, and developer experience. I build what's needed.",
+  catchphraseDe: "Vom Embedded-System über Linux und Security-Tooling bis zu DevOps, Webanwendungen und Developer Experience. Ich baue, was gebraucht wird.",
   domain: "reinke.ing",
   photoUrl: "/photo.webp",
 } as const;

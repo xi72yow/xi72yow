@@ -438,7 +438,7 @@ echo "AI cache saved to ${CACHE_FILE}"
 {
   echo "# Hey, I'm ${GITHUB_USER}"
   echo ""
-  echo "From embedded systems to web apps, from security tooling to Linux infrastructure, from DevOps to developer experience. I build what's needed."
+  echo "From embedded systems through Linux and security tooling to DevOps, web apps, and developer experience. I build what's needed."
   echo ""
   echo "## Selected Projects"
   echo ""
