@@ -70,4 +70,4 @@ Manages environment variables securely by storing them in GNOME Keyring instead 
 
 ---
 
-*Last updated: 2026-04-20*
+*Last updated: 2026-04-27*
