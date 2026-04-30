@@ -2,6 +2,5 @@ node_modules/
 dist/
 .astro/
 public/images/
-public/photo.webp
 public/og.jpg
 public/fonts/
