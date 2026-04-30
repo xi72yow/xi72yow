@@ -12,6 +12,17 @@ import { SITE } from "../config";
       <p class="text-2xl sm:text-3xl text-neutral-500 dark:text-neutral-400 font-500 hero-fade hero-fade-3">
         {SITE.title}
       </p>
+      <a
+        href={SITE.employer.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${SITE.title} @ ${SITE.employer.name}`}
+        class="inline-flex items-center gap-2 mt-1 text-neutral-500 dark:text-neutral-400 hero-fade hero-fade-3 w-fit group"
+      >
+        <span class="text-base sm:text-lg font-mono select-none">@</span>
+        <img src={SITE.employer.logoLight} alt={SITE.employer.name} class="h-6 sm:h-7 w-auto block dark:hidden transition-[filter] duration-200 group-hover:drop-shadow-[0_6px_20px_rgba(0,0,0,0.55)]" />
+        <img src={SITE.employer.logoDark} alt={SITE.employer.name} class="h-6 sm:h-7 w-auto hidden dark:block transition-[filter] duration-200 group-hover:drop-shadow-[0_0_18px_rgba(255,255,255,0.85)]" />
+      </a>
       <p class="text-sm sm:text-base text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-lg hero-fade hero-fade-3" data-i18n-en={SITE.catchphrase} data-i18n-de={SITE.catchphraseDe}>
         {SITE.catchphrase}
       </p>

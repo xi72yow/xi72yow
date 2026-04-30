@@ -10,4 +10,10 @@ export const SITE = {
   catchphraseDe: "Vom Embedded-System über Linux und Security-Tooling bis zu DevOps, Webanwendungen und Developer Experience. Ich baue, was gebraucht wird.",
   domain: "reinke.ing",
   photoUrl: "/photo.webp",
+  employer: {
+    name: "Attek Solutions GmbH",
+    url: "https://www.attek.eu/",
+    logoLight: "/attek-logo.webp",
+    logoDark: "/attek-logo-dark.webp",
+  },
 } as const;
