@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-28T21:41:45Z",
+  "updated_at": "2026-05-04T07:03:00Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
@@ -22,7 +22,7 @@
       },
       {
         "name": "JavaScript",
-        "bytes": 659040,
+        "bytes": 659227,
         "percentage": 23.7
       },
       {
@@ -32,7 +32,7 @@
       },
       {
         "name": "TypeScript",
-        "bytes": 270523,
+        "bytes": 270684,
         "percentage": 9.7
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "name": "Astro",
-        "bytes": 140975,
+        "bytes": 141606,
         "percentage": 5.1
       },
       {
