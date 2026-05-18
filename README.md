@@ -70,4 +70,4 @@ A Rust-based tool for remapping input device events at the kernel level using ev
 
 ---
 
-*Last updated: 2026-05-11*
+*Last updated: 2026-05-18*
