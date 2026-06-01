@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
+
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-05-01` chore(deps): bump the all-cargo group with 2 updates
+- `2026-05-01` chore(deps): bump the all-actions group with 2 updates
+- `2026-03-30` chore(deps): bump the all-actions group with 4 updates
+
+</details>
+
 ### [sei](https://github.com/xi72yow/sei)
 
 Manages environment variables securely by storing them in GNOME Keyring instead of plaintext .env files. Provides a TUI for editing and a CLI for injecting secrets into applications.
@@ -52,22 +68,6 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 </details>
 
-### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
-
-A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
-
-**Tech:** Rust, Shell, Dockerfile
-
-<details><summary>Recent activity</summary>
-
-- `2026-03-30` chore(deps): bump the all-actions group with 4 updates
-- `2026-03-30` chore: align dependabot (monthly, grouped, explicit deps)
-- `2026-03-28` fix: mount host /dev into test container for uinput device visibility
-
-</details>
-
 ---
 
-*Last updated: 2026-05-25*
+*Last updated: 2026-06-01*
