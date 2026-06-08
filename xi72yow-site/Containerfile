@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ADD https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz /tmp/ffmpeg.tar.xz
-RUN cd /tmp && tar xf ffmpeg.tar.xz && cp ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ && rm -rf /tmp/ffmpeg*
+RUN cd /tmp && tar xf ffmpeg.tar.xz && install -D ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ffmpeg && rm -rf /tmp/ffmpeg*
 WORKDIR /app
 COPY xi72yow-site/package.json xi72yow-site/package-lock.json* ./
 RUN npm install
