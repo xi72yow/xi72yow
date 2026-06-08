@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [desktop-drac](https://github.com/xi72yow/desktop-drac)
+
+A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
+
+**Tech:** TypeScript, SCSS, JavaScript
+
+<details><summary>Recent activity</summary>
+
+- `2026-06-01` fix: filter raw argv (not the parsed minimist object) in linux protocol handler
+- `2026-04-09` fix: adapt upstream tests for linux fork
+- `2026-04-09` Use pathToFileURL for Windows import path
+
+</details>
+
 ### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
 
 A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
@@ -36,22 +52,6 @@ Manages environment variables securely by storing them in GNOME Keyring instead 
 
 </details>
 
-### [desktop-drac](https://github.com/xi72yow/desktop-drac)
-
-A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
-
-**Tech:** TypeScript, SCSS, JavaScript
-
-<details><summary>Recent activity</summary>
-
-- `2026-04-09` fix: adapt upstream tests for linux fork
-- `2026-04-09` Use pathToFileURL for Windows import path
-- `2026-04-09` Fix Copilot CLI import on Windows
-
-</details>
-
 ### [ScreenChaser](https://github.com/xi72yow/ScreenChaser)
 
 ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Wayland XDG Desktop Portal to capture screen content, processes colors with GPU-accelerated wgpu compute shaders, and streams the output to WLED devices via UDP. It includes a webview frontend for LED configuration, device scanning, and live previews, all within a lightweight native binary.
@@ -70,4 +70,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-06-01*
+*Last updated: 2026-06-08*
