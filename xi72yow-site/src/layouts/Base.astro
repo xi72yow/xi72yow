@@ -465,36 +465,199 @@ const pageTitle = title ? `${title} | ${SITE.alias}` : `${SITE.alias} - ${SITE.t
 
 
       // ---- SUMMER: fireflies ----
-      var flyCount = Math.floor(w / 60);
-      var flies = [];
-      for (var i = 0; i < flyCount; i++) {
-        flies.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, phase: Math.random()*Math.PI*2, pulseSpeed: 0.02+Math.random()*0.03, r: Math.random()*2+1.5, target: {x: Math.random()*w, y: Math.random()*h}, timer: 0 });
+      // females: dark, slow wanderers. males: glowing, swarm the nearest female
+      // and occasionally gather into the logo silhouette (creepy smile).
+      var maleCount = Math.floor(w / 26);
+      var femaleCount = Math.max(2, Math.floor(w / 380));
+      var males = [], females = [];
+      function mkFly() {
+        return { x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, phase: Math.random()*Math.PI*2, pulseSpeed: 0.02+Math.random()*0.03, r: Math.random()*1.6+1.3, heading: Math.random()*Math.PI*2, turn: 0, smile: null, dancing: false };
       }
+      for (var i = 0; i < maleCount; i++) males.push(mkFly());
+      for (var i = 0; i < femaleCount; i++) { var fm = mkFly(); fm.r = Math.random()*1.2+1.4; fm.vx *= 0.4; fm.vy *= 0.4; females.push(fm); }
+
+      // logo silhouette sample points (centered, normalized to a unit box), loaded from the footer logo
+      var smilePts = null;
+      (function loadSmile() {
+        var img = new Image();
+        img.onload = function() {
+          var S = 180, oc = document.createElement("canvas"); oc.width = S; oc.height = S;
+          var octx = oc.getContext("2d");
+          octx.drawImage(img, 0, 0, S, S);
+          var data;
+          try { data = octx.getImageData(0,0,S,S).data; } catch(e) { return; }
+          var raw = [], minX = 1, minY = 1, maxX = 0, maxY = 0;
+          for (var y = 0; y < S; y++) for (var x = 0; x < S; x++) {
+            if (data[(y*S+x)*4+3] > 128) {
+              var nx = x/S, ny = y/S;
+              raw.push([nx, ny]);
+              if (nx < minX) minX = nx; if (nx > maxX) maxX = nx;
+              if (ny < minY) minY = ny; if (ny > maxY) maxY = ny;
+            }
+          }
+          if (!raw.length) return;
+          var bs = Math.max(maxX-minX, maxY-minY) || 1, cxn = (minX+maxX)/2, cyn = (minY+maxY)/2;
+          var pts = [];
+          for (var k = 0; k < raw.length; k++) pts.push([(raw[k][0]-cxn)/bs, (raw[k][1]-cyn)/bs]);
+          smilePts = pts;
+        };
+        img.src = "/assets/logo_ani.svg";
+      })();
+
+      // gathering event state machine
+      var gather = false, gatherStart = 0;
+      var nextGather = Date.now() + 20000 + Math.random()*3000;
+      var GATHER_FORM = 5000, GATHER_HOLD = 7000, GATHER_RELEASE = 3200;
+      function assignSmile() {
+        if (!smilePts) return false;
+        // fixed, small, near the top edge — on the eyes of the creepy face in the hero background
+        var sz = Math.min(w, h) * 0.32;
+        var cx = w*0.5, cy = h*0.15;
+        for (var i = 0; i < males.length; i++) {
+          var p = smilePts[Math.floor(Math.random()*smilePts.length)];
+          males[i].smile = { x: cx + p[0]*sz, y: cy + p[1]*sz };
+          males[i].dancing = false;
+        }
+        return true;
+      }
+      if (isDev) window.__smile = function() { nextGather = Date.now(); };
+
+      // pick the next dance figure; starts at the male's current relative position for a seamless transition
+      function startDanceMove(m) {
+        var f = m.danceFemale, rx = m.x-f.x, ry = m.y-f.y;
+        m.moveR = Math.sqrt(rx*rx+ry*ry) || 1;
+        m.moveTheta = Math.atan2(ry, rx);
+        m.moveDir = Math.random()<0.5 ? 1 : -1;
+        m.moveP = 0;
+        var r = Math.random();
+        if (r < 0.18) { m.moveType = "circle"; m.moveR2 = 26+Math.random()*18; m.moveDur = 380+Math.random()*180; }
+        else if (r < 0.36) { m.moveType = "arc"; m.moveR2 = 26+Math.random()*18; m.moveDur = 280+Math.random()*140; }
+        else if (r < 0.54) { m.moveType = "tiny"; m.moveR2 = 12+Math.random()*6; m.moveDur = 240+Math.random()*120; }
+        else if (r < 0.72) { m.moveType = "swoop"; m.moveDur = 280+Math.random()*120; }
+        else if (r < 0.88) { m.moveType = "pendulum"; m.moveDur = 300+Math.random()*140; }
+        else { m.moveType = "hover"; m.moveDur = 150+Math.random()*100; }
+        m.moveDp = 1/m.moveDur;
+      }
+      // eased target offset around the female for the current figure (s = smoothstep(moveP))
+      function danceTarget(m, s) {
+        var f = m.danceFemale, ox, oy;
+        if (m.moveType === "swoop") {
+          var x0 = Math.cos(m.moveTheta)*m.moveR, y0 = Math.sin(m.moveTheta)*m.moveR;
+          ox = x0*(1-2*s); oy = y0*(1-2*s); // straight across, through the female
+        } else if (m.moveType === "pendulum") {
+          var rp = m.moveR*(1-Math.sin(Math.PI*s)); // in toward her and back out
+          ox = Math.cos(m.moveTheta)*rp; oy = Math.sin(m.moveTheta)*rp;
+        } else if (m.moveType === "hover") {
+          ox = Math.cos(m.moveTheta)*m.moveR; oy = Math.sin(m.moveTheta)*m.moveR;
+        } else {
+          var sweep = m.moveType === "arc" ? Math.PI : Math.PI*2;
+          var th = m.moveTheta + m.moveDir*sweep*s;
+          var rr = m.moveR + (m.moveR2-m.moveR)*s;
+          ox = Math.cos(th)*rr; oy = Math.sin(th)*rr;
+        }
+        return { x: f.x+ox, y: f.y+oy };
+      }
+
       function drawFireflies() {
-        for (var i = 0; i < flies.length; i++) {
-          var f = flies[i];
-          f.phase += f.pulseSpeed;
-          f.timer++;
-          // drift toward random target
-          if (f.timer > 200+Math.random()*200) { f.target = {x:Math.random()*w, y:Math.random()*h}; f.timer = 0; }
-          var dx = f.target.x-f.x, dy = f.target.y-f.y;
-          var dist = Math.sqrt(dx*dx+dy*dy) || 1;
-          f.vx += dx/dist*0.005; f.vy += dy/dist*0.005;
-          f.vx *= 0.99; f.vy *= 0.99;
+        var t = Date.now();
+        // schedule + advance the gathering event
+        // only gather while the hero is in view (smile sits where the bg face is)
+        if (!gather && t > nextGather && smilePts) {
+          if (window.scrollY < window.innerHeight*0.6) { if (assignSmile()) { gather = true; gatherStart = t; } }
+          else nextGather = t + 5000;
+        }
+        var gx = 0;
+        if (gather) {
+          var el = t - gatherStart;
+          if (el < GATHER_FORM) gx = el / GATHER_FORM;
+          else if (el < GATHER_FORM + GATHER_HOLD) gx = 1;
+          else if (el < GATHER_FORM + GATHER_HOLD + GATHER_RELEASE) gx = 1 - (el - GATHER_FORM - GATHER_HOLD) / GATHER_RELEASE;
+          else { gather = false; for (var i = 0; i < males.length; i++) males[i].smile = null; nextGather = t + 60000 + Math.random()*60000; }
+        }
+
+        // females: dark, slow wanderers covering the whole screen (heading-based, no center bias)
+        for (var i = 0; i < females.length; i++) {
+          var f = females[i];
+          f.turn += (Math.random()-0.5)*0.006; f.turn *= 0.94; f.heading += f.turn;
+          f.vx += Math.cos(f.heading)*0.004; f.vy += Math.sin(f.heading)*0.004;
+          f.vx *= 0.97; f.vy *= 0.97;
           f.x += f.vx; f.y += f.vy;
-          // wrap
           if (f.x < -10) f.x = w+10; if (f.x > w+10) f.x = -10;
           if (f.y < -10) f.y = h+10; if (f.y > h+10) f.y = -10;
-          var glow = (Math.sin(f.phase)+1)/2 * 0.6 + 0.1;
-          // outer glow
-          var grad = ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*6);
-          grad.addColorStop(0,"rgba(180,255,80,"+glow*0.3+")");
-          grad.addColorStop(1,"rgba(180,255,80,0)");
-          ctx.beginPath(); ctx.arc(f.x,f.y,f.r*6,0,Math.PI*2);
-          ctx.fillStyle = grad; ctx.fill();
-          // core
+          // females never glow, only dark bodies
           ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
-          ctx.fillStyle = "rgba(200,255,100,"+glow+")"; ctx.fill();
+          ctx.fillStyle = "rgba(86,92,64,0.5)"; ctx.fill();
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r*0.55,0,Math.PI*2);
+          ctx.fillStyle = "rgba(150,160,108,0.35)"; ctx.fill();
+        }
+
+        // males: wander the whole screen; sometimes dance a glowing circle around a nearby female;
+        // gently drift into the smile during a gathering
+        var ge = gx*gx*(3-2*gx); // smoothstep so the gathering eases in/out of the random flight
+        for (var i = 0; i < males.length; i++) {
+          var m = males[i];
+          var danceGlow = 0;
+          // base: free curving wander ALWAYS runs (never a straight line); only dampened, never replaced
+          m.turn += (Math.random()-0.5)*0.008; m.turn *= 0.94; m.heading += m.turn;
+          var wmul = m.smile ? (1 - 0.45*ge) : 1;
+          var ax = Math.cos(m.heading)*0.005*wmul;
+          var ay = Math.sin(m.heading)*0.005*wmul;
+          if (m.dancing) {
+            // choreographed dance: a queue of distinct figures, each eased, overlaid on the wander
+            m.danceTimer++;
+            if (m.moveP >= 1) {
+              if (m.movesLeft <= 0) m.dancing = false;
+              else { m.movesLeft--; startDanceMove(m); }
+            }
+            if (m.dancing) {
+              m.moveP += m.moveDp; if (m.moveP > 1) m.moveP = 1;
+              var s = m.moveP*m.moveP*(3-2*m.moveP);
+              var dt = danceTarget(m, s);
+              ax += (dt.x-m.x)*0.012; ay += (dt.y-m.y)*0.012;
+              danceGlow = 0.4 * Math.min(1, m.danceTimer/60);
+              if (m.movesLeft <= 0) danceGlow *= (1-s); // fade out over the last figure
+            }
+          } else if (ge === 0 && Math.random() < 0.001) {
+            // occasionally start a dance around a nearby female (not during a gathering)
+            var nf = null, nd = 80*80;
+            for (var j = 0; j < females.length; j++) {
+              var ndx = females[j].x-m.x, ndy = females[j].y-m.y, d2 = ndx*ndx+ndy*ndy;
+              if (d2 < nd) { nd = d2; nf = females[j]; }
+            }
+            if (nf) { m.dancing = true; m.danceFemale = nf; m.danceTimer = 0; m.movesLeft = 2 + Math.floor(Math.random()*4); m.moveP = 1; m.pink = Math.random() < 0.12; }
+          }
+          // smile "arrive" pull added ON TOP of the wander (overlay, not replace): cruise + ease to a stop, no distance yank
+          if (m.smile && ge > 0) {
+            var dsx = m.smile.x-m.x, dsy = m.smile.y-m.y, dsd = Math.sqrt(dsx*dsx+dsy*dsy) || 1;
+            var slow = dsd < 140 ? dsd/140 : 1;
+            var dvx = dsx/dsd*2.2*slow, dvy = dsy/dsd*2.2*slow;
+            ax += (dvx-m.vx)*0.04*ge; ay += (dvy-m.vy)*0.04*ge;
+          }
+          // faint shimmer so nothing fully freezes (tiny, stays calm)
+          ax += (Math.random()-0.5)*0.005; ay += (Math.random()-0.5)*0.005;
+          m.vx += ax; m.vy += ay;
+          m.vx *= 0.99; m.vy *= 0.99;
+          var sp = Math.sqrt(m.vx*m.vx+m.vy*m.vy);
+          if (sp > 2.4) { m.vx = m.vx/sp*2.4; m.vy = m.vy/sp*2.4; }
+          m.x += m.vx; m.y += m.vy;
+          if (m.x < -10) m.x = w+10; if (m.x > w+10) m.x = -10;
+          if (m.y < -10) m.y = h+10; if (m.y > h+10) m.y = -10;
+          // individual pulse, brighter while dancing, blending into a synchronized unison flash while held
+          m.phase += m.pulseSpeed;
+          var indGlow = (Math.sin(m.phase)+1)/2 * 0.6 + 0.1 + danceGlow;
+          var syncGlow = (Math.sin(t*0.005)+1)/2 * 0.7 + 0.25;
+          var glow = indGlow*(1-ge) + syncGlow*ge;
+          // rare pink tint while dancing
+          var pk = (m.dancing && m.pink) ? Math.min(1, danceGlow/0.4) : 0;
+          var or = (180+75*pk)|0, og = (255-165*pk)|0, ob = (80+110*pk)|0;
+          var cr = (200+55*pk)|0, cg = (255-145*pk)|0, cb = (100+100*pk)|0;
+          var grad = ctx.createRadialGradient(m.x,m.y,0,m.x,m.y,m.r*6);
+          grad.addColorStop(0,"rgba("+or+","+og+","+ob+","+glow*0.3+")");
+          grad.addColorStop(1,"rgba("+or+","+og+","+ob+",0)");
+          ctx.beginPath(); ctx.arc(m.x,m.y,m.r*6,0,Math.PI*2);
+          ctx.fillStyle = grad; ctx.fill();
+          ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,Math.PI*2);
+          ctx.fillStyle = "rgba("+cr+","+cg+","+cb+","+Math.min(glow,1)+")"; ctx.fill();
         }
       }
 
