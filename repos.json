@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-22T08:01:08Z",
+  "updated_at": "2026-06-29T07:42:54Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
@@ -18,17 +18,17 @@
       {
         "name": "Rust",
         "bytes": 785670,
-        "percentage": 28.3
+        "percentage": 28.2
       },
       {
         "name": "JavaScript",
         "bytes": 659227,
-        "percentage": 23.7
+        "percentage": 23.6
       },
       {
         "name": "HTML",
         "bytes": 531052,
-        "percentage": 19.1
+        "percentage": 19
       },
       {
         "name": "TypeScript",
@@ -42,8 +42,8 @@
       },
       {
         "name": "Astro",
-        "bytes": 141606,
-        "percentage": 5.1
+        "bytes": 150671,
+        "percentage": 5.4
       },
       {
         "name": "CSS",
