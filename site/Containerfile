@@ -3,16 +3,18 @@
 # This allows access to both site/ and repos.json
 
 FROM dhi.io/node:25-debian13-dev AS build
+# chromium is only installed for its shared library deps; puppeteer uses its own
+# chrome-for-testing build (debian's chromium 150 crashes headless in containers)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    xz-utils fontconfig chromium \
+    xz-utils fontconfig unzip chromium \
     && rm -rf /var/lib/apt/lists/*
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 ADD https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz /tmp/ffmpeg.tar.xz
 RUN cd /tmp && tar xf ffmpeg.tar.xz && install -D ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ffmpeg && rm -rf /tmp/ffmpeg*
 WORKDIR /app
 COPY site/package.json site/package-lock.json* ./
 RUN npm install
+RUN npx puppeteer browsers install chrome
 COPY site/ .
 COPY repos.json ../repos.json
 COPY blog/ ../blog/
