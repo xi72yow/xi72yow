@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [blechblender](https://github.com/xi72yow/blechblender)
+
+A browser-based tool for retouching license plates in photos. Users can mark plate corners and replace them with a black bar, blur, or realistic dummy plate, all processed client-side without uploading images.
+
+<p align="center"><img src="https://raw.githubusercontent.com/xi72yow/blechblender/main/docs/screenshot.jpg" alt="blechblender" width="600"></p>
+
+**Tech:** JavaScript, CSS, HTML
+
+<details><summary>Recent activity</summary>
+
+- `2026-07-06` docs: add live demo link
+- `2026-07-06` feat: smaller corner handles with hover state
+- `2026-07-06` docs: add english readme with screenshot
+
+</details>
+
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac)
 
 A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.

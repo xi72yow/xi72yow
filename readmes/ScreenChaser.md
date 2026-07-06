@@ -76,9 +76,9 @@ The webview window hides on close. The daemon keeps capturing and streaming. Bri
 ### Screenshots
 
 <!-- TODO: add screenshots -->
-<!-- ![Main Window](docs/screenshots/main.png) -->
-<!-- ![Device Config](docs/screenshots/device-config.png) -->
-<!-- ![Network Scan](docs/screenshots/scan.png) -->
+<!-- ![Main Window](https://raw.githubusercontent.com/xi72yow/ScreenChaser/main/docs/screenshots/main.png) -->
+<!-- ![Device Config](https://raw.githubusercontent.com/xi72yow/ScreenChaser/main/docs/screenshots/device-config.png) -->
+<!-- ![Network Scan](https://raw.githubusercontent.com/xi72yow/ScreenChaser/main/docs/screenshots/scan.png) -->
 
 ## Architecture
 

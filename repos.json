@@ -1,54 +1,54 @@
 {
-  "updated_at": "2026-07-06T07:32:57Z",
+  "updated_at": "2026-07-06T14:29:57Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops software solutions primarily focused on Linux systems, with an emphasis on enhancing user experience, system-level functionality, and secure application workflows. His projects include a Linux-specific adaptation of GitHub Desktop tailored for a custom distribution, a kernel-level input remapping tool written in Rust, a secure environment variable manager leveraging GNOME Keyring, and a bias lighting daemon for Linux that integrates GPU-accelerated color processing and device control.",
-      "Maximilian's technical approach emphasizes efficiency, modularity, and leveraging modern programming languages and frameworks. He frequently employs Rust for its performance and safety features, TypeScript for web-related components, and WGSL for GPU compute tasks. His work integrates tools such as Docker for containerization, SCSS for styling, and system-level interfaces like evdev, uinput, and Wayland protocols to deliver robust and scalable solutions."
+      "Maximilian Reinke develops tools and applications with a focus on system-level programming, web-based utilities, and Linux-specific software. His projects include 'blechblender', a browser-based tool for anonymizing license plates in images; 'desktop-drac', a Linux-adapted fork of GitHub Desktop; 'input-remapper-rs', a Rust-based utility for remapping input device events; 'sei', a secure environment variable manager leveraging GNOME Keyring; and 'ScreenChaser', a bias lighting daemon for Linux that integrates GPU-accelerated processing and WLED device control.",
+      "In his work, Maximilian employs a range of technologies including Rust, TypeScript, JavaScript, HTML, CSS, SCSS, Shell scripting, and WGSL. His technical approach emphasizes performance, security, and platform-specific optimizations. He utilizes tools such as Docker for containerization and system-level libraries like evdev and uinput for Linux kernel interactions. His projects often integrate modern GPU compute frameworks like wgpu and leverage system services such as systemd for seamless operation."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Softwarelösungen, die sich hauptsächlich auf Linux-Systeme konzentrieren und dabei die Benutzerfreundlichkeit, Systemfunktionalität und sichere Anwendungsabläufe verbessern. Zu seinen Projekten gehören eine Linux-spezifische Anpassung von GitHub Desktop für eine maßgeschneiderte Distribution, ein Kernel-Level-Tool zur Eingabegeräte-Neuzuordnung in Rust, ein sicherer Umgebungsvariablen-Manager, der GNOME Keyring nutzt, sowie ein Bias-Lighting-Daemon für Linux, der GPU-beschleunigte Farbverarbeitung und Gerätesteuerung integriert.",
-      "Maximilians technischer Ansatz legt Wert auf Effizienz, Modularität und die Nutzung moderner Programmiersprachen und Frameworks. Er verwendet häufig Rust für dessen Leistungsfähigkeit und Sicherheitsmerkmale, TypeScript für Webkomponenten und WGSL für GPU-Compute-Aufgaben. Seine Arbeit integriert Werkzeuge wie Docker für die Containerisierung, SCSS für Styling und systemnahe Schnittstellen wie evdev, uinput und Wayland-Protokolle, um robuste und skalierbare Lösungen zu liefern."
+      "Maximilian Reinke entwickelt Tools und Anwendungen mit einem Schwerpunkt auf systemnaher Programmierung, webbasierten Werkzeugen und Linux-spezifischer Software. Zu seinen Projekten gehören 'blechblender', ein browserbasiertes Tool zur Anonymisierung von Kennzeichen in Bildern; 'desktop-drac', ein Linux-kompatibler Fork von GitHub Desktop; 'input-remapper-rs', ein in Rust entwickeltes Tool zur Neubelegung von Eingabegeräten; 'sei', ein sicherer Umgebungsvariablen-Manager, der GNOME Keyring verwendet; und 'ScreenChaser', ein Bias-Lighting-Daemon für Linux, der GPU-beschleunigte Verarbeitung und die Steuerung von WLED-Geräten integriert.",
+      "In seiner Arbeit verwendet Maximilian eine Vielzahl von Technologien, darunter Rust, TypeScript, JavaScript, HTML, CSS, SCSS, Shell-Skripte und WGSL. Sein technischer Ansatz legt Wert auf Leistung, Sicherheit und plattformspezifische Optimierungen. Er nutzt Tools wie Docker zur Containerisierung und systemnahe Bibliotheken wie evdev und uinput für Interaktionen mit dem Linux-Kernel. Seine Projekte integrieren häufig moderne GPU-Compute-Frameworks wie wgpu und nutzen Systemdienste wie systemd für eine nahtlose Funktionalität."
     ],
     "about_en_casual": [
-      "xi72yow is into building tools and apps that lean heavily toward Linux and low-level system stuff. Their projects range from tweaking GitHub Desktop to work better on a custom Linux distro, to creating a Rust-based input remapper for handling device events at the kernel level. They also seem to enjoy working on creative side projects, like a zombie survival game and a screen-color-sync app for WLED devices. A lot of their work focuses on making things more efficient or user-friendly, especially for Linux users.",
-      "When it comes to tech, xi72yow seems to prefer Rust for its performance and safety, especially in system-level tools. They also use TypeScript and JavaScript for web interfaces and SCSS for styling. Docker shows up in their repos, likely for containerization or testing setups. They’re comfortable with shell scripting and have a knack for integrating their tools with Linux-specific systems like systemd and GNOME Keyring. Overall, their projects show a mix of practical problem-solving and a bit of fun experimentation."
+      "xi72yow is one of those devs who seems to enjoy solving really specific problems. Their projects range from tools for Linux power users to quirky web apps. For example, they've built a browser-based tool called blechblender that lets you edit license plates in photos without uploading them anywhere—pretty handy for privacy-conscious folks. On the Linux side, they've got stuff like desktop-drac, a custom fork of GitHub Desktop tailored for a specific Linux distro, and input-remapper-rs, which lets you tweak how your input devices behave at the kernel level. There's also ScreenChaser, a neat app for syncing screen colors with WLED lights, and sei, a tool for securely managing environment variables using GNOME Keyring. Oh, and they even made a zombie survival game called klotzkoepfe, which sounds like a fun way to blow off steam.",
+      "Technically, xi72yow seems pretty comfortable with Rust, TypeScript, and Linux systems. Most of their projects lean on Rust for performance-critical stuff, like input-remapper-rs and ScreenChaser. They also use TypeScript and JavaScript for web-based tools like blechblender. Dockerfile and Shell scripting pop up here and there, especially for deployment or system-level tweaks. Their approach is practical—lots of terminal-based interfaces, system integration, and GPU acceleration when needed. They seem to favor tools that give users control, whether it's through a TUI, CLI, or a web interface. Overall, their repos give off a vibe of someone who likes tinkering and building things that are both functional and kind of fun."
     ],
     "language_stats": [
       {
         "name": "Rust",
         "bytes": 785670,
-        "percentage": 28.2
+        "percentage": 27.7
       },
       {
         "name": "JavaScript",
-        "bytes": 659227,
-        "percentage": 23.6
+        "bytes": 693284,
+        "percentage": 24.5
       },
       {
         "name": "HTML",
-        "bytes": 531052,
-        "percentage": 19
+        "bytes": 536184,
+        "percentage": 18.9
       },
       {
         "name": "TypeScript",
         "bytes": 270684,
-        "percentage": 9.7
+        "percentage": 9.6
       },
       {
         "name": "Shell",
         "bytes": 167892,
-        "percentage": 6
+        "percentage": 5.9
       },
       {
         "name": "Astro",
         "bytes": 150671,
-        "percentage": 5.4
+        "percentage": 5.3
       },
       {
         "name": "CSS",
-        "bytes": 79975,
-        "percentage": 2.9
+        "bytes": 85257,
+        "percentage": 3
       },
       {
         "name": "WGSL",
@@ -58,7 +58,7 @@
       {
         "name": "Go",
         "bytes": 32545,
-        "percentage": 1.2
+        "percentage": 1.1
       },
       {
         "name": "C++",
@@ -77,7 +77,7 @@
       },
       {
         "name": "Dockerfile",
-        "bytes": 10563,
+        "bytes": 11538,
         "percentage": 0.4
       },
       {
@@ -317,6 +317,43 @@
           "message": "Use pathToFileURL for Windows import path\n\nReplace manual file:// URL construction with Node's pathToFileURL to produce a correct file:// URL on Windows. Adds import of pathToFileURL from 'url' and uses it to set importPath when __WIN32__ is true, simplifying escaping and ensuring proper URL formatting.",
           "date": "2026-04-09T14:58:38Z",
           "author": "Sergio Padrino"
+        }
+      ]
+    },
+    {
+      "name": "blechblender",
+      "url": "https://github.com/xi72yow/blechblender",
+      "homepage": null,
+      "image": "https://raw.githubusercontent.com/xi72yow/blechblender/main/docs/screenshot.jpg",
+      "video": null,
+      "description_en": "A browser-based tool for retouching license plates in photos. Users can mark plate corners and replace them with a black bar, blur, or realistic dummy plate, all processed client-side without uploading images.",
+      "description_de": "Ein browserbasiertes Tool zur Bearbeitung von Kennzeichen in Fotos. Benutzer können die Ecken eines Kennzeichens markieren und es durch einen schwarzen Balken, eine Unschärfe oder ein realistisches Dummy-Kennzeichen ersetzen, alles clientseitig ohne Bild-Upload.",
+      "description_en_casual": "This is a web app where you can edit license plates in photos. Just mark the plate, and you can cover it with a black bar, blur it, or swap it for a fake plate—all without uploading your image.",
+      "readme_teaser": "Blechblender Browser-based license plate retouching. Drop in a photo, mark the four corners of a plate and replace it with a black bar, a blur or a realistic dummy plate — all client-side, the image never leaves your machine. Live demo: Features - Three effects — solid black bar, adjustable blur",
+      "tech_stack": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "topics": [],
+      "stars": null,
+      "is_fork": false,
+      "featured": "x",
+      "last_commits": [
+        {
+          "message": "docs: add live demo link",
+          "date": "2026-07-06T13:26:48Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "feat: smaller corner handles with hover state",
+          "date": "2026-07-06T13:26:48Z",
+          "author": "xi72yow"
+        },
+        {
+          "message": "docs: add english readme with screenshot",
+          "date": "2026-07-06T13:16:35Z",
+          "author": "xi72yow"
         }
       ]
     }
