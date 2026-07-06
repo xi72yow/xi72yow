@@ -94,6 +94,7 @@ for i in $(seq 0 $((repo_count - 1))); do
   homepage=$(echo "${repo}" | jq -r '.homepage // empty')
   stars=$(echo "${repo}" | jq -r '.stargazers_count')
   fork=$(echo "${repo}" | jq -r '.fork')
+  default_branch=$(echo "${repo}" | jq -r '.default_branch // "main"')
   description_raw=$(echo "${repo}" | jq -r '.description // empty')
   topics=$(echo "${repo}" | jq -c "[.topics // [] | .[] | select(. != \"${FEATURED_TOPIC}\" and . != \"${FUN_TOPIC}\")]")
   # Determine featured tier: "x" = both sites, "xx" = fun site only
@@ -149,10 +150,10 @@ for i in $(seq 0 $((repo_count - 1))); do
 
   # Make relative URLs absolute
   if [[ -n "${first_image}" && ! "${first_image}" =~ ^https?:// ]]; then
-    first_image="https://raw.githubusercontent.com/${full_name}/main/${first_image}"
+    first_image="https://raw.githubusercontent.com/${full_name}/${default_branch}/${first_image#./}"
   fi
   if [[ -n "${first_video}" && ! "${first_video}" =~ ^https?:// ]]; then
-    first_video="https://raw.githubusercontent.com/${full_name}/main/${first_video}"
+    first_video="https://raw.githubusercontent.com/${full_name}/${default_branch}/${first_video#./}"
   fi
 
   # Extract a plain-text README teaser (strip markdown/HTML, first ~300 chars)
@@ -532,6 +533,13 @@ while IFS= read -r entry; do
     "${API_URL}/repos/${r_full}/readme" 2>/dev/null || echo "")
 
   if [[ -n "${readme}" ]]; then
+    # Absolutize relative image/video paths (markdown images, src/srcset attrs)
+    # so fetch-images.mjs can download and bundle them
+    r_branch=$(curl -sf "${CURL_AUTH[@]}" "${API_URL}/repos/${r_full}" | jq -r '.default_branch // "main"')
+    readme=$(printf '%s' "${readme}" | RAW_BASE="https://raw.githubusercontent.com/${r_full}/${r_branch}/" perl -pe '
+      s{(!\[[^\]]*\]\(\s*)(?!https?://|data:|#)\.?/?([^)\s]+)}{$1.$ENV{RAW_BASE}.$2}ge;
+      s{((?:src|srcset)=["\x27])(?!https?://|data:)\.?/?([^"\x27]+)}{$1.$ENV{RAW_BASE}.$2}ge;
+    ')
     printf '%s' "${readme}" > "readmes/${r_name}.md"
     echo "  Written readmes/${r_name}.md"
   fi

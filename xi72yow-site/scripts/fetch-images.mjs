@@ -113,6 +113,10 @@ function extractImageUrls(md) {
   for (const m of md.matchAll(/<img[^>]+src=["'](https?:\/\/[^"']+)["'][^>]*>/gi)) {
     urls.add(m[1]);
   }
+  // <source srcset="url"> (picture dark/light variants)
+  for (const m of md.matchAll(/srcset=["'](https?:\/\/[^"'\s]+)["']/gi)) {
+    urls.add(m[1]);
+  }
   return [...urls];
 }
 
