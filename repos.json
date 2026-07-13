@@ -1,43 +1,43 @@
 {
-  "updated_at": "2026-07-06T14:29:57Z",
+  "updated_at": "2026-07-13T07:06:43Z",
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "Maximilian Reinke develops tools and applications with a focus on system-level programming, web-based utilities, and Linux-specific software. His projects include 'blechblender', a browser-based tool for anonymizing license plates in images; 'desktop-drac', a Linux-adapted fork of GitHub Desktop; 'input-remapper-rs', a Rust-based utility for remapping input device events; 'sei', a secure environment variable manager leveraging GNOME Keyring; and 'ScreenChaser', a bias lighting daemon for Linux that integrates GPU-accelerated processing and WLED device control.",
-      "In his work, Maximilian employs a range of technologies including Rust, TypeScript, JavaScript, HTML, CSS, SCSS, Shell scripting, and WGSL. His technical approach emphasizes performance, security, and platform-specific optimizations. He utilizes tools such as Docker for containerization and system-level libraries like evdev and uinput for Linux kernel interactions. His projects often integrate modern GPU compute frameworks like wgpu and leverage system services such as systemd for seamless operation."
+      "Maximilian Reinke develops tools and applications with a focus on Linux systems, image processing, and secure environment management. His projects include 'blechblender,' a browser-based utility for anonymizing license plates in photos, and 'desktop-drac,' a Linux-specific adaptation of GitHub Desktop tailored for a custom distribution. Other notable works include 'input-remapper-rs,' a kernel-level input remapping tool, and 'sei,' which securely manages environment variables using GNOME Keyring. Additionally, he has created 'ScreenChaser,' a bias lighting daemon for Linux that integrates GPU-accelerated color processing and WLED device control.",
+      "Maximilian employs a technical approach centered on efficiency and system-level integration. His projects leverage programming languages such as Rust, TypeScript, and JavaScript, along with technologies like Docker, evdev, uinput, and GPU-accelerated compute shaders via wgpu. He utilizes terminal-based interfaces, lightweight native binaries, and systemd integration to ensure seamless operation within Linux environments. His work often emphasizes local processing and security, avoiding external dependencies and prioritizing user privacy."
     ],
     "about_de": [
-      "Maximilian Reinke entwickelt Tools und Anwendungen mit einem Schwerpunkt auf systemnaher Programmierung, webbasierten Werkzeugen und Linux-spezifischer Software. Zu seinen Projekten gehören 'blechblender', ein browserbasiertes Tool zur Anonymisierung von Kennzeichen in Bildern; 'desktop-drac', ein Linux-kompatibler Fork von GitHub Desktop; 'input-remapper-rs', ein in Rust entwickeltes Tool zur Neubelegung von Eingabegeräten; 'sei', ein sicherer Umgebungsvariablen-Manager, der GNOME Keyring verwendet; und 'ScreenChaser', ein Bias-Lighting-Daemon für Linux, der GPU-beschleunigte Verarbeitung und die Steuerung von WLED-Geräten integriert.",
-      "In seiner Arbeit verwendet Maximilian eine Vielzahl von Technologien, darunter Rust, TypeScript, JavaScript, HTML, CSS, SCSS, Shell-Skripte und WGSL. Sein technischer Ansatz legt Wert auf Leistung, Sicherheit und plattformspezifische Optimierungen. Er nutzt Tools wie Docker zur Containerisierung und systemnahe Bibliotheken wie evdev und uinput für Interaktionen mit dem Linux-Kernel. Seine Projekte integrieren häufig moderne GPU-Compute-Frameworks wie wgpu und nutzen Systemdienste wie systemd für eine nahtlose Funktionalität."
+      "Maximilian Reinke entwickelt Tools und Anwendungen mit Schwerpunkt auf Linux-Systemen, Bildverarbeitung und sicherer Verwaltung von Umgebungsvariablen. Zu seinen Projekten gehören 'blechblender', ein browserbasiertes Werkzeug zur Anonymisierung von Kennzeichen in Fotos, sowie 'desktop-drac', eine Linux-spezifische Anpassung von GitHub Desktop für eine benutzerdefinierte Distribution. Weitere bemerkenswerte Arbeiten umfassen 'input-remapper-rs', ein Tool zur Eingabegeräte-Neuzuordnung auf Kernel-Ebene, und 'sei', das Umgebungsvariablen sicher mit GNOME Keyring verwaltet. Darüber hinaus hat er 'ScreenChaser' entwickelt, einen Bias-Lighting-Daemon für Linux, der GPU-beschleunigte Farbverarbeitung und WLED-Gerätesteuerung integriert.",
+      "Maximilian verfolgt einen technischen Ansatz, der auf Effizienz und Systemintegration ausgerichtet ist. Seine Projekte nutzen Programmiersprachen wie Rust, TypeScript und JavaScript sowie Technologien wie Docker, evdev, uinput und GPU-beschleunigte Compute-Shader über wgpu. Er setzt auf terminalbasierte Schnittstellen, leichte native Binärdateien und systemd-Integration, um eine nahtlose Funktionalität in Linux-Umgebungen zu gewährleisten. Seine Arbeit betont häufig lokale Verarbeitung und Sicherheit, vermeidet externe Abhängigkeiten und priorisiert den Schutz der Privatsphäre der Nutzer."
     ],
     "about_en_casual": [
-      "xi72yow is one of those devs who seems to enjoy solving really specific problems. Their projects range from tools for Linux power users to quirky web apps. For example, they've built a browser-based tool called blechblender that lets you edit license plates in photos without uploading them anywhere—pretty handy for privacy-conscious folks. On the Linux side, they've got stuff like desktop-drac, a custom fork of GitHub Desktop tailored for a specific Linux distro, and input-remapper-rs, which lets you tweak how your input devices behave at the kernel level. There's also ScreenChaser, a neat app for syncing screen colors with WLED lights, and sei, a tool for securely managing environment variables using GNOME Keyring. Oh, and they even made a zombie survival game called klotzkoepfe, which sounds like a fun way to blow off steam.",
-      "Technically, xi72yow seems pretty comfortable with Rust, TypeScript, and Linux systems. Most of their projects lean on Rust for performance-critical stuff, like input-remapper-rs and ScreenChaser. They also use TypeScript and JavaScript for web-based tools like blechblender. Dockerfile and Shell scripting pop up here and there, especially for deployment or system-level tweaks. Their approach is practical—lots of terminal-based interfaces, system integration, and GPU acceleration when needed. They seem to favor tools that give users control, whether it's through a TUI, CLI, or a web interface. Overall, their repos give off a vibe of someone who likes tinkering and building things that are both functional and kind of fun."
+      "xi72yow is one of those devs who seems to have a knack for solving niche but super practical problems. Their projects are all over the place in the best way—tools for Linux power users, creative web apps, and even a zombie survival game. They've built stuff like a license plate editor that works entirely in the browser, a Linux app to sync screen colors with smart lights, and a secure way to manage environment variables using GNOME Keyring. They also seem to enjoy tinkering with input devices and kernel-level stuff, judging by their input remapping tool written in Rust.",
+      "When it comes to tech, xi72yow keeps things pretty modern and efficient. They lean on Rust for a lot of their heavier, performance-focused projects, while TypeScript, JavaScript, and SCSS show up in their web-based work. They’re clearly comfortable with Linux, using tools like systemd and evdev, and even maintaining a custom fork of GitHub Desktop for a specific Linux distro. Dockerfiles and shell scripts pop up here and there too, so they’re no stranger to automation and containerization. Overall, their repos have a practical, no-frills vibe, with a clear focus on making things that just work."
     ],
     "language_stats": [
       {
         "name": "Rust",
         "bytes": 785670,
-        "percentage": 27.7
+        "percentage": 27.5
       },
       {
         "name": "JavaScript",
-        "bytes": 693284,
-        "percentage": 24.5
+        "bytes": 708409,
+        "percentage": 24.8
       },
       {
         "name": "HTML",
-        "bytes": 536184,
-        "percentage": 18.9
+        "bytes": 536790,
+        "percentage": 18.8
       },
       {
         "name": "TypeScript",
         "bytes": 270684,
-        "percentage": 9.6
+        "percentage": 9.5
       },
       {
         "name": "Shell",
-        "bytes": 167892,
+        "bytes": 168545,
         "percentage": 5.9
       },
       {
@@ -47,8 +47,8 @@
       },
       {
         "name": "CSS",
-        "bytes": 85257,
-        "percentage": 3
+        "bytes": 88561,
+        "percentage": 3.1
       },
       {
         "name": "WGSL",
@@ -326,10 +326,10 @@
       "homepage": null,
       "image": "https://raw.githubusercontent.com/xi72yow/blechblender/main/docs/screenshot.jpg",
       "video": null,
-      "description_en": "A browser-based tool for retouching license plates in photos. Users can mark plate corners and replace them with a black bar, blur, or realistic dummy plate, all processed client-side without uploading images.",
-      "description_de": "Ein browserbasiertes Tool zur Bearbeitung von Kennzeichen in Fotos. Benutzer können die Ecken eines Kennzeichens markieren und es durch einen schwarzen Balken, eine Unschärfe oder ein realistisches Dummy-Kennzeichen ersetzen, alles clientseitig ohne Bild-Upload.",
-      "description_en_casual": "This is a web app where you can edit license plates in photos. Just mark the plate, and you can cover it with a black bar, blur it, or swap it for a fake plate—all without uploading your image.",
-      "readme_teaser": "Blechblender Browser-based license plate retouching. Drop in a photo, mark the four corners of a plate and replace it with a black bar, a blur or a realistic dummy plate — all client-side, the image never leaves your machine. Live demo: Features - Three effects — solid black bar, adjustable blur",
+      "description_en": "A browser-based tool for retouching license plates in photos. Users can mark plate corners and apply effects like black bars, blurs, or realistic dummy plates, all processed locally without uploading images.",
+      "description_de": "Ein browserbasiertes Werkzeug zur Bearbeitung von Kennzeichen in Fotos. Benutzer können die Ecken von Kennzeichen markieren und Effekte wie schwarze Balken, Unschärfen oder realistische Dummy-Kennzeichen anwenden, alles lokal ohne Hochladen von Bildern.",
+      "description_en_casual": "It's a web app where you can edit license plates in photos. Just mark the plate, and you can blur it, cover it, or even replace it with a fake plate—all without uploading your image.",
+      "readme_teaser": "Blechblender Browser-based license plate retouching. Drop in a photo, mark the four corners of a plate and replace it with a black bar, a blur or a realistic dummy plate, all client-side, the image never leaves your machine. Live demo: Features - Three effects: solid black bar, adjustable blur, or a",
       "tech_stack": [
         "JavaScript",
         "CSS",
@@ -341,18 +341,18 @@
       "featured": "x",
       "last_commits": [
         {
-          "message": "docs: add live demo link",
-          "date": "2026-07-06T13:26:48Z",
+          "message": "style: drop em-dashes and make hint bar responsive",
+          "date": "2026-07-06T21:04:04Z",
           "author": "xi72yow"
         },
         {
-          "message": "feat: smaller corner handles with hover state",
-          "date": "2026-07-06T13:26:48Z",
+          "message": "feat: interactive onboarding tour with animated demo",
+          "date": "2026-07-06T21:04:04Z",
           "author": "xi72yow"
         },
         {
-          "message": "docs: add english readme with screenshot",
-          "date": "2026-07-06T13:16:35Z",
+          "message": "feat: mobile zoom/pan and portrait layout",
+          "date": "2026-07-06T15:30:34Z",
           "author": "xi72yow"
         }
       ]

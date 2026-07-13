@@ -1,7 +1,7 @@
 # Blechblender
 
 Browser-based license plate retouching. Drop in a photo, mark the four corners
-of a plate and replace it with a black bar, a blur or a realistic dummy plate —
+of a plate and replace it with a black bar, a blur or a realistic dummy plate,
 all client-side, the image never leaves your machine.
 
 **Live demo: [blechblender.reinke.ing](https://blechblender.reinke.ing/)**
@@ -10,22 +10,22 @@ all client-side, the image never leaves your machine.
 
 ## Features
 
-- **Three effects** — solid black bar, adjustable blur, or a generated dummy
+- **Three effects**: solid black bar, adjustable blur, or a generated dummy
   plate rendered in perspective onto the marked quad.
-- **Perspective mapping** — a 4-point homography warps the effect onto the plate
+- **Perspective mapping**: a 4-point homography warps the effect onto the plate
   no matter how the car is angled; every corner stays draggable after placement.
-- **European plate templates** — Germany (standard, dealer, tax-exempt,
+- **European plate templates**: Germany (standard, dealer, tax-exempt,
   short-term) plus Austria, Switzerland, France, Netherlands, Poland, Italy,
   Spain and Belgium, each with the correct EU band and country code.
-- **Authentic German plates** — real FE-Schrift (self-hosted, see below),
+- **Authentic German plates**: real FE-Schrift (self-hosted, see below),
   registration seal, HU/TÜV inspection sticker for rear plates, season plates
   and embossed glyphs at FZV-correct proportions.
-- **Plate holder** — optional plastic frame with a custom print line
+- **Plate holder**: optional plastic frame with a custom print line
   (dealer name, website, …).
-- **Photo integration** — the generated plate adopts the white tone and the
+- **Photo integration**: the generated plate adopts the white tone and the
   light falloff sampled from the covered region, plus optional wear/patina, so
   it blends into the scene instead of looking like a sticker.
-- **Non-destructive editing** — apply multiple regions, undo per step, reset all,
+- **Non-destructive editing**: apply multiple regions, undo per step, reset all,
   then download the result as JPEG.
 
 Keyboard: `Enter` apply · `Esc` discard selection · `Ctrl/⌘ Z` undo.
