@@ -10,13 +10,13 @@ A browser-based tool for retouching license plates in photos. Users can mark pla
 
 <p align="center"><img src="https://raw.githubusercontent.com/xi72yow/blechblender/main/docs/screenshot.jpg" alt="blechblender" width="600"></p>
 
-**Tech:** JavaScript, CSS, HTML
+**Tech:** JavaScript, Python, CSS
 
 <details><summary>Recent activity</summary>
 
-- `2026-07-06` style: drop em-dashes and make hint bar responsive
-- `2026-07-06` feat: interactive onboarding tour with animated demo
-- `2026-07-06` feat: mobile zoom/pan and portrait layout
+- `2026-07-19` feat: dedup gate, roboflow harvest, and labelling-harness fixes
+- `2026-07-18` feat: image inbox collector + detection rollout gating
+- `2026-07-18` feat: clean-room plate-corner pose detector + labelling QA + drive backup
 
 </details>
 
@@ -86,4 +86,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-07-13*
+*Last updated: 2026-07-20*
