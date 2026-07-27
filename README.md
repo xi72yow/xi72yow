@@ -14,9 +14,9 @@ A browser-based tool for retouching license plates in photos. Users can mark pla
 
 <details><summary>Recent activity</summary>
 
+- `2026-07-21` feat: open detection to the public build and match the tour to it
+- `2026-07-21` feat: node drive backup/restore and model download as a build arg
 - `2026-07-19` feat: dedup gate, roboflow harvest, and labelling-harness fixes
-- `2026-07-18` feat: image inbox collector + detection rollout gating
-- `2026-07-18` feat: clean-room plate-corner pose detector + labelling QA + drive backup
 
 </details>
 
@@ -86,4 +86,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-07-20*
+*Last updated: 2026-07-27*
