@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [desktop-drac](https://github.com/xi72yow/desktop-drac) :star: 6
+
+A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
+
+**Tech:** TypeScript, SCSS, JavaScript
+
+<details><summary>Recent activity</summary>
+
+- `2026-06-01` fix: filter raw argv (not the parsed minimist object) in linux protocol handler
+- `2026-04-09` fix: adapt upstream tests for linux fork
+- `2026-04-09` Use pathToFileURL for Windows import path
+
+</details>
+
 ### [blechblender](https://github.com/xi72yow/blechblender)
 
 A browser-based tool for retouching license plates in photos. Users can mark plate corners and apply effects like black bars, blurs, or realistic dummy plates, all processed locally without uploading images.
@@ -17,22 +33,6 @@ A browser-based tool for retouching license plates in photos. Users can mark pla
 - `2026-07-21` feat: open detection to the public build and match the tour to it
 - `2026-07-21` feat: node drive backup/restore and model download as a build arg
 - `2026-07-19` feat: dedup gate, roboflow harvest, and labelling-harness fixes
-
-</details>
-
-### [desktop-drac](https://github.com/xi72yow/desktop-drac)
-
-A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/211838b3-89d7-4a07-97c9-32ed612d0b35" alt="desktop-drac" width="600"></p>
-
-**Tech:** TypeScript, SCSS, JavaScript
-
-<details><summary>Recent activity</summary>
-
-- `2026-06-01` fix: filter raw argv (not the parsed minimist object) in linux protocol handler
-- `2026-04-09` fix: adapt upstream tests for linux fork
-- `2026-04-09` Use pathToFileURL for Windows import path
 
 </details>
 
@@ -86,4 +86,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-07-27*
+*Last updated: 2026-08-03*
