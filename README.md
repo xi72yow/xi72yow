@@ -4,6 +4,22 @@ From embedded systems through Linux and security tooling to DevOps, web apps, an
 
 ## Selected Projects
 
+### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
+
+A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
+
+<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
+
+**Tech:** Rust, Shell, Dockerfile
+
+<details><summary>Recent activity</summary>
+
+- `2026-08-13` fix(deb): install systemd unit only to /usr/lib to avoid merged-usr conflict
+- `2026-08-01` chore(deps): bump the all-cargo group across 1 directory with 6 updates
+- `2026-07-01` chore(deps): bump actions/checkout from 6 to 7 in the all-actions group
+
+</details>
+
 ### [desktop-drac](https://github.com/xi72yow/desktop-drac) :star: 6
 
 A Linux-specific fork of GitHub Desktop, synchronized with the official upstream repository and adapted for compatibility with a custom Linux distribution.
@@ -14,9 +30,9 @@ A Linux-specific fork of GitHub Desktop, synchronized with the official upstream
 
 <details><summary>Recent activity</summary>
 
-- `2026-06-01` fix: filter raw argv (not the parsed minimist object) in linux protocol handler
-- `2026-04-09` fix: adapt upstream tests for linux fork
-- `2026-04-09` Use pathToFileURL for Windows import path
+- `2026-07-14` Draft release 3.6.3
+- `2026-07-08` Draft release 3.6.3-beta3
+- `2026-07-08` Bump @github/copilot-sdk to 1.0.5
 
 </details>
 
@@ -33,22 +49,6 @@ A browser-based tool for retouching license plates in photos. Users can mark pla
 - `2026-07-21` feat: open detection to the public build and match the tour to it
 - `2026-07-21` feat: node drive backup/restore and model download as a build arg
 - `2026-07-19` feat: dedup gate, roboflow harvest, and labelling-harness fixes
-
-</details>
-
-### [input-remapper-rs](https://github.com/xi72yow/input-remapper-rs)
-
-A Rust-based tool for remapping input device events at the kernel level using evdev and uinput. Supports multi-device mapping, terminal-based configuration, and integration with systemd on Linux systems.
-
-<p align="center"><img src="https://github.com/user-attachments/assets/78a50482-9e85-4baa-ab16-6cafa35e1031" alt="input-remapper-rs" width="600"></p>
-
-**Tech:** Rust, Shell, Dockerfile
-
-<details><summary>Recent activity</summary>
-
-- `2026-05-01` chore(deps): bump the all-cargo group with 2 updates
-- `2026-05-01` chore(deps): bump the all-actions group with 2 updates
-- `2026-03-30` chore(deps): bump the all-actions group with 4 updates
 
 </details>
 
@@ -86,4 +86,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-08-10*
+*Last updated: 2026-08-17*
