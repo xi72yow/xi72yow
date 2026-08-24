@@ -86,4 +86,4 @@ ScreenChaser is a Rust-based bias lighting daemon for Linux that uses the Waylan
 
 ---
 
-*Last updated: 2026-08-17*
+*Last updated: 2026-08-24*
