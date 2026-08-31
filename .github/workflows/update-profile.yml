@@ -1,14 +1,13 @@
 name: Update Profile README
 
+# weekly schedule disabled: github models was retired on 2026-07-30, profile texts
+# are now generated locally via the profile-text skill into profile-texts.json.
+# this workflow only refreshes repo data (languages, commits, readmes) on demand.
 on:
-  schedule:
-    # Every Monday at 06:00 UTC
-    - cron: "0 6 * * 1"
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
-  models: read
 
 jobs:
   update-profile:
@@ -24,18 +23,11 @@ jobs:
           chmod +x scripts/generate-profile.sh
           bash scripts/generate-profile.sh
 
-      - name: Translate blog posts
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          chmod +x scripts/translate-blog.sh
-          bash scripts/translate-blog.sh
-
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md repos.json readmes/ .cache/ blog/ blog-de/
+          git add README.md repos.json readmes/
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else

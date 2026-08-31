@@ -3,29 +3,16 @@
   "user": "xi72yow",
   "profile": {
     "about_en": [
-      "A developer building tools across embedded systems, web applications, and Linux infrastructure."
+      "Maximilian Reinke develops tools and applications with a focus on privacy, system-level functionality, and user-centric workflows. His projects include a browser-based image processing tool for anonymizing license plates, a Linux-specific fork of GitHub Desktop tailored for a custom distribution, and utilities for input remapping, secure environment variable management, and bias lighting for Linux systems. These projects often emphasize local processing, platform-specific optimizations, and seamless integration with existing workflows.",
+      "In his technical approach, Maximilian employs a diverse set of programming languages and tools, including Rust, Python, TypeScript, and WGSL. His work frequently involves low-level system programming, GPU-accelerated computations, and terminal-based user interfaces. He leverages technologies such as evdev, uinput, systemd, and wgpu to build efficient and maintainable solutions. Dockerfiles and shell scripting are also part of his toolkit for managing development environments and deployment processes."
     ],
     "about_de": [
-      "Ein Entwickler, der Tools im Bereich Embedded-Systeme, Webanwendungen und Linux-Infrastruktur baut."
+      "Maximilian Reinke entwickelt Tools und Anwendungen mit einem Schwerpunkt auf Datenschutz, systemnaher Funktionalität und benutzerzentrierten Workflows. Zu seinen Projekten gehören ein browserbasiertes Bildbearbeitungstool zur Anonymisierung von Kennzeichen, ein Linux-spezifischer Fork von GitHub Desktop für eine angepasste Distribution sowie Werkzeuge zur Eingabeneuverknüpfung, sicheren Verwaltung von Umgebungsvariablen und Bias-Beleuchtung für Linux-Systeme. Diese Projekte legen oft Wert auf lokale Verarbeitung, plattformspezifische Optimierungen und nahtlose Integration in bestehende Workflows.",
+      "In seiner technischen Herangehensweise verwendet Maximilian eine Vielzahl von Programmiersprachen und Werkzeugen, darunter Rust, Python, TypeScript und WGSL. Seine Arbeit umfasst häufig systemnahe Programmierung, GPU-beschleunigte Berechnungen und terminalbasierte Benutzeroberflächen. Er nutzt Technologien wie evdev, uinput, systemd und wgpu, um effiziente und wartbare Lösungen zu entwickeln. Dockerfiles und Shell-Skripte gehören ebenfalls zu seinem Werkzeugkasten für die Verwaltung von Entwicklungsumgebungen und Bereitstellungsprozessen."
     ],
     "about_en_casual": [
-      "xi72yow builds tools across embedded systems, web apps, and Linux infrastructure."
-    ],
-    "skills": [
-      {
-        "category": "Technologies",
-        "items": [
-          "CSS",
-          "Dockerfile",
-          "JavaScript",
-          "Python",
-          "Rust",
-          "SCSS",
-          "Shell",
-          "TypeScript",
-          "WGSL"
-        ]
-      }
+      "xi72yow is into building practical tools and fun side projects, mostly for Linux and the web. They’ve got a mix of stuff going on, from a browser-based app for editing license plates in photos to a zombie survival game you can play with a friend on one keyboard. A lot of their work leans toward solving niche problems, like remapping input devices at the kernel level or syncing screen colors with WLED lights. They also seem to care about security and usability, with projects like a tool for managing environment variables securely using GNOME Keyring.",
+      "When it comes to tech, xi72yow keeps things pretty diverse. They write in Rust, Python, TypeScript, and even WGSL for GPU stuff. Their repos show a knack for working with Linux-specific tools like systemd and Wayland, and they’re comfortable with Docker for containerized workflows. They seem to prefer clean, efficient solutions, whether it’s using a terminal UI for configuration or integrating directly with the system. Overall, their projects feel like a mix of curiosity and practicality, with a solid focus on making things work well in their chosen environments."
     ],
     "language_stats": [
       {

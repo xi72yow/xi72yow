@@ -5,42 +5,25 @@ GITHUB_USER="xi72yow"
 FEATURED_TOPIC="x"
 FUN_TOPIC="xx"
 API_URL="https://api.github.com"
-MODELS_URL="https://models.inference.ai.azure.com/chat/completions"
-MODEL="gpt-4o"
+TEXTS_FILE="profile-texts.json"
 
 # Auth header (works in Actions via GITHUB_TOKEN, optional for local testing)
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then
   AUTH_HEADER="Authorization: Bearer ${GITHUB_TOKEN}"
   CURL_AUTH=(-H "${AUTH_HEADER}")
 else
-  echo "Warning: No GITHUB_TOKEN set, running without auth (rate-limited, no AI descriptions)"
+  echo "Warning: No GITHUB_TOKEN set, running without auth (rate-limited)"
   CURL_AUTH=()
 fi
 
-# ── AI cache (hash-based to save tokens) ───────────────────────────────
-CACHE_FILE=".cache/ai-cache.json"
-mkdir -p .cache
-if [[ -f "${CACHE_FILE}" ]]; then
-  ai_cache=$(cat "${CACHE_FILE}")
-else
-  ai_cache="{}"
+# ── Curated texts (written by the profile-text skill) ───────────────────
+if [[ ! -f "${TEXTS_FILE}" ]]; then
+  echo "Error: ${TEXTS_FILE} not found. Run the profile-text skill to regenerate it."
+  exit 1
 fi
 
-cache_get() {
-  local key="$1" hash="$2"
-  local stored_hash
-  stored_hash=$(echo "${ai_cache}" | jq -r --arg k "${key}" '.[$k].hash // empty')
-  if [[ "${stored_hash}" == "${hash}" ]]; then
-    echo "${ai_cache}" | jq -c --arg k "${key}" '.[$k].data'
-    return 0
-  fi
-  return 1
-}
-
-cache_set() {
-  local key="$1" hash="$2" data="$3"
-  ai_cache=$(echo "${ai_cache}" | jq --arg k "${key}" --arg h "${hash}" --argjson d "${data}" '.[$k] = {hash: $h, data: $d}')
-}
+profile_texts=$(jq -c '.profile' "${TEXTS_FILE}")
+repo_texts=$(jq -c '.repos' "${TEXTS_FILE}")
 
 # ── Fetch all public repos ──────────────────────────────────────────────
 echo "Fetching public repos for ${GITHUB_USER}..."
@@ -128,7 +111,7 @@ for i in $(seq 0 $((repo_count - 1))); do
     author: .commit.author.name
   }] | .[:3]' 2>/dev/null || echo "[]")
 
-  # Fetch full README for AI context + image extraction
+  # Fetch full README for teaser + image extraction
   readme_content=$(curl -sf "${CURL_AUTH[@]}" \
     -H "Accept: application/vnd.github.raw+json" \
     "${API_URL}/repos/${full_name}/readme" 2>/dev/null || echo "")
@@ -169,66 +152,18 @@ for i in $(seq 0 $((repo_count - 1))); do
     sed 's/  */ /g' | \
     head -c 300)
 
-  # Trim README for AI context
-  readme_content=$(echo "${readme_content}" | head -c 2000)
+  # ── Descriptions from the curated texts ─────────────────────────────
+  repo_text=$(echo "${repo_texts}" | jq -c --arg n "${name}" '.[$n] // empty')
 
-  # ── AI: Generate descriptions (EN + DE) with hash cache ─────────────
-  ai_context="Repository: ${name}
-Original description: ${description_raw}
-Languages: ${languages}
-Topics: ${topics}
-README excerpt: ${readme_content}"
-
-  context_hash=$(printf '%s' "${ai_context}" | sha256sum | cut -d' ' -f1)
-  cached_desc=$(cache_get "repo:${name}" "${context_hash}" || echo "")
-
-  if [[ -n "${cached_desc}" && "${cached_desc}" != "null" ]]; then
-    description_en=$(echo "${cached_desc}" | jq -r '.en // empty')
-    description_de=$(echo "${cached_desc}" | jq -r '.de // empty')
-    description_en_casual=$(echo "${cached_desc}" | jq -r '.en_casual // empty')
-    echo "  Using cached AI description (hash match)"
+  if [[ -n "${repo_text}" ]]; then
+    description_en=$(echo "${repo_text}" | jq -r '.en // empty')
+    description_de=$(echo "${repo_text}" | jq -r '.de // empty')
+    description_en_casual=$(echo "${repo_text}" | jq -r '.en_casual // empty')
   else
-    ai_payload=$(jq -nc \
-      --arg model "${MODEL}" \
-      --arg system "You generate concise repository descriptions. Respond ONLY with valid JSON, no markdown fences. Format: {\"en\": \"...\", \"de\": \"...\", \"en_casual\": \"...\"}" \
-      --arg context "${ai_context}" \
-      '{
-        model: $model,
-        messages: [
-          { role: "system", content: $system },
-          { role: "user", content: ("Write a short description (1-2 sentences) for this repo. Provide three versions:\n\n1. en: English, formal. Neutral, technical tone.\n2. de: German, formal. Same rules.\n3. en_casual: English, casual. Relaxed and approachable, as if telling a friend about the project. Still accurate, no hype.\n\nFor all: Be specific about what it does, not generic. No marketing language, no superlatives, no em dashes. Context:\n" + $context) }
-        ],
-        temperature: 0.3,
-        max_tokens: 400
-      }')
-
-    ai_response=$(curl -s -X POST "${MODELS_URL}" \
-      "${CURL_AUTH[@]}" \
-      -H "Content-Type: application/json" \
-      -d "${ai_payload}" || echo "")
-
-    if [[ -n "${ai_response}" ]]; then
-      api_error=$(echo "${ai_response}" | jq -r '.error.message // empty' 2>/dev/null)
-      if [[ -n "${api_error}" ]]; then
-        echo "  AI API error: ${api_error}"
-        description_en="${description_raw}"
-        description_de="${description_raw}"
-        description_en_casual="${description_raw}"
-      else
-        descriptions=$(echo "${ai_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-        descriptions=$(echo "${descriptions}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-        description_en=$(echo "${descriptions}" | jq -r '.en // empty' 2>/dev/null || echo "${description_raw}")
-        description_de=$(echo "${descriptions}" | jq -r '.de // empty' 2>/dev/null || echo "${description_raw}")
-        description_en_casual=$(echo "${descriptions}" | jq -r '.en_casual // empty' 2>/dev/null || echo "${description_raw}")
-        echo "  AI description generated (new)"
-        cache_set "repo:${name}" "${context_hash}" "$(jq -nc --arg en "${description_en}" --arg de "${description_de}" --arg enc "${description_en_casual}" '{en: $en, de: $de, en_casual: $enc}')"
-      fi
-    else
-      echo "  AI request failed, using original description"
-      description_en="${description_raw}"
-      description_de="${description_raw}"
-      description_en_casual="${description_raw}"
-    fi
+    echo "  No entry in ${TEXTS_FILE}, falling back to the GitHub description"
+    description_en="${description_raw}"
+    description_de="${description_raw}"
+    description_en_casual="${description_raw}"
   fi
 
   # ── Build repo entry ────────────────────────────────────────────────
@@ -276,127 +211,8 @@ README excerpt: ${readme_content}"
 
 done
 
-# ── Generate profile (about + skills) via AI ─────────────────────────────
-echo "Generating profile section..."
-
-all_languages=$(echo "${repos_output}" | jq -r '[.[].tech_stack[]] | unique | join(", ")')
-
-# ── Formal profile: only "x" repos ───────────────────────────────────────
-formal_descriptions=$(echo "${repos_output}" | jq -r '[.[] | select(.featured == "x") | "\(.name): \(.description_en)"] | join("\n")')
-
-formal_context="Developer: Maximilian Reinke (GitHub: ${GITHUB_USER})
-Languages/tech: ${all_languages}
-Project summaries:
-${formal_descriptions}"
-
-formal_hash=$(printf '%s' "${formal_context}" | sha256sum | cut -d' ' -f1)
-cached_formal=$(cache_get "profile:formal" "${formal_hash}" || echo "")
-
-if [[ -n "${cached_formal}" && "${cached_formal}" != "null" ]]; then
-  formal_profile="${cached_formal}"
-  echo "  Using cached formal profile (hash match)"
-else
-  formal_payload=$(jq -nc \
-    --arg model "${MODEL}" \
-    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en\": [\"paragraph 1\", \"paragraph 2\"], \"about_de\": [\"paragraph 1\", \"paragraph 2\"]}" \
-    --arg context "${formal_context}" \
-    '{
-      model: $model,
-      messages: [
-        { role: "system", content: $system },
-        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Tone: technical, neutral, factual. No marketing language, no superlatives, no \"passionate\", no hype, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Refer to the developer by name (Maximilian Reinke), not by GitHub username. Write in third person. Provide both English and German versions. Context:\n" + $context) }
-      ],
-      temperature: 0.3,
-      max_tokens: 600
-    }')
-
-  formal_response=$(curl -s -X POST "${MODELS_URL}" \
-    "${CURL_AUTH[@]}" \
-    -H "Content-Type: application/json" \
-    -d "${formal_payload}" || echo "")
-
-  if [[ -n "${formal_response}" ]]; then
-    formal_data=$(echo "${formal_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-    formal_data=$(echo "${formal_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-    formal_profile=$(echo "${formal_data}" | jq -c '.' 2>/dev/null || echo "null")
-  else
-    formal_profile="null"
-  fi
-
-  if [[ "${formal_profile}" != "null" ]]; then
-    cache_set "profile:formal" "${formal_hash}" "${formal_profile}"
-    echo "  Formal profile generated (new)"
-  fi
-fi
-
-# ── Casual profile: all repos (x + xx) ───────────────────────────────────
-all_descriptions=$(echo "${repos_output}" | jq -r '[.[] | "\(.name): \(.description_en_casual // .description_en)"] | join("\n")')
-
-casual_context="Developer: xi72yow
-Languages/tech: ${all_languages}
-Project summaries:
-${all_descriptions}"
-
-casual_hash=$(printf '%s' "${casual_context}" | sha256sum | cut -d' ' -f1)
-cached_casual=$(cache_get "profile:casual" "${casual_hash}" || echo "")
-
-if [[ -n "${cached_casual}" && "${cached_casual}" != "null" ]]; then
-  casual_profile="${cached_casual}"
-  echo "  Using cached casual profile (hash match)"
-else
-  casual_payload=$(jq -nc \
-    --arg model "${MODEL}" \
-    --arg system "You generate developer profile data. Respond ONLY with valid JSON, no markdown fences. Format: {\"about_en_casual\": [\"paragraph 1\", \"paragraph 2\"]}" \
-    --arg context "${casual_context}" \
-    '{
-      model: $model,
-      messages: [
-        { role: "system", content: $system },
-        { role: "user", content: ("Generate a 2-paragraph developer bio based on the following project data. Write as if describing a fellow dev you know from GitHub. Relaxed, approachable tone. Refer to the developer as \"xi72yow\", not by real name. Can use short sentences, informal phrasing. Still technically accurate, no hype or superlatives, no em dashes. Paragraph 1: What this developer builds and their focus areas (derived from the projects). Paragraph 2: Technical approach and primary tools (derived from the tech stacks). Do not fabricate experience. Only reference what is evident from the repositories. Context:\n" + $context) }
-      ],
-      temperature: 0.3,
-      max_tokens: 400
-    }')
-
-  casual_response=$(curl -s -X POST "${MODELS_URL}" \
-    "${CURL_AUTH[@]}" \
-    -H "Content-Type: application/json" \
-    -d "${casual_payload}" || echo "")
-
-  if [[ -n "${casual_response}" ]]; then
-    casual_data=$(echo "${casual_response}" | jq -r '.choices[0].message.content' 2>/dev/null || echo "")
-    casual_data=$(echo "${casual_data}" | sed 's/^```json//;s/^```//;s/```$//' | tr -d '\n')
-    casual_profile=$(echo "${casual_data}" | jq -c '.' 2>/dev/null || echo "null")
-  else
-    casual_profile="null"
-  fi
-
-  if [[ "${casual_profile}" != "null" ]]; then
-    cache_set "profile:casual" "${casual_hash}" "${casual_profile}"
-    echo "  Casual profile generated (new)"
-  fi
-fi
-
-# ── Merge formal + casual into profile_json ──────────────────────────────
-if [[ "${formal_profile}" != "null" && "${casual_profile}" != "null" ]]; then
-  profile_json=$(echo "${formal_profile}" | jq --argjson casual "${casual_profile}" '. + $casual')
-elif [[ "${formal_profile}" != "null" ]]; then
-  profile_json="${formal_profile}"
-elif [[ "${casual_profile}" != "null" ]]; then
-  profile_json="${casual_profile}"
-else
-  echo "  Profile AI requests failed, using fallback"
-  profile_json=$(jq -nc \
-    --arg langs "${all_languages}" \
-    '{
-      about_en: ["A developer building tools across embedded systems, web applications, and Linux infrastructure."],
-      about_de: ["Ein Entwickler, der Tools im Bereich Embedded-Systeme, Webanwendungen und Linux-Infrastruktur baut."],
-      about_en_casual: ["xi72yow builds tools across embedded systems, web apps, and Linux infrastructure."],
-      skills: [{"category": "Technologies", "items": ($langs | split(", "))}]
-    }')
-fi
-
-echo "Profile section generated."
+# ── Profile section from the curated texts ───────────────────────────────
+profile_json="${profile_texts}"
 
 # ── Compute language stats ───────────────────────────────────────────────
 echo "Computing language stats..."
@@ -430,10 +246,6 @@ output_json=$(jq -nc \
 
 echo "${output_json}" | jq '.' > repos.json
 echo "Written repos.json with $(echo "${repos_output}" | jq 'length') repos."
-
-# ── Save AI cache ──────────────────────────────────────────────────────
-echo "${ai_cache}" | jq '.' > "${CACHE_FILE}"
-echo "AI cache saved to ${CACHE_FILE}"
 
 # ── Generate README.md ───────────────────────────────────────────────────
 {
